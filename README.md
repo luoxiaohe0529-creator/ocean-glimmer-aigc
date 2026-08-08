@@ -18,21 +18,15 @@
 
 ## README 视频预览
 
-下面两个播放器直接读取本仓库 `main` 分支中的中英文成片；如果当前 GitHub 客户端不渲染播放器，可点击播放器下方的原始文件链接打开视频。
+下面两个播放器使用 GitHub 附件托管，打开 README 后即可直接点击播放键观看。
 
 ### 中文成片
 
-<video controls playsinline preload="metadata" width="720">
-  <source src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E7%BE%8E%E7%99%BD%E5%A5%B6%E7%BD%90_%E9%AB%98%E7%AB%AFTVC_0729_0434.mp4" type="video/mp4">
-  <a href="frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4">打开中文版原始视频</a>
-</video>
+https://github.com/user-attachments/assets/74734f72-d492-4dd3-a5c0-b4d841303856
 
 ### English cut
 
-<video controls playsinline preload="metadata" width="720">
-  <source src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/veo-2_%E5%AD%97%E5%B9%95.mp4" type="video/mp4">
-  <a href="frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4">打开英文原始视频</a>
-</video>
+https://github.com/user-attachments/assets/8b56f676-ef79-4034-8571-fb77ebd9df3a
 
 如果只有一分钟，先看上面的中英文成片和 [Case Study](docs/CASE_STUDY.md)，再看 [frontend/server.mjs](frontend/server.mjs)、[python_service/server.py](python_service/server.py) 与 [n8n-workflows/public/04-video-generation.json](n8n-workflows/public/04-video-generation.json)。
 
