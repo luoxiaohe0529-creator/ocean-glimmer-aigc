@@ -51,8 +51,8 @@ flowchart LR
   INPUT["产品链接 / 营销主题 / 产品图片"] --> CRAWLER["产品页面抓取"]
   CRAWLER --> FACTS["DeepSeek · 产品事实整理"]
   FACTS --> KB1["广告策划 Wiki"]
-  KB1 --> GEMINI1["Gemini 3.1 Pro · Hook 与 Mood Board"]
-  GEMINI1 --> SELECT["用户选择 Hook"]
+  KB1 --> DOUBAO1["豆包 Responses · Hook 与 Mood Board"]
+  DOUBAO1 --> SELECT["用户选择 Hook"]
   SELECT --> KB2["编剧导演 Wiki"]
   KB2 --> GEMINI2["Gemini 3.1 Pro · 导演脚本"]
   GEMINI2 --> KB3["摄影摄像 Wiki"]
@@ -66,7 +66,7 @@ flowchart LR
 Stage 1 严格分为两次模型调用：
 
 1. DeepSeek 仅整理产品名称、品类、目标人群、卖点、痛点、使用场景和限制，不生成创意。
-2. 系统读取广告策划 Wiki 后，由 Gemini 3.1 Pro 生成 12 条 Hook、简要 Mood Board 和供 Stage 2 使用的隐藏创意板。
+2. 系统读取广告策划 Wiki 后，由豆包 Responses 生成 12 条 Hook、简要 Mood Board 和供 Stage 2 使用的隐藏创意板；产品图 URL 会作为多模态输入一并传入。
 
 这一分层避免产品事实与广告想象互相污染。
 
@@ -122,7 +122,8 @@ n8n 处理产品图对象存储、分镜图、角色图、视频任务提交、�
 | 网关层 | Node.js | 静态服务、同源代理、文件解析、统一入口 |
 | 内容层 | Python | 抓取、知识检索、模型调用、结构化契约、媒体适配 |
 | 策划模型 | DeepSeek | 可验证产品事实与简报 |
-| 创意模型 | Gemini 3.1 Pro via KIE.ai | Hook、Mood Board、导演脚本、摄影分镜 |
+| Stage 1 创意模型 | 豆包 Responses API | 产品图理解、Hook、Mood Board、完整创意方案 |
+| Stage 2/3 中文文本模型 | Gemini 3.1 Pro via KIE.ai | 导演脚本、摄影分镜 |
 | 编排层 | n8n | TOS 上传、图像/视频任务、等待、轮询、回写 |
 | 知识层 | 飞书 Wiki | 广告策划、编剧导演、摄影摄像模板 |
 | 媒体层 | 火山 TOS、FFmpeg | 公网素材与本地后期处理 |
@@ -159,7 +160,7 @@ npm exec playwright install chromium
 cp .env.example .env
 ```
 
-按需填写 DeepSeek、KIE.ai、飞书和媒体服务配置。真实密钥只能存放在 `.env` 或 n8n Credentials 中。
+按需填写 DeepSeek、豆包、KIE.ai、飞书和媒体服务配置。真实密钥只能存放在本机 `.env` 或 n8n Credentials 中，不能写进 Python 源码。
 
 启动 n8n 后，再确认 `.env` 中的 `N8N_BASE_URL`、Webhook 路径和对象存储配置与 n8n 工作流一致。
 
@@ -190,7 +191,8 @@ npm start
 │   ├── prompts.py             # 结构化提示词契约
 │   ├── feishu_knowledge.py    # Wiki-only 知识读取器
 │   ├── deepseek.py            # 产品事实模型
-│   └── gemini_kie.py          # Gemini 3.1 Pro 通道
+│   ├── doubao.py              # Stage 1 豆包 Responses 多模态通道
+│   └── gemini_kie.py          # Stage 2/3 Gemini 3.1 Pro 通道
 ├── n8n-workflows/public/      # 脱敏公开工作流
 ├── scraper-service.mjs        # Playwright 商品爬虫服务
 ├── docs/knowledge/            # 三份知识库整理版

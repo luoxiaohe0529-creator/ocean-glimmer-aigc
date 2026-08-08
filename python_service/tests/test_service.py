@@ -30,20 +30,20 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(result["recommended_plan_id"], "plan-01")
         self.assertEqual(result["model_provider"], "mock")
         self.assertEqual(result["product_facts_provider"], "mock")
-        self.assertIn("gemini_3_1_pro_creative_model", result["pipeline_trace"]["order"])
+        self.assertIn("doubao_responses_creative_model", result["pipeline_trace"]["order"])
 
-    def test_stage_one_uses_same_gemini_channel_as_director_for_creative_output(self):
+    def test_stage_one_uses_doubao_channel_for_creative_output(self):
         payload = StageOneRequest(campaign_theme="夏日樱花晚霞").model_dump()
         creative_output = mock_stage_one(payload)
         with patch.dict(os.environ, {"PYTHON_MOCK_MODE": "0"}):
             with patch("python_service.server.fetch_product_page", return_value={}):
                 with patch("python_service.server.chat_json", return_value={"product_name": "测试产品", "category": "手机"}) as facts_model:
                     with patch("python_service.server.knowledge.context", return_value="广告策划知识"):
-                        with patch("python_service.server.gemini_kie_json", return_value=creative_output) as creative_model:
+                        with patch("python_service.server.doubao_json", return_value=creative_output) as creative_model:
                             result = stage_one(payload)
         facts_model.assert_called_once()
         creative_model.assert_called_once()
-        self.assertEqual(result["model_provider"], "gemini-kie")
+        self.assertEqual(result["model_provider"], "doubao-responses")
         self.assertEqual(result["product_facts_provider"], "deepseek")
 
     def test_stage_one_keeps_twelve_hooks_and_links_mood_summary(self):

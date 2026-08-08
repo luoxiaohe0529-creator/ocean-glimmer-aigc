@@ -7,7 +7,7 @@
 逐项确认旧值已经失效，不要把新值粘贴到 Issue、Pull Request、聊天记录或 shell 命令中：
 
 - 飞书：App Secret、Wiki/知识库访问 Token，以及仍在使用的 Base Token。
-- 模型服务：DeepSeek、KIE.ai、Minimax、Topaz 等 API Key。
+- 模型服务：DeepSeek、豆包、KIE.ai、Minimax、Topaz 等 API Key。
 - 火山 TOS：Access Key、Secret Key，以及绑定在 n8n Credential 中的对象存储凭证。
 - 其他外部服务：检查 `.env`、n8n Credentials 和部署平台环境变量中是否还有同一批旧值。
 

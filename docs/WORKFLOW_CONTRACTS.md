@@ -84,7 +84,7 @@
 }
 ```
 
-中文导演脚本默认通过 KIE.ai 的 Gemini 3.1 Pro 通道生成，并返回 `model_provider: gemini-kie`。英文脚本当前使用 DeepSeek，并返回 `model_provider: deepseek`。
+Stage 1 创意方案默认通过豆包 Responses 多模态通道生成，并返回 `model_provider: doubao-responses`；中文导演脚本和摄影分镜仍通过 KIE.ai 的 Gemini 3.1 Pro 通道生成；英文脚本当前使用 DeepSeek，并返回 `model_provider: deepseek`。
 
 ## KIE 异步任务
 

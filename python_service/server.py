@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from .playwright_crawler import fetch_product_page
 from .deepseek import chat_json
+from .doubao import chat_json as doubao_json
 from .gemini_kie import chat_json as gemini_kie_json
 from .feishu_knowledge import knowledge
 from .kie import create_image_task, create_kling_video_task, create_overseas_video_task, query_task
@@ -575,10 +576,14 @@ def stage_one(payload: dict) -> dict:
         product_category=product_category,
         template_group_id=template_group_id,
     )
-    # Match the Stage 2 director path: after factual extraction and Wiki retrieval,
-    # Gemini 3.1 Pro owns the creative JSON contract for Hooks and Mood Boards.
-    data = mock_stage_one(payload) if mock_mode else gemini_kie_json(
-        stage_one_prompt(payload, source_text, knowledge_context, product_facts)
+    # Stage 1 uses Doubao Responses for faster multimodal product understanding.
+    # Stage 2/3 remain on the existing Gemini-KIE path for now.
+    product_images = list(payload.get("product_images") or [])
+    if page.get("image") and page["image"] not in product_images:
+        product_images.append(page["image"])
+    data = mock_stage_one(payload) if mock_mode else doubao_json(
+        stage_one_prompt(payload, source_text, knowledge_context, product_facts),
+        image_urls=product_images,
     )
     data = _normalize_stage_one(data, payload)
     generated_brief = dict(data.get("product_brief") or {})
@@ -612,7 +617,7 @@ def stage_one(payload: dict) -> dict:
         "hooks": hooks,
         "hooks_list": hooks,
         "source": "python",
-        "model_provider": "mock" if mock_mode else "gemini-kie",
+        "model_provider": "mock" if mock_mode else "doubao-responses",
         "product_facts_provider": "mock" if mock_mode else "deepseek",
         "knowledge_source": (_knowledge_trace("广告策划").get("source") or "unknown"),
         "knowledge_role": "广告策划",
@@ -625,7 +630,7 @@ def stage_one(payload: dict) -> dict:
                 "crawler",
                 "product_facts_model",
                 "planning_knowledge_wiki",
-                "gemini_3_1_pro_creative_model",
+                "doubao_responses_creative_model",
             ],
             "crawler_completed": bool(page or source_text),
             "product_facts_completed": bool(product_facts),

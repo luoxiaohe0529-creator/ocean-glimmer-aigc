@@ -14,7 +14,7 @@
 flowchart LR
   A[产品链接 / 主题 / 图片] --> B[DeepSeek：产品事实]
   B --> C[广告策划 Wiki]
-  C --> D[Gemini：12 个 Hook + Mood Board]
+  C --> D[豆包 Responses：12 个 Hook + Mood Board]
   D --> E{用户选择 Hook / 创意方案}
   E --> F[Gemini：导演脚本]
   F --> G[摄影分镜与视频提示词]
