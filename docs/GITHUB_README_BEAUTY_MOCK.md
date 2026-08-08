@@ -8,7 +8,7 @@
 
 ## Product Preview
 
-![大海浮光 AIGC 工作台](../frontend/showcase/posters/automation-beauty.jpg)
+预览入口：[脱敏工作台](../frontend/showcase/workbench/open-design-demo.html) · [中英文视频作品](../frontend/showcase/README.md)
 
 - [本地产品体验](http://localhost:4173/open-design.html?demo=1)
 - [产品与视频作品集](http://localhost:4173/portfolio.html)
@@ -111,8 +111,7 @@ flowchart TB
 │   ├── server.mjs             # 本地服务、文件解析和 n8n 代理
 │   └── showcase/
 │       ├── workbench/         # 脱敏产品演示
-│       ├── videos/            # 分类演示成片
-│       └── posters/           # 视频封面
+│       └── videos/            # 中文与英文视频
 ├── n8n-workflows/
 │   ├── public/                # 可公开导入的脱敏工作流
 │   └── README.md

@@ -10,15 +10,13 @@
 
 | 你想看什么 | 入口 |
 | --- | --- |
-| 先看真实产出 | [成片海报](frontend/showcase/posters/huawei-summer.jpg) · [Demo 模式](frontend/showcase/workbench/open-design-demo.html) |
-| 看真实产出 | [Demo 视频 01](frontend/demo/adflow-demo-01.mp4) · [Demo 视频 02](frontend/demo/adflow-demo-02.mp4) |
+| 先看真实产出 | [中文版成片](frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4) · [英文版成片](frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4) |
+| 看工作台 | [Demo 模式](frontend/showcase/workbench/open-design-demo.html) · [中英文视频目录](frontend/showcase/README.md) |
 | 看系统怎么拆 | [系统架构](docs/ARCHITECTURE.md) |
 | 看一次完整产品决策 | [Case Study](docs/CASE_STUDY.md) |
 | 看质量和安全边界 | [GitHub 发布检查](docs/GITHUB_RELEASE.md) · `npm run check` |
 
-![真实 Demo 产出](frontend/showcase/posters/huawei-summer.jpg)
-
-如果只有一分钟，先看上面的真实产出和 [Case Study](docs/CASE_STUDY.md)，再看 [frontend/server.mjs](frontend/server.mjs)、[python_service/server.py](python_service/server.py) 与 [n8n-workflows/public/04-video-generation.json](n8n-workflows/public/04-video-generation.json)。
+如果只有一分钟，先看上面的中英文成片和 [Case Study](docs/CASE_STUDY.md)，再看 [frontend/server.mjs](frontend/server.mjs)、[python_service/server.py](python_service/server.py) 与 [n8n-workflows/public/04-video-generation.json](n8n-workflows/public/04-video-generation.json)。
 
 ## 这个项目解决什么问题
 
