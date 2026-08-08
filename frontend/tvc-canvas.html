@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大海浮光 AIGC 工作台 · TVC 智能分镜画布</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xyflow/react@12.8.6/dist/style.css">
+  <style>
+    :root {
+      --ink: #111216;
+      --muted: #73747c;
+      --faint: #a3a4ab;
+      --line: #dedfe5;
+      --canvas: #f5f5f7;
+      --surface: #fff;
+      --soft: #fafafd;
+      --blue: #0b74df;
+      --blue-soft: #edf5ff;
+      --green: #198754;
+      --orange: #c87835;
+      --shadow: 0 18px 50px rgba(29, 31, 39, .08);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    html, body, #root { min-width: 320px; min-height: 100%; margin: 0; }
+    body { background: var(--canvas); }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(11, 116, 223, .2); outline-offset: 2px; }
+    .app { min-height: 100vh; }
+    .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 70px; padding: 0 28px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.92); backdrop-filter: blur(18px); }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 250px; }
+    .mark { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--ink); font-size: 11px; font-weight: 800; }
+    .brand strong, .brand small { display: block; }
+    .brand strong { font-size: 15px; letter-spacing: -.04em; }
+    .brand small { margin-top: 4px; color: var(--faint); font-size: 9px; letter-spacing: .2em; }
+    .top-title { color: var(--muted); font-size: 12px; }
+    .top-actions { display: flex; align-items: center; justify-content: flex-end; gap: 14px; min-width: 250px; }
+    .status { display: inline-flex; align-items: center; gap: 7px; color: var(--green); font-size: 11px; font-weight: 650; white-space: nowrap; }
+    .status i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 650; transition: .16s ease; }
+    .button:hover { border-color: var(--ink); transform: translateY(-1px); }
+    .button.primary { border-color: var(--ink); background: var(--ink); color: #fff; }
+    .button.primary:hover { background: #2c2d32; }
+    .button:disabled { cursor: not-allowed; opacity: .46; transform: none; }
+    .body { display: grid; grid-template-columns: 235px minmax(0, 1fr); min-height: calc(100vh - 70px); }
+    .rail { display: flex; flex-direction: column; padding: 28px 16px; border-right: 1px solid var(--line); background: var(--surface); }
+    .rail-label { padding: 0 12px 12px; color: var(--faint); font-size: 10px; font-weight: 750; letter-spacing: .16em; }
+    .project { margin: 0 8px 26px; padding: 15px; border-radius: 12px; background: var(--ink); color: #fff; }
+    .project small, .project strong { display: block; }
+    .project small { color: #aeb0b9; font-size: 9px; letter-spacing: .14em; }
+    .project strong { margin-top: 10px; font-size: 13px; }
+    .project span { display: block; margin-top: 7px; color: #bfc1c8; font-size: 10px; line-height: 1.45; }
+    .workflow { display: grid; gap: 5px; }
+    .workflow button { display: grid; grid-template-columns: 29px 1fr; gap: 10px; width: 100%; padding: 11px 12px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--muted); text-align: left; }
+    .workflow button:hover { background: var(--soft); color: var(--ink); }
+    .workflow button.active { border-color: var(--blue); background: var(--blue-soft); color: var(--ink); }
+    .workflow b, .workflow small { display: block; }
+    .workflow b { font-size: 12px; }
+    .workflow small { margin-top: 3px; color: inherit; font-size: 9px; opacity: .75; line-height: 1.35; }
+    .workflow em { display: grid; place-items: center; width: 25px; height: 25px; border: 1px solid currentColor; border-radius: 50%; font-size: 10px; font-style: normal; font-weight: 750; }
+    .rail-bottom { margin-top: auto; padding: 18px 12px 0; border-top: 1px solid var(--line); color: var(--faint); font-size: 9px; letter-spacing: .1em; line-height: 1.7; }
+    .main { min-width: 0; padding: 34px 38px 50px; }
+    .main-inner { max-width: 1500px; margin: 0 auto; }
+    .page-head { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 22px; }
+    .kicker { color: var(--blue); font-size: 11px; font-weight: 800; letter-spacing: .17em; }
+    h1 { margin: 10px 0 8px; font-size: clamp(28px, 3vw, 42px); letter-spacing: -.065em; line-height: 1.02; }
+    .page-head p { max-width: 720px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .head-meta { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .head-meta span { padding: 7px 9px; border-radius: 7px; background: var(--surface); }
+    .head-meta strong { padding: 7px 9px; border-radius: 7px; background: #eaf8f0; color: var(--green); }
+    .canvas-shell { display: grid; grid-template-columns: minmax(0, 1fr) 325px; min-height: 690px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
+    .canvas-column { min-width: 0; display: flex; flex-direction: column; }
+    .canvas-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 61px; padding: 0 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.88); }
+    .canvas-toolbar-left, .canvas-toolbar-right { display: flex; align-items: center; gap: 8px; }
+    .toolbar-title b, .toolbar-title small { display: block; }
+    .toolbar-title b { font-size: 12px; }
+    .toolbar-title small { margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .tiny-button { min-height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--muted); font-size: 10px; }
+    .tiny-button:hover { border-color: var(--blue); color: var(--blue); }
+    .flow-area { position: relative; flex: 1; min-height: 620px; background: #fbfbfc; }
+    .flow-area .react-flow__background { background: #fbfbfc; }
+    .flow-area .react-flow__controls { overflow: hidden; border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 5px 16px rgba(0,0,0,.05); }
+    .flow-area .react-flow__controls-button { width: 30px; height: 30px; border: 0; border-bottom: 1px solid var(--line); background: #fff; }
+    .flow-area .react-flow__minimap { right: 14px; bottom: 14px; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.85); }
+    .node-card { width: 228px; overflow: hidden; border: 1px solid #d2d4da; border-radius: 13px; background: #fff; box-shadow: 0 8px 22px rgba(30,31,38,.07); }
+    .node-card.selected { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(11,116,223,.12), 0 10px 24px rgba(30,31,38,.1); }
+    .node-visual { height: 82px; background: linear-gradient(135deg, #dfe7ef, #f4e7dd 48%, #222631); }
+    .node-visual.product { background: radial-gradient(circle at 50% 45%, #f5f7fb 0 18%, #d2d4d8 19% 21%, #fafafa 22% 49%, #d6d8de 50% 53%, #eef0f4 54%); }
+    .node-visual.blue { background: linear-gradient(135deg, #153e68, #8dc4da 45%, #f6ca9b); }
+    .node-visual.purple { background: linear-gradient(135deg, #252d5a, #b49ad0 50%, #f5cba4); }
+    .node-visual.gold { background: linear-gradient(135deg, #39352a, #cb9c48 48%, #f0e1b9); }
+    .node-visual.dark { background: linear-gradient(135deg, #08090c, #353a46 55%, #a56e52); }
+    .node-copy { padding: 11px 12px 12px; }
+    .node-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .node-top span { color: var(--blue); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+    .node-top i { color: var(--green); font-size: 9px; font-style: normal; }
+    .node-copy h3 { margin: 7px 0 4px; font-size: 13px; letter-spacing: -.02em; }
+    .node-copy p { min-height: 28px; margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .node-tags { display: flex; gap: 5px; margin-top: 10px; }
+    .node-tags span { padding: 4px 6px; border-radius: 5px; background: #f3f3f5; color: var(--muted); font-size: 9px; }
+    .node-card .react-flow__handle { width: 8px; height: 8px; border: 2px solid #fff; background: var(--blue); }
+    .inspector { display: flex; flex-direction: column; min-width: 0; border-left: 1px solid var(--line); background: #fff; }
+    .inspector-head { padding: 22px 20px 18px; border-bottom: 1px solid var(--line); }
+    .inspector-head span { color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .15em; }
+    .inspector-head h2 { margin: 8px 0 4px; font-size: 18px; letter-spacing: -.04em; }
+    .inspector-head p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .inspector-content { display: grid; gap: 14px; padding: 20px; }
+    .field { display: grid; gap: 7px; }
+    .field label { color: var(--muted); font-size: 10px; font-weight: 700; }
+    .field input, .field textarea, .field select { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font-size: 12px; }
+    .field textarea { min-height: 82px; resize: vertical; line-height: 1.5; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--blue); outline: 0; }
+    .inspector-divider { height: 1px; background: var(--line); }
+    .asset-preview { display: grid; grid-template-columns: 48px 1fr; gap: 10px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--soft); }
+    .asset-thumb { width: 48px; height: 48px; border-radius: 7px; background: radial-gradient(circle at 50% 45%, #fff 0 19%, #c8cbd1 20% 22%, #fafafa 23% 48%, #d3d5db 49% 53%, #eceef2 54%); }
+    .asset-preview b, .asset-preview small { display: block; }
+    .asset-preview b { font-size: 11px; }
+    .asset-preview small { margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .inspector-actions { margin-top: auto; display: grid; gap: 8px; padding: 20px; border-top: 1px solid var(--line); }
+    .notice { margin-top: 14px; padding: 11px 13px; border: 1px solid #cde7d8; border-radius: 9px; background: #eefaf3; color: var(--green); font-size: 11px; line-height: 1.5; }
+    .notice strong { display: block; margin-bottom: 3px; color: var(--ink); }
+    .empty-inspector { padding: 22px 20px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .empty-inspector b { display: block; margin-bottom: 8px; color: var(--ink); font-size: 14px; }
+    @media (max-width: 1040px) {
+      .canvas-shell { grid-template-columns: 1fr; }
+      .inspector { min-height: 360px; border-top: 1px solid var(--line); border-left: 0; }
+      .inspector-actions { margin-top: 0; }
+    }
+    @media (max-width: 760px) {
+      .topbar { height: auto; min-height: 64px; padding: 12px 16px; }
+      .top-title, .status { display: none; }
+      .top-actions { min-width: 0; }
+      .brand { min-width: 0; }
+      .brand small { display: none; }
+      .body { display: block; }
+      .rail { padding: 12px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .project, .rail-label, .rail-bottom { display: none; }
+      .workflow { grid-template-columns: repeat(3, 1fr); }
+      .workflow button { display: block; padding: 9px 6px; text-align: center; }
+      .workflow button em { margin: 0 auto 5px; }
+      .workflow small { display: none; }
+      .main { padding: 24px 14px 35px; }
+      .page-head { display: block; }
+      .head-meta { margin-top: 16px; }
+      .canvas-toolbar { align-items: flex-start; padding: 12px; }
+      .canvas-toolbar-right { flex-wrap: wrap; justify-content: flex-end; }
+      .flow-area { min-height: 560px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.3.1",
+        "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+        "react/jsx-dev-runtime": "https://esm.sh/react@18.3.1/jsx-dev-runtime",
+        "react-dom": "https://esm.sh/react-dom@18.3.1",
+        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+        "@xyflow/react": "https://esm.sh/@xyflow/react@12.8.6?external=react,react-dom"
+      }
+    }
+  </script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script type="module">
+    import React, { useCallback, useMemo, useState } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { Background, Controls, Handle, MiniMap, Position, ReactFlow, addEdge, applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
+
+    const initialNodes = [
+      { id: 'product', type: 'shot', position: { x: 50, y: 235 }, data: { step: 'SOURCE', title: '产品白底图', description: '产品形态锚点', kind: 'product', tone: 'product', duration: '—', status: '已准备' } },
+      { id: 'shot-01', type: 'shot', position: { x: 350, y: 90 }, data: { step: 'SHOT 01', title: '产品亮相', description: '让产品在光影中第一次出现', kind: '镜头', tone: 'blue', duration: '3s', status: '待生成' } },
+      { id: 'shot-02', type: 'shot', position: { x: 350, y: 350 }, data: { step: 'SHOT 02', title: '材质特写', description: '把核心卖点变成可见细节', kind: '镜头', tone: 'purple', duration: '3s', status: '待生成' } },
+      { id: 'shot-03', type: 'shot', position: { x: 690, y: 90 }, data: { step: 'SHOT 03', title: '使用场景', description: '让产品进入品牌世界', kind: '镜头', tone: 'gold', duration: '4s', status: '待生成' } },
+      { id: 'shot-04', type: 'shot', position: { x: 690, y: 350 }, data: { step: 'SHOT 04', title: '品牌收束', description: '留下高级、克制的最后印象', kind: '镜头', tone: 'dark', duration: '3s', status: '待生成' } },
+      { id: 'final', type: 'shot', position: { x: 1025, y: 235 }, data: { step: 'OUTPUT', title: 'TVC 成片', description: '镜头合成为最终视频', kind: '结果', tone: 'dark', duration: '13s', status: '等待镜头' } }
+    ];
+    const initialEdges = [
+      { id: 'e-product-01', source: 'product', target: 'shot-01', animated: true },
+      { id: 'e-product-02', source: 'product', target: 'shot-02', animated: true },
+      { id: 'e-01-03', source: 'shot-01', target: 'shot-03' },
+      { id: 'e-02-04', source: 'shot-02', target: 'shot-04' },
+      { id: 'e-03-final', source: 'shot-03', target: 'final' },
+      { id: 'e-04-final', source: 'shot-04', target: 'final' }
+    ];
+
+    function ShotNode({ id, data, selected }) {
+      return React.createElement('div', { className: `node-card ${selected ? 'selected' : ''}` },
+        id !== 'product' && React.createElement(Handle, { type: 'target', position: Position.Left }),
+        React.createElement('div', { className: `node-visual ${data.tone || 'blue'}` }),
+        React.createElement('div', { className: 'node-copy' },
+          React.createElement('div', { className: 'node-top' }, React.createElement('span', null, data.step), React.createElement('i', null, data.status)),
+          React.createElement('h3', null, data.title),
+          React.createElement('p', null, data.description),
+          React.createElement('div', { className: 'node-tags' }, React.createElement('span', null, data.kind), React.createElement('span', null, data.duration))
+        ),
+        id !== 'final' && React.createElement(Handle, { type: 'source', position: Position.Right })
+      );
+    }
+
+    function CanvasTools({ onFit }) {
+      return React.createElement('div', { className: 'canvas-toolbar-right' },
+        React.createElement('button', { className: 'tiny-button', onClick: onFit }, '适应画布'),
+        React.createElement('button', { className: 'tiny-button', onClick: () => window.alert('已保存当前分镜结构（演示模式）') }, '保存分镜')
+      );
+    }
+
+    function App() {
+      const [nodes, setNodes] = useState(initialNodes);
+      const [edges, setEdges] = useState(initialEdges);
+      const [selectedId, setSelectedId] = useState('shot-01');
+      const [notice, setNotice] = useState('');
+      const [flowInstance, setFlowInstance] = useState(null);
+      const nodeTypes = useMemo(() => ({ shot: ShotNode }), []);
+      const selected = nodes.find(node => node.id === selectedId);
+
+      const onNodesChange = useCallback(changes => setNodes(current => applyNodeChanges(changes, current)), []);
+      const onEdgesChange = useCallback(changes => setEdges(current => applyEdgeChanges(changes, current)), []);
+      const onConnect = useCallback(connection => setEdges(current => addEdge({ ...connection, animated: true }, current)), []);
+      const onNodeClick = useCallback((event, node) => setSelectedId(node.id), []);
+
+      const updateSelected = (key, value) => {
+        setNodes(current => current.map(node => node.id === selectedId ? { ...node, data: { ...node.data, [key]: value } } : node));
+      };
+
+      const addShot = () => {
+        const number = nodes.filter(node => node.id.startsWith('shot-')).length + 1;
+        const id = `shot-${Date.now()}`;
+        const newNode = { id, type: 'shot', position: { x: 380, y: 610 }, data: { step: `SHOT ${String(number).padStart(2, '0')}`, title: '新镜头', description: '补充一个新的视觉段落', kind: '镜头', tone: 'blue', duration: '3s', status: '待生成' } };
+        setNodes(current => [...current, newNode]);
+        setSelectedId(id);
+        setNotice('已添加新镜头，可以在右侧编辑它的内容。');
+      };
+
+      const generateSelected = () => {
+        if (!selected || selected.id === 'product' || selected.id === 'final') {
+          setNotice('请选择一个具体镜头，再生成该镜头。');
+          return;
+        }
+        setNodes(current => current.map(node => node.id === selectedId ? { ...node, data: { ...node.data, status: '生成中' } } : node));
+        setNotice(`${selected.data.step} 已进入生成队列。接入 n8n 后，这里会提交图片/视频模型任务。`);
+        window.setTimeout(() => {
+          setNodes(current => current.map(node => node.id === selectedId ? { ...node, data: { ...node.data, status: '已生成' } } : node));
+          setNotice(`${selected.data.step} 演示结果已返回。下一步可接入真实 Seedance 视频地址。`);
+        }, 1400);
+      };
+
+      const generateAll = () => {
+        setNodes(current => current.map(node => node.id.startsWith('shot-') ? { ...node, data: { ...node.data, status: '生成中' } } : node));
+        setNotice('全部镜头已进入演示队列。真实版本将由 n8n 分批调用图片模型和 Seedance。');
+        window.setTimeout(() => {
+          setNodes(current => current.map(node => node.id.startsWith('shot-') ? { ...node, data: { ...node.data, status: '已生成' } } : node));
+          setNotice('全部镜头演示结果已返回，可以继续接入成片合成。');
+        }, 1600);
+      };
+
+      return React.createElement('div', { className: 'app' },
+        React.createElement('header', { className: 'topbar' },
+          React.createElement('div', { className: 'brand' }, React.createElement('span', { className: 'mark' }, 'AI'), React.createElement('span', null, React.createElement('strong', null, '大海浮光 AIGC 工作台'), React.createElement('small', null, 'AI AD VIDEO FACTORY'))),
+          React.createElement('span', { className: 'top-title' }, 'TVC产品广告 · 智能分镜画布'),
+          React.createElement('div', { className: 'top-actions' }, React.createElement('span', { className: 'status' }, React.createElement('i'), '画布已连接'), React.createElement('button', { className: 'button', onClick: () => window.location.href = 'figma-preview.html?demo=1' }, '返回工作台'))
+        ),
+        React.createElement('div', { className: 'body' },
+          React.createElement('aside', { className: 'rail' },
+            React.createElement('span', { className: 'rail-label' }, '当前项目'),
+            React.createElement('div', { className: 'project' }, React.createElement('small', null, 'TVC WORKSPACE'), React.createElement('strong', null, '产品高端展示片'), React.createElement('span', null, '白底产品图作为形态锚点，画布负责编排镜头。')),
+            React.createElement('span', { className: 'rail-label' }, '创作流程'),
+            React.createElement('nav', { className: 'workflow' },
+              React.createElement('button', { className: 'active' }, React.createElement('em', null, '01'), React.createElement('span', null, React.createElement('b', null, '产品素材'), React.createElement('small', null, '白底图与产品卖点'))),
+              React.createElement('button', { className: 'active' }, React.createElement('em', null, '02'), React.createElement('span', null, React.createElement('b', null, '智能画布'), React.createElement('small', null, '编排与调整分镜'))),
+              React.createElement('button', null, React.createElement('em', null, '03'), React.createElement('span', null, React.createElement('b', null, '视频结果'), React.createElement('small', null, '生成与导出成片')))
+            ),
+            React.createElement('div', { className: 'rail-bottom' }, 'DESIGNED IN FIGMA<br>BUILT WITH REACT FLOW<br>EXECUTED BY N8N')
+          ),
+          React.createElement('main', { className: 'main' },
+            React.createElement('div', { className: 'main-inner' },
+              React.createElement('div', { className: 'page-head' }, React.createElement('div', null, React.createElement('span', { className: 'kicker' }, '02 / TVC STORYBOARD CANVAS'), React.createElement('h1', null, '把产品，编排成一支广告片。'), React.createElement('p', null, '每个镜头都是一个可编辑的生成任务。先调整视觉方向，再让工作流执行。')), React.createElement('div', { className: 'head-meta' }, React.createElement('span', null, 'Seedance 2.0'), React.createElement('strong', null, '演示模式'))),
+              React.createElement('section', { className: 'canvas-shell' },
+                React.createElement('div', { className: 'canvas-column' },
+                  React.createElement('div', { className: 'canvas-toolbar' }, React.createElement('div', { className: 'canvas-toolbar-left' }, React.createElement('div', { className: 'toolbar-title' }, React.createElement('b', null, 'TVC 智能分镜'), React.createElement('small', null, `${nodes.filter(node => node.id.startsWith('shot-')).length} 个镜头 · 可拖拽调整`))), React.createElement(CanvasTools, { onFit: () => flowInstance?.fitView({ padding: .18, duration: 350 }) })),
+                  React.createElement('div', { className: 'flow-area' }, React.createElement(ReactFlow, { nodes, edges, nodeTypes, onNodesChange, onEdgesChange, onConnect, onNodeClick, onPaneClick: () => setSelectedId(null), onInit: setFlowInstance, fitView: true, fitViewOptions: { padding: .18 }, deleteKeyCode: ['Backspace', 'Delete'] }, React.createElement(Background, { gap: 22, size: 1, color: '#dedfe5' }), React.createElement(Controls), React.createElement(MiniMap, { nodeColor: node => node.id === 'product' ? '#0b74df' : node.id === 'final' ? '#111216' : '#c6c8ce' })))
+                ),
+                React.createElement('aside', { className: 'inspector' },
+                  selected ? React.createElement(React.Fragment, null,
+                    React.createElement('div', { className: 'inspector-head' }, React.createElement('span', null, selected.data.step), React.createElement('h2', null, selected.data.title), React.createElement('p', null, selected.id === 'product' ? '产品素材会作为所有镜头的形态依据。' : '这里的内容会成为该镜头的生成上下文。')),
+                    React.createElement('div', { className: 'inspector-content' },
+                      selected.id === 'product' ? React.createElement('div', { className: 'asset-preview' }, React.createElement('div', { className: 'asset-thumb' }), React.createElement('div', null, React.createElement('b', null, '产品白底图'), React.createElement('small', null, 'public URL 待接入对象存储'))) : React.createElement(React.Fragment, null,
+                        React.createElement('div', { className: 'field' }, React.createElement('label', null, '镜头标题'), React.createElement('input', { value: selected.data.title, onChange: event => updateSelected('title', event.target.value) })),
+                        React.createElement('div', { className: 'field' }, React.createElement('label', null, '镜头描述'), React.createElement('textarea', { value: selected.data.description, onChange: event => updateSelected('description', event.target.value) })),
+                        React.createElement('div', { className: 'field' }, React.createElement('label', null, '视觉影调'), React.createElement('select', { value: selected.data.tone, onChange: event => updateSelected('tone', event.target.value) }, React.createElement('option', { value: 'blue' }, '冷静通透'), React.createElement('option', { value: 'purple' }, '梦幻高级'), React.createElement('option', { value: 'gold' }, '鎏金暖光'), React.createElement('option', { value: 'dark' }, '深色高奢'))),
+                        React.createElement('div', { className: 'field' }, React.createElement('label', null, '镜头时长'), React.createElement('select', { value: selected.data.duration, onChange: event => updateSelected('duration', event.target.value) }, React.createElement('option', null, '3s'), React.createElement('option', null, '4s'), React.createElement('option', null, '5s'), React.createElement('option', null, '6s')))
+                      ),
+                      React.createElement('div', { className: 'inspector-divider' }),
+                      React.createElement('div', { className: 'field' }, React.createElement('label', null, '执行方式'), React.createElement('input', { value: selected.id === 'product' ? '素材上传 → 对象存储' : '镜头描述 → 图片 / Seedance', readOnly: true }))
+                    ),
+                    React.createElement('div', { className: 'inspector-actions' }, selected.id !== 'product' && selected.id !== 'final' && React.createElement('button', { className: 'button primary', onClick: generateSelected }, '生成当前镜头 →'), React.createElement('button', { className: 'button', onClick: addShot }, '＋ 添加镜头'), React.createElement('button', { className: 'button', onClick: generateAll }, '生成全部镜头'))
+                  ) : React.createElement('div', { className: 'empty-inspector' }, React.createElement('b', null, '选择一个镜头'), '点击画布中的镜头卡片，在这里编辑标题、画面描述、影调和时长。')
+                )
+              ),
+              notice && React.createElement('div', { className: 'notice' }, React.createElement('strong', null, '画布状态'), notice)
+            )
+          )
+        )
+      );
+    }
+
+    createRoot(document.getElementById('root')).render(React.createElement(App));
+  </script>
+</body>
+</html>

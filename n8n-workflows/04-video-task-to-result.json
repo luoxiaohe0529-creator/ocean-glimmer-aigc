@@ -1,0 +1,127 @@
+[
+  {
+    "updatedAt": "2026-07-24T13:19:09.934Z",
+    "createdAt": "2026-07-24T13:19:09.934Z",
+    "id": "h7JrqtKU40HqnYXE",
+    "name": "大海浮光 AIGC｜04 视频任务到成片",
+    "description": "接收视频任务和补充素材 URL，返回 Seedance 生成队列状态与成片 URL 契约。",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "id": "68ba079c-d4cd-490e-9e2b-ab543f603426",
+        "name": "接收视频生成任务",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ai-ad-video-task-v2",
+          "authentication": "none",
+          "responseMode": "responseNode",
+          "options": {
+            "allowedOrigins": "*"
+          }
+        },
+        "webhookId": "8113bb55-b415-4211-811e-ee811bf52d71"
+      },
+      {
+        "id": "491745db-e496-45a3-9591-128d8c009c45",
+        "name": "提交 Seedance 成片任务",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          224,
+          0
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const body = $input.first().json.body || {};\nif (!body.video_task_id) {\n  return [{ json: { ok: false, status: 'rejected', error: '缺少 video_task_id' } }];\n}\nreturn [{ json: {\n  ok: true,\n  video_task_id: body.video_task_id,\n  product_record_id: body.product_record_id || '',\n  status: 'queued',\n  video_url: '',\n  result_url: '',\n  public_url: '',\n  provider: 'Seedance 2.0',\n  duration_seconds: 15,\n  aspect_ratio: '9:16',\n  message: '视频任务已进入生成队列。接入 Seedance 凭证后，此节点可替换为真实的提交与轮询节点。',\n  product_image_url: body.product_image_url || ''\n} }];"
+        }
+      },
+      {
+        "id": "73bb1a6d-fa36-4085-8bdc-72279ad38426",
+        "name": "返回成片状态",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          448,
+          0
+        ],
+        "parameters": {
+          "respondWith": "firstIncomingItem",
+          "enableStreaming": false,
+          "options": {
+            "responseCode": 200
+          }
+        }
+      }
+    ],
+    "connections": {
+      "接收视频生成任务": {
+        "main": [
+          [
+            {
+              "node": "提交 Seedance 成片任务",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "提交 Seedance 成片任务": {
+        "main": [
+          [
+            {
+              "node": "返回成片状态",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "availableInMCP": true
+    },
+    "staticData": null,
+    "meta": {
+      "aiBuilderAssisted": true,
+      "builderVariant": "mcp"
+    },
+    "pinData": null,
+    "versionId": "ebe1f1c7-0e28-4309-ac5d-08fe1271ea55",
+    "activeVersionId": "ebe1f1c7-0e28-4309-ac5d-08fe1271ea55",
+    "versionCounter": 3,
+    "triggerCount": 1,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-24T13:19:09.935Z",
+        "createdAt": "2026-07-24T13:19:09.935Z",
+        "role": "workflow:owner",
+        "workflowId": "h7JrqtKU40HqnYXE",
+        "projectId": "7THXHYUL0q8j8YhX",
+        "project": {
+          "updatedAt": "2026-07-23T12:37:01.650Z",
+          "createdAt": "2026-02-23T09:38:30.317Z",
+          "id": "7THXHYUL0q8j8YhX",
+          "name": "晓荷 luoxiaohe0529@gmail.com <luoxiaohe0529@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "6103da84-913c-4ec2-891b-973134c19bf8"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]

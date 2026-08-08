@@ -1,0 +1,360 @@
+[
+  {
+    "updatedAt": "2026-07-30T07:58:01.631Z",
+    "createdAt": "2026-07-27T15:17:20.088Z",
+    "id": "RRRZVbLYqvSCFhFW",
+    "name": "编剧导演｜分镜图与主角形象生成",
+    "description": "接收前端 storyboard，逐镜头调用 Seedream 生成分镜图，兼容同步返回与异步轮询，并汇总图片链接返回前端。",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "aigc-storyboard-images-v1",
+          "responseMode": "responseNode",
+          "options": {
+            "allowedOrigins": "*"
+          }
+        },
+        "id": "ddec6be8-f44b-467e-8363-b4440185d418",
+        "name": "前端｜提交分镜图任务",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          16,
+          0
+        ],
+        "webhookId": "adefaa62-5052-48f3-9ab5-496ffbd8c63a"
+      },
+      {
+        "id": "b52dbc8b-4659-4535-bb7d-aba72fddf2db",
+        "name": "组装 Image 2 / Nano Banana Pro 提示词",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          240,
+          0
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "jsCode": "const incoming=$input.first().json;const body=incoming.body||incoming;\nconst isCharacter=[\"generate_character\",\"generate_character_reference\"].includes(body.action);\nif(isCharacter){\n  const charType=body.character_type||\"真人达人\";const charDesc=body.character_description||\"\";\n  const refs=(body.character_reference_images||[]).map(v=>v?.url||v).filter(Boolean);\n  const product=body.product_brief||{};const pn=product[\"产品名称\"]||product.product_name||\"\";\n  const prompt=charType+\"角色设定图。角色描述：\"+charDesc+\"。全身正面站立，清晰展示面部特征、发型、服装与整体气质。纯色背景，柔和影棚光，超写实，9:16竖屏。\"+(pn?\"产品：\"+pn+\"。角色形象需与品牌调性一致。\":\"\");\n  return[{json:{kind:\"character\",model:refs.length?\"gpt-image-2-image-to-image\":\"gpt-image-2-text-to-image\",prompt,reference_images:refs,aspect_ratio:\"9:16\"}}];\n}\nlet shots=body.storyboard;if(typeof shots===\"string\"){try{shots=JSON.parse(shots);}catch(e){throw new Error(\"storyboard 不是有效 JSON\");}}\nif(!Array.isArray(shots)||!shots.length)throw new Error(\"缺少 storyboard 数组\");\nconst product=body.product_brief||{};const pn=product[\"产品名称\"]||product.product_name||\"产品\";\nconst selling=product[\"核心卖点\"]||product.selling_points||\"\";const sell=Array.isArray(selling)?selling.join(\" · \"):String(selling);\nconst refs=(body.product_images||[]).map(v=>v?.url||v).filter(Boolean);\nconst panels=shots.map((shot,i)=>\"Panel \"+(i+1)+\": \"+(shot.image_prompt||shot.visual||shot.description||shot.scene_description||shot.prompt||\"\"));\nconst prompt=\"Create one coherent 9:16 storyboard contact sheet with \"+shots.length+\" clearly separated panels. \"+panels.join(\" \")+\" Product: \"+pn+\". Key features: \"+sell+\". Keep product, cast, lighting and art direction consistent. No text, logos or watermarks.\";\nreturn[{json:{kind:\"storyboard\",model:\"nano-banana-pro\",video_task_id:body.video_task_id||body.task_id||\"\",product_record_id:body.product_record_id||\"\",prompt,reference_images:refs,aspect_ratio:\"9:16\",resolution:\"2K\",shot_count:shots.length,source_shots:shots}}];"
+        }
+      },
+      {
+        "id": "5a1436d5-ccf2-4f39-8cfa-2265d9e69dd7",
+        "name": "KIE 适配器｜创建图片任务",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          520,
+          0
+        ],
+        "retryOnFail": true,
+        "maxTries": 3,
+        "waitBetweenTries": 5000,
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $json.kind === \"character\" ? \"http://127.0.0.1:8787/providers/kie/character\" : \"http://127.0.0.1:8787/providers/kie/storyboard\" }}",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ { prompt: $json.prompt, reference_images: $json.reference_images, aspect_ratio: $json.aspect_ratio, resolution: $json.resolution || \"2K\" } }}",
+          "options": {
+            "timeout": 180000,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "54d9fe09-0ef1-4e9d-9be6-8f0ab47a54d9",
+        "name": "保存 KIE 图片任务上下文",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          780,
+          0
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "jsCode": "const created=$input.first().json;const source=$(\"组装 Image 2 / Nano Banana Pro 提示词\").first().json;const taskId=created.task_id||created.taskId||created.data?.taskId;if(!taskId)throw new Error(\"KIE 未返回图片任务 ID\");return[{json:{...source,kie_task_id:String(taskId),_poll_count:0}}];"
+        }
+      },
+      {
+        "id": "4bb7ffce-49c9-4192-84f4-dcbdbd91482b",
+        "webhookId": "2256c39c-47d0-4666-9802-e10e2c933f3f",
+        "name": "等待图片生成",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1040,
+          0
+        ],
+        "parameters": {
+          "resume": "timeInterval",
+          "amount": 20,
+          "unit": "seconds"
+        }
+      },
+      {
+        "id": "9ec236eb-610a-47ae-a42b-4794b5b8eb12",
+        "name": "KIE 适配器｜查询图片状态",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1300,
+          0
+        ],
+        "retryOnFail": true,
+        "maxTries": 3,
+        "waitBetweenTries": 5000,
+        "parameters": {
+          "method": "POST",
+          "url": "http://127.0.0.1:8787/providers/kie/status",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ { task_id: $json.kie_task_id, kind: $json.kind } }}",
+          "options": {
+            "timeout": 180000,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "a0e69ea7-f6cb-40ab-983d-51c8c93ad3a2",
+        "name": "检查图片任务状态",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1560,
+          0
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "jsCode": "const result=$input.first().json;const context=$(\"等待图片生成\").item.json;const status=String(result.status||\"unknown\").toLowerCase();if([\"fail\",\"failed\",\"error\"].includes(status))throw new Error(\"KIE 图片生成失败\");const count=Number(context._poll_count||0)+1;if(count>45)throw new Error(\"KIE 图片生成超时\");const urls=(result.urls||[]).filter(Boolean);return[{json:{...context,status,image_urls:urls,completed:status===\"success\"&&urls.length>0,_poll_count:count}}];"
+        }
+      },
+      {
+        "id": "d892765f-796c-438b-aa06-b02fdbd675d9",
+        "name": "图片生成完成？",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1810,
+          0
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "leftValue": "={{ $json.completed }}",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                },
+                "rightValue": ""
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "3f5d9eb9-ffe0-456b-a7fb-131423739077",
+        "name": "返回前端｜图片 JSON",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2070,
+          -120
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "jsCode": "const data=$input.first().json;const urls=(data.image_urls||[]).filter(Boolean);if(!urls.length)throw new Error(\"图片任务成功但没有 URL\");const character=data.kind===\"character\";return[{json:{ok:true,status:\"completed\",provider:\"kie.ai\",model:data.model,kind:data.kind,count:urls.length,images:urls,urls,image_url:urls[0],storyboard_image_url:character?undefined:urls[0],character_image_url:character?urls[0]:undefined,storyboard_images:character?[]:urls.map((url,index)=>({index,url,image_url:url}))}}];"
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ]
+            }
+          }
+        },
+        "id": "55be7f1e-5f0f-4a5a-a844-d219cf51c726",
+        "name": "响应前端",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          2320,
+          -120
+        ]
+      }
+    ],
+    "connections": {
+      "前端｜提交分镜图任务": {
+        "main": [
+          [
+            {
+              "node": "组装 Image 2 / Nano Banana Pro 提示词",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "组装 Image 2 / Nano Banana Pro 提示词": {
+        "main": [
+          [
+            {
+              "node": "KIE 适配器｜创建图片任务",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "KIE 适配器｜创建图片任务": {
+        "main": [
+          [
+            {
+              "node": "保存 KIE 图片任务上下文",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "保存 KIE 图片任务上下文": {
+        "main": [
+          [
+            {
+              "node": "等待图片生成",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "等待图片生成": {
+        "main": [
+          [
+            {
+              "node": "KIE 适配器｜查询图片状态",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "KIE 适配器｜查询图片状态": {
+        "main": [
+          [
+            {
+              "node": "检查图片任务状态",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "检查图片任务状态": {
+        "main": [
+          [
+            {
+              "node": "图片生成完成？",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "图片生成完成？": {
+        "main": [
+          [
+            {
+              "node": "返回前端｜图片 JSON",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "等待图片生成",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "返回前端｜图片 JSON": {
+        "main": [
+          [
+            {
+              "node": "响应前端",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "availableInMCP": true,
+      "binaryMode": "separate"
+    },
+    "staticData": null,
+    "meta": {
+      "aiBuilderAssisted": true
+    },
+    "pinData": {},
+    "versionId": "6e5b4472-7047-4ac1-b0da-f542cf7660b7",
+    "activeVersionId": "5f20cc1c-97f8-462b-b9d4-0ea17497a822",
+    "versionCounter": 104,
+    "triggerCount": 1,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-27T15:17:20.096Z",
+        "createdAt": "2026-07-27T15:17:20.096Z",
+        "role": "workflow:owner",
+        "workflowId": "RRRZVbLYqvSCFhFW",
+        "projectId": "7THXHYUL0q8j8YhX",
+        "project": {
+          "updatedAt": "2026-07-23T12:37:01.650Z",
+          "createdAt": "2026-02-23T09:38:30.317Z",
+          "id": "7THXHYUL0q8j8YhX",
+          "name": "晓荷 luoxiaohe0529@gmail.com <luoxiaohe0529@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "6103da84-913c-4ec2-891b-973134c19bf8"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]

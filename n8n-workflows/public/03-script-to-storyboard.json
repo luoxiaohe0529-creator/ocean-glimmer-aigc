@@ -1,0 +1,155 @@
+{
+  "name": "大海浮光 AIGC｜03 脚本到导演分镜（公开模板）",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-ad-script-to-video-task-v2",
+        "responseMode": "lastNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "c49e1011-1c87-4f2a-bdb7-03a2bba51eea",
+      "name": "前端｜确认脚本与模特",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const b=$input.first().json.body||$input.first().json;if(!b.product_record_id||!b.script_text)throw new Error('缺少产品记录或脚本');const raw=b.script_segments||b.storyboard||[];if(!Array.isArray(raw)||raw.length===0)throw new Error('缺少 Gemini 生成的 script_segments');const storyboard=raw.map((s,i)=>({shot:i+1,time:s.time||'',visual:s.visual||s.scene_description||'',action:s.camera_movement||s.action||'',dialogue:s.dialogue||s.narration||'',subtitle:s.subtitle||'',music_sfx:s.music_sfx||'',seedance_prompt:s.video_prompt||s.seedance_prompt||''}));const videoPrompt=storyboard.map(s=>`镜头${s.shot} ${s.time}：${s.visual}；${s.action}`).join('；');return [{json:{...b,language:b.language||'中文',content_type:b.content_type||'真人口播带货',creator_profile:b.creator_profile||b.character_description||'自然真实',storyboard,video_prompt:videoPrompt,model_provider:b.model_provider||'gemini'}}];"
+      },
+      "id": "ef462e38-a65e-40cf-aaf3-3e942eb4a9a2",
+      "name": "校验视频任务输入",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"app_id\": \"YOUR_FEISHU_APP_ID\", \"app_secret\": \"CONFIGURE_IN_N8N_CREDENTIALS\" } }}",
+        "options": {}
+      },
+      "id": "d58fe512-ac1a-4c47-a902-75974717c00b",
+      "name": "飞书｜获取应用令牌",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.feishu.cn/open-apis/bitable/v1/apps/YOUR_FEISHU_APP_TOKEN/tables/YOUR_FEISHU_TABLE_ID/records",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.tenant_access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { fields: { \"产品名称\": $(\"校验视频任务输入\").first().json.product_brief[\"产品名称\"] || $(\"校验视频任务输入\").first().json.product_brief.product_name || \"\", \"视频状态\": \"pending\", \"错误信息\": \"\", \"产品链接\": {\"link\": $(\"校验视频任务输入\").first().json.product_url || \"\", \"text\": \"商品链接\"}, \"口播脚本\": $(\"校验视频任务输入\").first().json.script_text || \"\", \"语言\": $(\"校验视频任务输入\").first().json.language || \"中文\", \"内容分类\": $(\"校验视频任务输入\").first().json.content_type || \"\" } } }}",
+        "options": {}
+      },
+      "id": "6e1e186d-4baa-40b3-adda-bcec502253fc",
+      "name": "飞书｜创建视频任务记录",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1344,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const fs=$input.first().json;const p=$('校验视频任务输入').first().json;const id=fs.data?.record?.record_id||fs.data?.record_id;if(!id)throw new Error('飞书未返回视频任务记录ID');return [{json:{ok:true,status:'prepared',video_task_id:id,task_id:id,product_record_id:p.product_record_id,storyboard:p.storyboard,video_prompt:p.video_prompt,creator_profile:p.creator_profile,model_provider:p.model_provider}}];"
+      },
+      "id": "baf1234e-9d2a-4645-a02c-46face47152d",
+      "name": "返回前端｜视频任务与分镜",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "前端｜确认脚本与模特": {
+      "main": [
+        [
+          {
+            "node": "校验视频任务输入",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "校验视频任务输入": {
+      "main": [
+        [
+          {
+            "node": "飞书｜获取应用令牌",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "飞书｜获取应用令牌": {
+      "main": [
+        [
+          {
+            "node": "飞书｜创建视频任务记录",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "飞书｜创建视频任务记录": {
+      "main": [
+        [
+          {
+            "node": "返回前端｜视频任务与分镜",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "active": false,
+  "meta": {
+    "publicTemplate": true,
+    "sourceWorkflowName": "大海浮光 AIGC｜03 脚本到视频任务",
+    "note": "Bind your own credentials and replace resource placeholders before publishing."
+  }
+}

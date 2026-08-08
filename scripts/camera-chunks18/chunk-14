@@ -1,0 +1,18 @@
+provider_route：primary_provider、fallback_provider 和 provider_prompt。
+
+quality_check：生成前的事实、一致性、摄影执行和安全检查结果。
+
+十七、快速检索知识卡
+
+每张运行知识卡建议包含：card_id、role、card_type、content_type、filter_id、filter_value、name、tags、visual_focus、look、camera_rhythm、subject_action、product_rule、reference_rule、continuity_rule、generation_prompt、provider、negative_rules 和 safety。
+
+一次 Stage 3 任务只组合：
+
+1 张摄影执行总契约。
+1 张内容类型摄影母版。
+3 张前端筛选器匹配卡。
+1 至 2 张创意机制卡。
+1 张参考图与连续性卡。
+1 张模型适配卡。
+1 张安全卡。
+

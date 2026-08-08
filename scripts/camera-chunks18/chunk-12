@@ -1,0 +1,18 @@
+Subject identity and product identity.
+Visible action and product interaction.
+Environment, location and time of day.
+Shot size, composition and camera position.
+Camera movement and subject movement.
+Lighting direction, contrast and color palette.
+Surface materials and physical details.
+Natural motion and sound synchronization.
+Continuity from previous shot and anchor for next shot.
+Aspect ratio and duration.
+Negative constraints.
+
+禁止只输出关键词堆砌。提示词必须描述一个清晰、连续、可发生的镜头过程。
+
+十五、负面提示词与安全规则
+
+统一禁止：产品变形、颜色漂移、包装文字变化、额外 Logo、乱码文字、多余电子产品、人物身份变化、脸部变形、手指畸形、服装变化、左右手跳变、物体穿透、不自然悬浮、违反重力、镜头无意义抖动、画面闪烁、背景跳变和光线方向突变。
+

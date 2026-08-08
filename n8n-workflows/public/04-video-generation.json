@@ -1,0 +1,445 @@
+{
+  "name": "大海浮光 AIGC｜04 视频生成与成片（公开模板）",
+  "nodes": [
+    {
+      "id": "779ba043-e13e-41c2-aef5-65b99dd0a3a9",
+      "name": "前端｜提交视频生成",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        80
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-ad-video-task-v2",
+        "responseMode": "lastNode",
+        "responseData": "firstEntryJson",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      }
+    },
+    {
+      "id": "56dcc0d9-179a-4e64-9619-b4876db612be",
+      "name": "整理Seedance生成参数",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        80
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const b=$input.first().json.body||$input.first().json;\nconst pid=b.video_task_id||b.product_record_id||\"rec_\"+Date.now();\nconst product=b.product_brief||{};\nconst name=product[\"产品名称\"]||product.product_name||\"产品\";\nconst selling=product[\"核心卖点\"]||product.selling_points||\"\";\nconst sell=Array.isArray(selling)?selling.join(\" · \"):String(selling);\nconst duration=Number(b.duration)||15;\nconst requestedResolution=String(b.resolution||\"480p\").trim().toLowerCase();\nconst allowedResolutions=[\"480p\",\"720p\",\"1080p\"];\nconst resolution=allowedResolutions.includes(requestedResolution)?requestedResolution:\"480p\";\nconst filterValues=b.filter_values||b.filterValues||{};\nconst adType=filterValues.ad_type||b.ad_type||\"由 AI 决定\";\nconst voiceType=filterValues.voice_type||b.voice_type||\"真人口播\";\nconst contentType=b.content_type||\"真人口播带货\";\nconst creativeTags=Object.entries(filterValues).filter(([key,value])=>value&&![\"ad_type\",\"voice_type\"].includes(key)).map(([,value])=>String(value)).join(\" · \");\nconst creativePlan=b.creative_plan||b.selected_plan||{};\nconst directorInstruction=b.director_instruction||creativePlan.director_guidance||\"\";\nconst planDirection=[creativePlan.core_hook||creativePlan.hook||\"\",creativePlan.slogan||\"\",creativePlan.mood_board||\"\",creativePlan.opening_method||\"\",creativePlan.rhythm_skeleton||\"\",Array.isArray(creativePlan.visual_codes)?creativePlan.visual_codes.join(\"、\"):creativePlan.visual_codes||\"\"].filter(Boolean).join(\"；\");\nconst selectedMoodBoard=b.selected_mood_board||creativePlan.selected_mood_board||{};\nconst moodValue=value=>Array.isArray(value)?value.filter(Boolean).join(\"、\"):value&&typeof value===\"object\"?Object.values(value).filter(Boolean).join(\"、\"):String(value||\"\");\nconst moodDirection=[\n  \"名称：\"+moodValue(selectedMoodBoard.name||creativePlan.mood_board),\n  \"情绪：\"+moodValue(selectedMoodBoard.emotion_direction||creativePlan.emotion_direction),\n  \"色彩：\"+moodValue(selectedMoodBoard.palette),\n  \"光线：\"+moodValue(selectedMoodBoard.lighting),\n  \"材质：\"+moodValue(selectedMoodBoard.materials),\n  \"场景：\"+moodValue(selectedMoodBoard.scene_grammar),\n  \"人物：\"+moodValue(selectedMoodBoard.character_state),\n  \"镜头语言：\"+moodValue(selectedMoodBoard.camera_language),\n  \"负面约束：\"+moodValue(selectedMoodBoard.negative_rules)\n].filter(value=>!value.endsWith(\"：\")).join(\"；\");\nconst filterSummary=JSON.stringify(filterValues);\nlet storyboard=b.storyboard;\nif(typeof storyboard===\"string\"){try{storyboard=JSON.parse(storyboard);}catch(error){throw new Error(\"storyboard 不是有效 JSON\");}}\nlet storyboardSegments=b.segments;\nif(typeof storyboardSegments===\"string\"){try{storyboardSegments=JSON.parse(storyboardSegments);}catch(error){storyboardSegments=[];}}\nif(!Array.isArray(storyboardSegments))storyboardSegments=[];\nif(!Array.isArray(storyboard))storyboard=[];\nif(!storyboard.length&&storyboardSegments.length)storyboard=storyboardSegments.reduce((all,segment)=>all.concat(Array.isArray(segment.storyboard)?segment.storyboard:[]),[]);\nif(!storyboard.length)throw new Error(\"缺少导演分镜，不能直接根据脚本文本重新创作\");\nconst sourceScriptSegments=Array.isArray(b.script_segments)?b.script_segments:[];\nconst textOverlayKeys=new Set([\"subtitle\",\"subtitle_zh\",\"subtitles\",\"caption\",\"captions\",\"on_screen_text\",\"text_overlay\",\"text_overlays\",\"title_card\",\"supers\"]);\nconst withoutTextOverlays=value=>{\n  if(Array.isArray(value))return value.map(withoutTextOverlays);\n  if(!value||typeof value!==\"object\")return value;\n  return Object.fromEntries(Object.entries(value).filter(([key])=>!textOverlayKeys.has(String(key).toLowerCase())).map(([key,item])=>[key,withoutTextOverlays(item)]));\n};\nconst sourceScriptSegmentsForVideo=withoutTextOverlays(sourceScriptSegments);\nconst validStoryboardSegments=storyboardSegments.filter(segment=>{\n  if(!segment||!Array.isArray(segment.storyboard)||!segment.storyboard.length)return false;\n  const start=Number(segment.start);\n  const end=Number(segment.end);\n  return Number.isFinite(start)&&Number.isFinite(end)&&end>start&&end-start<=15;\n});\nconst totalSegments=Math.max(1,Math.ceil(duration/15),validStoryboardSegments.length||0);\nconst parseStart=value=>{const match=String(value||\"\").match(/(\\d+(?:\\.\\d+)?)/);return match?Number(match[1]):0;};\nconst parseEnd=value=>{const match=String(value||\"\").match(/[-~至](\\d+(?:\\.\\d+)?)/);return match?Number(match[1]):parseStart(value);};\nconst shotStart=shot=>Number.isFinite(Number(shot.start))?Number(shot.start):parseStart(shot.time||shot.timestamp);\nconst shotEnd=shot=>Number.isFinite(Number(shot.end))?Number(shot.end):parseEnd(shot.time||shot.timestamp);\nconst shotText=(shot,index)=>{\n  const shotWindow=shot.time||shot.timestamp||((shot.start||0)+\"-\"+(shot.end||\"\")+\"s\");\n  const values=[\n    \"镜头\"+(index+1)+\"（\"+shotWindow+\"）\",\n    \"画面：\"+(shot.visual||shot.scene_description||shot.description||\"\"),\n    \"动作：\"+(shot.action||\"\"),\n    \"运镜：\"+(shot.camera_movement||shot.camera||\"\"),\n    \"人物：\"+(shot.performance||shot.character_action||\"\"),\n    \"产品露出：\"+(shot.product_exposure||\"\"),\n    \"光线材质：\"+(shot.lighting||shot.materials||\"\"),\n    \"声音：\"+(shot.music_sfx||\"\"),\n    \"口播：\"+(shot.dialogue||shot.voiceover||\"\"),\n    \"视频提示词：\"+(shot.video_prompt||shot.seedance_prompt||\"\"),\n    \"连续性：\"+(Array.isArray(shot.continuity_anchors)?shot.continuity_anchors.join(\"、\"):shot.continuity_anchors||\"\")\n  ];\n  return values.filter(value=>!value.endsWith(\"：\")).join(\"；\");\n};\nconst shotsForSegment=index=>{\n  const segment=validStoryboardSegments[index];\n  if(segment&&Array.isArray(segment.storyboard)&&segment.storyboard.length)return segment.storyboard;\n  const start=index*15;\n  const end=Math.min(duration,(index+1)*15);\n  if(totalSegments===1)return storyboard;\n  return storyboard.filter(shot=>shotStart(shot)<end&&shotEnd(shot)>start);\n};\nconst refs=[b.product_image_url,...(Array.isArray(b.product_images)?b.product_images.map(image=>image&&image.url||image):[])].filter(Boolean).slice(0,5);\nconst useVeo=/^(英文|english|en)$/i.test(String(b.language||\"中文\").trim());\nreturn Array.from({length:totalSegments},(_,index)=>{\n  const shots=shotsForSegment(index);\n  const segmentStart=Number(validStoryboardSegments[index]?.start);\n  const segmentEnd=Number(validStoryboardSegments[index]?.end);\n  const actualStart=Number.isFinite(segmentStart)?segmentStart:index*15;\n  const actualEnd=Number.isFinite(segmentEnd)?segmentEnd:Math.min(duration,(index+1)*15);\n  const shotsForVideo=shots.map(withoutTextOverlays);\n  const exactShotPlan=shotsForVideo.map((shot,shotIndex)=>shotText(shot,shotIndex)).join(\"\\n\");\n  const prompt=[\n    \"9:16 竖屏商业视频，第\"+(index+1)+\"/\"+totalSegments+\"段，时长\"+(actualEnd-actualStart)+\"秒。\",\n    \"这是已完成的导演分镜执行任务，不是重新创意。必须按镜头顺序逐条执行，不得删除、合并、改写或补造镜头。\",\n    \"产品：\"+name+\"。核心卖点：\"+sell+\"。内容类型：\"+contentType+\"。广告形式：\"+adType+\"。声音：\"+voiceType+\"。分辨率：\"+resolution+\"。\",\n    \"筛选器结果：\"+filterSummary+\"。创意方向：\"+(creativeTags||\"由已选方案决定\")+\"。\",\n    \"已选创意方案：\"+(planDirection||\"按上游创意方案执行\")+\"。Mood Board 视觉执行约束：\"+(moodDirection||\"按上游 Mood Board 执行\")+\"。导演指导：\"+directorInstruction+\"。\",\n    \"Stage 2 结构化脚本段（已移除所有字幕字段）：\"+JSON.stringify(sourceScriptSegmentsForVideo)+\"。\",\n    \"本段逐镜执行清单：\\n\"+exactShotPlan,\n    \"Mood Board 是本段的主视觉，不得退化为普通产品展示：必须把它的主色、光线、材质、人物状态和镜头节奏落实到对应镜头。Slogan 只作为创意方向，不得渲染成画面文字。\",\n    \"如果上游脚本与无字幕规则冲突，以无字幕规则为最高优先级：脚本中出现的字幕、标题、品牌名、Slogan 文字、屏幕文字、UI 或界面均改为纯视觉动作，不得生成任何文字画面。\",\n    \"成片禁止任何字幕、字幕条、标题卡、品牌字样、Slogan 文字、UI、屏幕文字、Logo 和水印；可以保留口播与环境音，但绝不能把口播转成文字。\",\n    \"保持产品外观、包装、色彩、人物、服装、场景和光线连续；不要出现未被上游允许的品牌标识、道具或功能。\"\n  ].join(\"\\n\");\n  const content=[{type:\"text\",text:prompt}];\n  for(const url of refs)content.push({type:\"image_url\",image_url:{url},role:\"reference_image\"});\n  return {json:{...b,video_task_id:pid,video_prompt:prompt,seedance_content:content,ref_images:refs,segment_index:index+1,total_segments:totalSegments,duration:actualEnd-actualStart,resolution,no_subtitles:true,source_shots:shotsForVideo,source_script_segments:sourceScriptSegmentsForVideo,segment_start:actualStart,segment_end:actualEnd,use_veo:useVeo,provider:useVeo?\"kie.ai/veo3.1\":\"seedance-official\"}};\n});"
+      }
+    },
+    {
+      "id": "6c7fef87-68ea-46b3-b209-809e3be80d46",
+      "name": "Seedance 2.0｜创建15秒视频",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://ark.cn-beijing.volces.com/api/v3/contents/generations/tasks",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer CONFIGURE_IN_N8N_CREDENTIALS"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { model: \"doubao-seedance-2-0-260128\", content: $json.seedance_content, generate_audio: true, ratio: \"9:16\", resolution: $json.resolution || \"480p\", duration: 15, watermark: false } }}",
+        "options": {
+          "timeout": 180000
+        }
+      }
+    },
+    {
+      "id": "711ee445-756c-4120-8a44-ee462d07b0d8",
+      "name": "等待视频生成",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        80
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 15,
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "4dadaff6-d3bc-4ae7-81f7-5cef3cb6635b",
+      "name": "Seedance 2.0｜查询生成状态",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ \"https://ark.cn-beijing.volces.com/api/v3/contents/generations/tasks/\" + $json.seedance_task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer CONFIGURE_IN_N8N_CREDENTIALS"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 10000
+    },
+    {
+      "id": "67cdac36-2040-44b0-8cbf-9b4b37a0519f",
+      "name": "检查视频状态",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const result=$input.first().json;\nconst context=$(\"等待视频生成\").item.json;\nconst status=String(result.status||result.data?.status||\"\").toLowerCase();\nif([\"failed\",\"error\",\"cancelled\"].includes(status)){\n  throw new Error(\"Seedance 生成失败：\"+(result.error?.message||result.message||status));\n}\nconst pollCount=Number(context._poll_count||0)+1;\nif(pollCount>40) throw new Error(\"Seedance 生成超时：已查询 40 次\");\nconst videoUrl=\n  result.content?.video_url||\n  result.video_url||\n  result.result_url||\n  result.data?.video_url||\n  result.data?.url||\n  result.url||\n  \"\";\nconst isCompleted=[\"completed\",\"succeeded\"].includes(status)&&Boolean(videoUrl);\nreturn [{json:{\n  ...context,\n  seedance_result:result,\n  status,\n  is_completed:isCompleted,\n  video_url:videoUrl,\n  result_url:videoUrl,\n  _poll_count:pollCount,\n}}];"
+      }
+    },
+    {
+      "id": "7f12ab9a-bbf7-4a69-a6ca-467eff95d57f",
+      "name": "视频是否生成完成",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1344,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.is_completed }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "73573c34-181f-4345-a735-abdeaaa9c927",
+      "name": "飞书｜获取应用令牌",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        80
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"app_id\": \"YOUR_FEISHU_APP_ID\", \"app_secret\": \"CONFIGURE_IN_N8N_CREDENTIALS\" } }}"
+      }
+    },
+    {
+      "id": "71a0d6e7-ca1c-40b8-8599-462092deb359",
+      "name": "飞书｜回写成片链接与成功状态",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1792,
+        80
+      ],
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://open.feishu.cn/open-apis/bitable/v1/apps/YOUR_FEISHU_APP_TOKEN/tables/YOUR_FEISHU_TABLE_ID/records/{{ $(\"整理Seedance生成参数\").first().json.video_task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.tenant_access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { fields: { \"视频状态\": \"completed\", \"视频URL\": { text: \"打开视频\", link: $(\"汇总视频结果\").first().json.video_url || \"\" }, \"错误信息\": \"\" } } }}"
+      }
+    },
+    {
+      "id": "897ceefa-e67f-41b6-a17c-761959d5b8f1",
+      "name": "汇总视频结果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        80
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const segments=$input.all()\n  .map(({json})=>({\n    segment_index:Number(json.segment_index)||1,\n    total_segments:Number(json.total_segments)||1,\n    video_url:json.video_url||json.result_url||\"\",\n    url:json.video_url||json.result_url||\"\",\n    duration:15,\n    status:(json.video_url||json.result_url)?\"completed\":\"error\",\n  }))\n  .sort((a,b)=>a.segment_index-b.segment_index);\nconst input=$(\"整理Seedance生成参数\").first().json;\nconst ok=segments.length>0&&segments.every((segment)=>Boolean(segment.video_url));\nreturn [{json:{\n  ok,\n  status:ok?\"completed\":\"error\",\n  segments,\n  count:segments.length,\n  video_url:segments[0]?.video_url||\"\",\n  duration_seconds:Number(input.duration)||15,\n  video_task_id:input.video_task_id,\n  product_record_id:input.product_record_id,\n}}];"
+      }
+    },
+    {
+      "id": "434483b1-592c-49a6-9d28-13fb262192ce",
+      "name": "逐段生成视频",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        336,
+        0
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      }
+    },
+    {
+      "id": "a5b20448-031c-4348-821d-a9cb6c608646",
+      "name": "FFmpeg拼接成片",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        -80
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const {execSync}=require('child_process');\nconst fs=require('fs');\nconst TMP='/tmp/n8n_videos_'+Date.now();\nfs.mkdirSync(TMP,{recursive:true});\n\n// Download all segment videos\nconst items=$input.all();\nconst videos=[];\nfor(let i=0;i<items.length;i++){\n  const url=items[i].json.video_url||items[i].json.result_url||items[i].json.public_url||'';\n  if(!url){console.log('Segment '+(i+1)+' has no video URL, skipping');continue;}\n  const filepath=TMP+'/seg_'+i+'.mp4';\n  execSync('curl -sk -o '+filepath+' \"'+url+'\"',{stdio:'pipe',timeout:60000});\n  if(fs.existsSync(filepath)&&fs.statSync(filepath).size>0){videos.push(filepath);}\n}\n\nif(videos.length<2){\n  // Single segment or only one valid - return first video\n  const singleUrl=items[0].json.video_url||'';\n  return [{json:{ok:true,video_url:singleUrl,result_url:singleUrl,public_url:singleUrl,segment_count:1}}];\n}\n\n// FFmpeg concat\nconst output=TMP+'/final.mp4';\nconst inputs=videos.map(v=>'-i \"'+v+'\"').join(' ');\nconst filterParts=videos.map((_,i)=>'['+i+':v]['+i+':a]').join('');\nconst cmd=`ffmpeg -y ${inputs} -filter_complex \"${filterParts}concat=n=${videos.length}:v=1:a=1[v][a]\" -map \"[v]\" -map \"[a]\" -c:v libx264 -preset veryfast -crf 23 -c:a aac -b:a 128k \"${output}\"`;\nconsole.log('FFmpeg: '+cmd.substring(0,200));\nexecSync(cmd,{stdio:'pipe',timeout:120000});\n\n// Upload to TOS\nconst videoBuffer=fs.readFileSync(output);\nconst tosName='seedance_combined_'+Date.now()+'.mp4';\nconst tosUrl='https://YOUR_BUCKET.tos-cn-region.volces.com/videos/'+tosName;\ntry{\n  const resp=await fetch(tosUrl,{method:'PUT',headers:{'Content-Type':'video/mp4'},body:videoBuffer});\n  if(resp.ok){console.log('Uploaded to TOS: '+tosUrl);}\n}catch(e){console.log('TOS upload failed: '+e.message);}\n\nfs.rmSync(TMP,{recursive:true,force:true});\nreturn [{json:{ok:true,video_url:tosUrl,result_url:tosUrl,public_url:tosUrl,segment_count:videos.length}}];"
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const created=$input.first().json;\nconst source=$(\"逐段生成视频\").item.json;\nconst taskId=created.id||created.task_id||created.data?.id;\nif(!taskId) throw new Error(\"Seedance 创建任务后未返回任务 ID\");\nreturn [{json:{...source,seedance_task_id:taskId,_poll_count:0}}];"
+      },
+      "id": "0b0729ed-8deb-4c3b-bfef-51a33deefa01",
+      "name": "保存视频任务上下文",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return [{json:$(\"汇总视频结果\").first().json}];"
+      },
+      "id": "38011126-f1b7-4bab-ac8a-a4cf30f11035",
+      "name": "返回前端｜可发布成片",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2140,
+        220
+      ]
+    }
+  ],
+  "connections": {
+    "前端｜提交视频生成": {
+      "main": [
+        [
+          {
+            "node": "整理Seedance生成参数",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "整理Seedance生成参数": {
+      "main": [
+        [
+          {
+            "node": "逐段生成视频",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "逐段生成视频": {
+      "main": [
+        [
+          {
+            "node": "汇总视频结果",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Seedance 2.0｜创建15秒视频",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seedance 2.0｜创建15秒视频": {
+      "main": [
+        [
+          {
+            "node": "保存视频任务上下文",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "等待视频生成": {
+      "main": [
+        [
+          {
+            "node": "Seedance 2.0｜查询生成状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seedance 2.0｜查询生成状态": {
+      "main": [
+        [
+          {
+            "node": "检查视频状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "检查视频状态": {
+      "main": [
+        [
+          {
+            "node": "视频是否生成完成",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "视频是否生成完成": {
+      "main": [
+        [
+          {
+            "node": "逐段生成视频",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "等待视频生成",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "飞书｜获取应用令牌": {
+      "main": [
+        [
+          {
+            "node": "飞书｜回写成片链接与成功状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "保存视频任务上下文": {
+      "main": [
+        [
+          {
+            "node": "等待视频生成",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "汇总视频结果": {
+      "main": [
+        [
+          {
+            "node": "飞书｜获取应用令牌",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "飞书｜回写成片链接与成功状态": {
+      "main": [
+        [
+          {
+            "node": "返回前端｜可发布成片",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "active": false,
+  "meta": {
+    "publicTemplate": true,
+    "sourceWorkflowName": "大海浮光 AIGC｜04 视频任务到成片",
+    "note": "Bind your own credentials and replace resource placeholders before publishing."
+  }
+}

@@ -1,0 +1,36 @@
+Subject identity and product identity.
+Visible action and product interaction.
+Environment, location and time of day.
+Shot size, composition and camera position.
+Camera movement and subject movement.
+Lighting direction, contrast and color palette.
+Surface materials and physical details.
+Natural motion and sound synchronization.
+Continuity from previous shot and anchor for next shot.
+Aspect ratio and duration.
+Negative constraints.
+
+禁止只输出关键词堆砌。提示词必须描述一个清晰、连续、可发生的镜头过程。
+
+十五、负面提示词与安全规则
+
+统一禁止：产品变形、颜色漂移、包装文字变化、额外 Logo、乱码文字、多余电子产品、人物身份变化、脸部变形、手指畸形、服装变化、左右手跳变、物体穿透、不自然悬浮、违反重力、镜头无意义抖动、画面闪烁、背景跳变和光线方向突变。
+
+根据输入追加：禁止拍摄部位、禁止品牌名、禁止系统界面、禁止屏幕、禁止摄像头、禁止未经确认的地标、禁止危险使用方式、禁止功效夸大和甲方限制词。
+
+当产品资料与创意要求冲突时，优先遵守真实产品事实，并在质量检查中标记冲突。
+
+十六、Stage 3 输出契约
+
+当前 V1 保持兼容：storyboard 中每个镜头返回 time、visual、camera_movement、dialogue、subtitle、music_sfx 和 video_prompt。
+
+目标 V2 输出：
+
+camera_strategy：画幅、总体影调、光线逻辑、镜头节奏和内容类型摄影母版。
+
+continuity_bible：product_lock、character_lock、wardrobe、locations、color_script、lighting_timeline 和 forbidden。
+
+shots：shot_id、start、end、visual_focus、subject、action、product_interaction、scene、shot_size、composition、camera_position、camera_movement、lighting、color_material、motion_physics、sound_sync、reference_images、continuity_in、continuity_out、video_prompt 和 negative_prompt。
+
+segments：segment_index、start、end、shot_ids、opening_anchor、ending_anchor、product_state、character_state、environment_state、audio_bridge、transition_bridge、video_prompt 和 reference_images。
+

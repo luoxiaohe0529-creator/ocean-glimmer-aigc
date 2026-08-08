@@ -1,0 +1,308 @@
+{
+  "name": "大海浮光 AIGC｜05 分镜图生成（公开模板）",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aigc-storyboard-images-v1",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "ddec6be8-f44b-467e-8363-b4440185d418",
+      "name": "前端｜提交分镜图任务",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const incoming=$input.first().json;const body=incoming.body||incoming;\nconst isCharacter=[\"generate_character\",\"generate_character_reference\"].includes(body.action);\nif(isCharacter){\n  const charType=body.character_type||\"真人达人\";const charDesc=body.character_description||\"\";const refs=(body.character_reference_images||[]).filter(Boolean);const product=body.product_brief||{};const pn=product[\"产品名称\"]||product.product_name||\"\";const prompt=charType+\"角色设定图。角色描述：\"+charDesc+\"。全身正面站立，清晰展示面部特征、发型、服装与整体气质。纯色背景，柔和影棚光，超写实，9:16竖屏。\"+(pn?\"产品：\"+pn+\"。角色形象需与品牌调性一致。\":\"\");return[{json:{kind:\"character\",model:refs.length?\"gpt-image-2-image-to-image\":\"gpt-image-2-text-to-image\",prompt,image_input:refs,aspect_ratio:\"9:16\",resolution:\"2K\"}}];\n}\nlet shots=body.storyboard;if(typeof shots===\"string\"){try{shots=JSON.parse(shots);}catch(e){throw new Error(\"storyboard 不是有效 JSON\");}}if(!Array.isArray(shots)||!shots.length)throw new Error(\"缺少 storyboard 数组\");const product=body.product_brief||{};const pn=product[\"产品名称\"]||product.product_name||\"产品\";const sell=Array.isArray(product[\"核心卖点\"]||product.selling_points)?(product[\"核心卖点\"]||product.selling_points).join(\" · \"):(product[\"核心卖点\"]||product.selling_points||\"\");const refs=(body.product_images||[]).filter(Boolean);const panels=shots.map((shot,i)=>\"Panel \"+(i+1)+\": \"+(shot.image_prompt||shot.visual||shot.description||shot.scene_description||shot.prompt||\"\"));const prompt=\"Create one coherent 9:16 storyboard contact sheet with \"+shots.length+\" clearly separated panels. \"+panels.join(\" \")+\" Product: \"+pn+\". Key features: \"+sell+\". Keep the product, cast, lighting and art direction consistent. No text, logos or watermarks.\";return[{json:{kind:\"storyboard\",model:\"nano-banana-pro\",video_task_id:body.video_task_id||body.task_id||\"\",product_record_id:body.product_record_id||\"\",prompt,image_input:refs,aspect_ratio:\"9:16\",resolution:\"2K\",shot_count:shots.length,source_shots:shots}}];",
+        "mode": "runOnceForAllItems"
+      },
+      "id": "6d2eaa1f-6db4-4ed2-b989-646baf7fc088",
+      "name": "组装分镜提示词",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data=$input.first().json;const urls=(data.image_urls||[]).filter(Boolean);if(!urls.length)throw new Error(\"KIE 任务成功但没有返回图片 URL\");const isCharacter=data.kind===\"character\";return[{json:{ok:true,status:\"completed\",kind:data.kind,count:urls.length,images:urls,urls,image_url:urls[0],storyboard_image_url:isCharacter?undefined:urls[0],character_image_url:isCharacter?urls[0]:undefined,storyboard_images:isCharacter?[]:urls.map((url,index)=>({index,url,image_url:url}))}}];"
+      },
+      "id": "77ce6a1f-0b69-40f0-896c-541c23ee2b05",
+      "name": "返回前端｜分镜图片 JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "55be7f1e-5f0f-4a5a-a844-d219cf51c726",
+      "name": "响应前端",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1440,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.kie.ai/api/v1/jobs/createTask",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer CONFIGURE_IN_N8N_CREDENTIALS"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { model: $json.model, input: $json.kind === \"character\" ? { prompt: $json.prompt, input_urls: $json.image_input, aspect_ratio: $json.aspect_ratio } : { prompt: $json.prompt, image_input: $json.image_input, aspect_ratio: $json.aspect_ratio, resolution: $json.resolution, output_format: \"png\" } } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 180000
+        }
+      },
+      "id": "e3b93c5d-4806-4d88-9d94-d64380fbd3c1",
+      "name": "KIE｜提交图片任务",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        720,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const response=$input.first().json;const source=$(\"组装分镜提示词\").first().json;const taskId=response.data?.taskId||response.data?.task_id||response.taskId||response.task_id;if(!taskId)throw new Error(\"KIE 未返回 taskId: \"+JSON.stringify(response));return[{json:{...source,kie_task_id:String(taskId),status:\"submitted\"}}];"
+      },
+      "id": "78ef098f-fbff-4a53-b80e-1e025d94d6d4",
+      "name": "解析 KIE 图片任务",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "id": "92f33987-c019-4d9a-9125-1c083930912c",
+      "name": "等待 20 秒",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ \"https://api.kie.ai/api/v1/jobs/recordInfo?taskId=\" + $json.kie_task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer CONFIGURE_IN_N8N_CREDENTIALS"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 60000
+        }
+      },
+      "id": "b35fbe9b-cc55-4193-84b8-1f1e1f760f70",
+      "name": "KIE｜查询任务状态",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1680,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const response=$input.first().json;const base=$(\"解析 KIE 图片任务\").first().json;const data=response.data||response;const state=String(data.state||data.status||\"unknown\").toLowerCase();let result=data.resultJson||data.result_json||{};if(typeof result===\"string\"){try{result=JSON.parse(result);}catch(e){result={};}}const urls=(result.resultUrls||result.result_urls||data.resultUrls||[]).filter(Boolean);if([\"fail\",\"failed\",\"error\"].includes(state))throw new Error(data.failMsg||data.errorMessage||\"KIE 图片生成失败\");return{json:{...base,state,status:state,completed:state===\"success\",image_urls:urls,image_url:urls[0]||\"\"}};"
+      },
+      "id": "a87bf4dd-0cf0-4c8e-906e-13a171a2e798",
+      "name": "标准化任务状态",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.completed ? \"yes\" : \"no\" }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "id": "ee72e5ef-eaba-4a27-9535-80107d3f77ac",
+      "name": "生成完成？",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 图片生成编排\n角色形象使用 KIE GPT Image 2，分镜多宫格使用 KIE Nano Banana 2。工作流统一提交、轮询并返回前端兼容 JSON。",
+        "height": 200,
+        "width": 780,
+        "color": 5
+      },
+      "id": "a9beac16-a774-4faa-b340-28edd630c57b",
+      "name": "Sticky Note 3e08817c",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 凭证\n请在两个 KIE HTTP 节点中绑定同一个 Header Auth 凭证（Authorization: Bearer ...）。密钥只保存在 n8n Credentials，不写入节点参数。",
+        "height": 320,
+        "width": 1260,
+        "color": 3
+      },
+      "id": "365a7c63-5b14-4aa3-850c-3ab4c52d70f1",
+      "name": "Sticky Note ec62a482",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        672,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "前端｜提交分镜图任务": {
+      "main": [
+        [
+          {
+            "node": "组装分镜提示词",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "组装分镜提示词": {
+      "main": [[{"node":"KIE｜提交图片任务","type":"main","index":0}]]
+    },
+    "KIE｜提交图片任务": {
+      "main": [[{"node":"解析 KIE 图片任务","type":"main","index":0}]]
+    },
+    "解析 KIE 图片任务": {
+      "main": [[{"node":"等待 20 秒","type":"main","index":0}]]
+    },
+    "等待 20 秒": {
+      "main": [[{"node":"KIE｜查询任务状态","type":"main","index":0}]]
+    },
+    "KIE｜查询任务状态": {
+      "main": [[{"node":"标准化任务状态","type":"main","index":0}]]
+    },
+    "标准化任务状态": {
+      "main": [[{"node":"生成完成？","type":"main","index":0}]]
+    },
+    "生成完成？": {
+      "main": [
+        [{"node":"返回前端｜分镜图片 JSON","type":"main","index":0}],
+        [{"node":"等待 20 秒","type":"main","index":0}]
+      ]
+    },
+    "返回前端｜分镜图片 JSON": {
+      "main": [
+        [
+          {
+            "node": "响应前端",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "binaryMode": "separate"
+  },
+  "active": false,
+  "meta": {
+    "publicTemplate": true,
+    "sourceWorkflowName": "大海浮光 AIGC｜05 分镜图生成",
+    "note": "Bind your own credentials and replace resource placeholders before publishing."
+  }
+}

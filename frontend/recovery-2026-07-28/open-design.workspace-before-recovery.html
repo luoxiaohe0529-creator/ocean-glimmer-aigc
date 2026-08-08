@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大海浮光 AIGC 工作台 · Open Design</title>
+  <style>
+    :root {
+      --canvas: #f6f6f8;
+      --surface: #fff;
+      --soft: #fbfbfc;
+      --ink: #14141a;
+      --muted: #666670;
+      --faint: #8f8f99;
+      --line: #d6d6de;
+      --blue: #0070e3;
+      --blue-soft: #edf5ff;
+      --green: #1f8c59;
+      --dark: #111318;
+      --radius: 18px;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--canvas);
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: var(--canvas); }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(0,112,227,.22); outline-offset: 2px; }
+    .app { min-height: 100vh; }
+    .topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 18px; height: 72px; padding: 0 32px; background: rgba(255,255,255,.92); border-bottom: 1px solid var(--line); backdrop-filter: blur(18px); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 800; }
+    .brand-copy strong, .brand-copy small { display: block; }
+    .brand-copy strong { font-size: 16px; letter-spacing: -.04em; }
+    .brand-copy small { margin-top: 3px; color: var(--faint); font-size: 9px; letter-spacing: .2em; }
+    .topbar-title { color: var(--muted); font-size: 12px; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; min-width: 260px; justify-content: flex-end; }
+    .topbar-actions a { text-decoration: none; }
+    .connection { color: var(--green); font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .connection::first-letter { color: var(--green); }
+    .primary, .secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 40px; padding: 0 15px; border-radius: 10px; font-size: 12px; font-weight: 650; transition: transform .16s ease, border-color .16s ease, background .16s ease; }
+    .primary { border: 1px solid var(--ink); background: var(--ink); color: #fff; }
+    .primary:hover, .secondary:hover { transform: translateY(-1px); }
+    .primary:hover { background: #2b2b31; }
+    .primary:disabled { cursor: not-allowed; opacity: .45; transform: none; }
+    .secondary { border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+    .secondary:hover { border-color: var(--ink); }
+    .full { width: 100%; }
+
+    .layout { display: grid; grid-template-columns: 224px minmax(0,1fr); min-height: calc(100vh - 72px); }
+    .rail { display: flex; flex-direction: column; padding: 32px 18px 24px; background: var(--surface); border-right: 1px solid var(--line); }
+    .rail-label { padding: 0 14px 14px; color: var(--faint); font-size: 10px; font-weight: 700; letter-spacing: .15em; }
+    .steps { display: grid; gap: 6px; }
+    .step { display: grid; grid-template-columns: 28px 1fr; gap: 10px; width: 100%; padding: 12px 14px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: var(--muted); text-align: left; }
+    .step:hover { background: var(--soft); color: var(--ink); }
+    .step.active { background: var(--ink); color: #fff; }
+    .step:disabled { cursor: not-allowed; opacity: .48; }
+    .step strong, .step small { display: block; }
+    .step strong { font-size: 13px; }
+    .step small { margin-top: 4px; color: inherit; font-size: 9px; opacity: .72; }
+    .step-num { font-size: 11px; font-weight: 750; }
+
+    main { min-width: 0; padding: 44px 54px 72px; }
+    .main-inner { max-width: 1120px; margin: 0 auto; }
+    .page-head { display: flex; align-items: end; justify-content: space-between; gap: 22px; padding-bottom: 26px; }
+    .eyebrow, .result-label { display: block; color: var(--blue); font-size: 11px; font-weight: 750; letter-spacing: .16em; }
+    h1 { margin: 12px 0 10px; font-size: 40px; line-height: 1.02; letter-spacing: -.065em; }
+    .page-head p { max-width: 760px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.65; }
+    .head-meta { min-width: 140px; padding-left: 14px; border-left: 3px solid var(--blue); }
+    .head-meta span, .head-meta strong { display: block; }
+    .head-meta span { color: var(--muted); font-size: 11px; }
+    .head-meta strong { margin-top: 8px; font-size: 14px; }
+    .notice { margin-bottom: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); color: var(--muted); font-size: 12px; }
+    .notice strong { color: var(--ink); }
+    .workspace { display: grid; grid-template-columns: minmax(340px,.85fr) minmax(0,1.15fr); gap: 16px; align-items: start; }
+    .panel { min-width: 0; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 18px 44px rgba(24,24,30,.05); }
+    .panel-heading { display: flex; align-items: center; gap: 14px; padding-bottom: 20px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .panel-index { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--blue); color: var(--blue); font-size: 11px; font-weight: 750; }
+    .panel-heading b, .panel-heading small { display: block; }
+    .panel-heading b { font-size: 16px; }
+    .panel-heading small { margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .type-list { display: grid; gap: 8px; }
+    .type-choice { display: grid; grid-template-columns: 34px 1fr 20px; gap: 12px; align-items: center; width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); text-align: left; }
+    .type-choice:hover { border-color: var(--blue); }
+    .type-choice.active { border-color: var(--blue); background: var(--blue-soft); }
+    .type-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--soft); color: var(--muted); font-size: 12px; font-weight: 750; }
+    .type-choice.active .type-icon { background: var(--blue); color: #fff; }
+    .type-choice b, .type-choice small { display: block; }
+    .type-choice b { font-size: 13px; }
+    .type-choice small { margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; }
+    .type-check { color: var(--blue); font-size: 18px; text-align: center; }
+    .field-stack { display: grid; gap: 13px; }
+    .field { display: grid; gap: 7px; }
+    .field > span { color: var(--muted); font-size: 11px; font-weight: 650; }
+    .field em { margin-left: 4px; color: #c87033; font-style: normal; font-weight: 500; }
+    input, textarea, select { width: 100%; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); color: var(--ink); padding: 11px 12px; font-size: 13px; }
+    textarea { min-height: 86px; resize: vertical; line-height: 1.55; }
+    .url-input { min-height: 138px; resize: vertical; }
+    .form-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+    .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 10px; background: #f2f2f4; }
+    .segmented button { padding: 9px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); font-size: 12px; }
+    .segmented button.active { background: var(--surface); color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .upload { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 13px; border: 1px dashed #b6b7bf; border-radius: 11px; background: var(--soft); }
+    .upload-icon { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; color: var(--blue); }
+    .upload b, .upload small { display: block; }
+    .upload b { font-size: 12px; }
+    .upload small { margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .upload strong { color: var(--blue); font-size: 11px; }
+    .upload input { display: none; }
+    .upload-label { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center; min-width: 0; cursor: pointer; }
+    .upload-label b, .upload-label small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .video-layout .upload { display: block; padding: 0; border: 0; background: transparent; }
+    .video-layout .upload-label { display: flex; min-height: 98px; padding: 20px 22px; gap: 14px; border: 1px dashed #aeb2c0; border-radius: 18px; background: linear-gradient(135deg, #f8faff, #f5f5f7); transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+    .video-layout .upload-label:hover { border-color: var(--blue); background: #f1f6ff; transform: translateY(-1px); }
+    .video-layout .upload-label .upload-icon { flex: 0 0 42px; width: 42px; height: 42px; border-color: #b7c9e7; background: var(--surface); font-size: 22px; }
+    .video-layout .upload-label b { font-size: 15px; line-height: 1.35; }
+    .video-layout .upload-label small { margin-top: 6px; font-size: 11px; line-height: 1.45; }
+    .video-layout .upload > strong { display: none; }
+    .video-layout .upload + .asset-status { margin-top: 12px; padding-left: 4px; }
+    .video-layout .field:has([data-creator-profile]) em { color: var(--muted); }
+    .asset-status { margin-top: 8px; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .asset-status.ready { color: var(--green); }
+    .asset-status.error { color: #b64c43; }
+    .publish-panel { margin-top: 16px; }
+    .publish-panel .result-head { align-items: center; }
+    .publish-copy { min-height: 148px; margin-top: 16px; }
+    .copy-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .copy-actions .primary, .copy-actions .secondary { flex: 1 1 140px; }
+    .result-head { display: flex; align-items: start; justify-content: space-between; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+    .result-head h2 { margin: 8px 0 0; font-size: 20px; letter-spacing: -.04em; }
+    .pill, .count { display: inline-flex; align-items: center; min-height: 26px; padding: 0 10px; border-radius: 99px; background: #f2f2f4; color: var(--muted); font-size: 10px; white-space: nowrap; }
+    .pill.ready { background: #eaf8f0; color: var(--green); }
+    .empty { display: grid; place-items: center; min-height: 420px; padding: 40px; color: var(--muted); text-align: center; }
+    .empty-mark { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 16px; border: 1px solid var(--line); border-radius: 50%; color: var(--blue); font-size: 24px; }
+    .empty h2 { margin: 0; color: var(--ink); font-size: 18px; }
+    .empty p { max-width: 340px; margin: 10px 0 0; font-size: 12px; line-height: 1.6; }
+    .output-placeholder { min-height: 420px; border: 1px dashed #c7c8d0; border-radius: 10px; background: var(--soft); }
+    .output-placeholder p { max-width: none; margin: 0; color: var(--muted); }
+    .brief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 18px; }
+    .brief-cell { padding: 14px; border: 1px solid var(--line); border-radius: 11px; background: var(--soft); }
+    .brief-cell.wide { grid-column: 1 / -1; }
+    .brief-cell span { color: var(--muted); font-size: 10px; }
+    .brief-cell p { margin: 7px 0 0; font-size: 13px; line-height: 1.55; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .chips span { padding: 5px 8px; border-radius: 6px; background: var(--blue-soft); color: #286cae; font-size: 10px; }
+    .result-footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .result-footer strong { color: var(--ink); }
+
+    .filter-layout, .script-layout, .video-layout { display: grid; grid-template-columns: 286px minmax(0,1fr); gap: 16px; align-items: start; }
+    .hook-layout { display: grid; grid-template-columns: 320px minmax(0,1fr); gap: 28px; align-items: start; }
+    .hook-select-panel { min-width: 0; padding: 30px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); box-shadow: 0 18px 44px rgba(24,24,30,.05); }
+    .hook-select-title h2 { margin: 0; font-size: 0; line-height: 1.08; letter-spacing: -.055em; }
+    .hook-select-title h2::after { content: '选择一个广告切入角度'; display: block; color: var(--ink); font-size: 28px; font-weight: 700; }
+    .hook-select-title p { margin: 10px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .hook-filter-stack { display: grid; gap: 21px; margin-top: 32px; }
+    .hook-filter { display: grid; gap: 9px; }
+    .hook-filter label { color: var(--muted); font-size: 13px; }
+    .hook-filter select { min-height: 56px; padding: 0 15px; border-radius: 16px; font-size: 15px; }
+    .hook-selection { margin-top: 28px; padding: 17px 18px 18px 22px; border-left: 4px solid var(--blue); background: var(--blue-soft); }
+    .hook-selection b, .hook-selection small { display: block; }
+    .hook-selection b { font-size: 15px; line-height: 1.35; }
+    .hook-selection small { margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .hook-select-panel .primary { min-height: 54px; margin-top: 28px; border-radius: 16px; font-size: 15px; }
+    .hook-output { min-width: 0; }
+    .hook-output .result-label { color: var(--muted); }
+    .hook-output .result-head { padding-bottom: 12px; }
+    .hook-output .result-head .count { background: transparent; color: var(--ink); font-weight: 700; }
+    .hook-list.reference-list { grid-template-columns: 1fr; gap: 8px; padding-top: 13px; }
+    .reference-list .hook { padding: 12px 14px; border-radius: 9px; text-align: left; }
+    .reference-list .hook p { min-height: 0; margin: 7px 0 8px; }
+    .reference-list .hook-context { display: block; margin-top: 8px; color: var(--muted); font-size: 9px; line-height: 1.45; }
+    .reference-list .hook-footer { display: none; }
+    .filter-title { margin-bottom: 16px; }
+    .filter-title b, .filter-title small { display: block; }
+    .filter-title b { font-size: 16px; }
+    .filter-title small { margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .filter { display: grid; gap: 7px; margin-bottom: 15px; }
+    .filter span { color: var(--muted); font-size: 10px; }
+    .filter select { padding: 9px 10px; font-size: 12px; }
+    .selection { margin: 18px 0; padding: 12px; border-left: 3px solid var(--blue); background: var(--blue-soft); }
+    .selection b, .selection small { display: block; }
+    .selection b { font-size: 12px; }
+    .selection small { margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .context { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 11px 12px; border-radius: 9px; background: var(--soft); color: var(--muted); font-size: 10px; }
+    .context strong { color: var(--ink); }
+    .hook-list { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; padding-top: 15px; }
+    .hook { min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); cursor: pointer; }
+    .hook:hover, .hook.active { border-color: var(--blue); background: var(--blue-soft); }
+    .hook-top { display: flex; justify-content: space-between; gap: 8px; }
+    .hook h3 { margin: 0; font-size: 13px; line-height: 1.35; }
+    .hook-score { color: var(--blue); font-size: 12px; font-weight: 750; }
+    .hook p { min-height: 38px; margin: 7px 0 10px; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .hook-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .hook-tags span { padding: 4px 6px; border-radius: 5px; background: rgba(255,255,255,.75); color: var(--muted); font-size: 9px; }
+    .hook-footer { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; color: var(--faint); font-size: 10px; }
+    .hook-footer strong { color: var(--blue); }
+    .review-lines { display: grid; margin: 12px 0 18px; border-top: 1px solid var(--line); }
+    .review-line { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+    .review-line span { color: var(--muted); }
+    .confirm-line { display: flex; align-items: flex-start; gap: 8px; margin: 18px 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .confirm-line input { width: 15px; height: 15px; margin: 0; accent-color: var(--blue); }
+    .script-copy { margin-top: 18px; padding: 18px; border-left: 3px solid var(--blue); background: var(--soft); font-size: 14px; line-height: 1.8; white-space: pre-wrap; }
+    .script-placeholder { display: grid; place-items: center; min-height: 320px; margin-top: 18px; padding: 28px; border: 1px dashed #c7c8d0; border-radius: 12px; background: var(--soft); color: var(--muted); text-align: center; }
+    .script-placeholder strong, .script-placeholder span { display: block; }
+    .script-placeholder strong { color: var(--ink); font-size: 16px; }
+    .script-placeholder span { margin-top: 8px; font-size: 12px; line-height: 1.5; }
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .meta-cell { padding: 13px; border: 1px solid var(--line); border-radius: 10px; }
+    .meta-cell.wide { grid-column: 1 / -1; }
+    .meta-cell span { color: var(--muted); font-size: 10px; }
+    .meta-cell p { margin: 6px 0 0; font-size: 12px; line-height: 1.5; }
+    .video-preview { position: relative; display: grid; place-items: center; min-height: 360px; margin-top: 18px; overflow: hidden; border-radius: 14px; background: var(--dark); }
+    .video-preview::before { position: absolute; inset: 24px; content: ""; border-radius: 9px; background: linear-gradient(135deg, #151a28, #343743 45%, #1a1b21); }
+    .video-content { position: relative; z-index: 1; text-align: center; }
+    .video-content h3 { margin: 0; color: #fff; font-size: 22px; }
+    .video-content p { margin: 9px 0 0; color: #b9becb; font-size: 11px; }
+    .play { display: grid; place-items: center; width: 58px; height: 58px; margin: 22px auto 0; border: 0; border-radius: 50%; background: #fff; color: var(--dark); font-size: 20px; }
+    .timeline { display: flex; align-items: center; gap: 10px; margin-top: 14px; color: var(--muted); font-size: 10px; }
+    .timeline-bar { position: relative; flex: 1; height: 4px; border-radius: 3px; background: var(--line); }
+    .timeline-bar::before { position: absolute; inset: 0 40% 0 0; content: ""; border-radius: 3px; background: var(--blue); }
+    .status-card { margin-top: 18px; padding: 15px; border: 1px solid #c9e8d8; border-radius: 12px; background: #eefaf3; }
+    .status-card strong, .status-card small { display: block; }
+    .status-card strong { font-size: 14px; }
+    .status-card small { margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .summary { display: grid; margin: 12px 0 18px; }
+    .summary-row { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 11px; }
+    .summary-row span { color: var(--muted); }
+    .summary-row strong { text-align: right; }
+    .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      .topbar-title { display: none; }
+      .topbar-actions { min-width: 0; }
+      main { padding: 32px 24px 56px; }
+      .workspace, .filter-layout, .script-layout, .video-layout, .hook-layout { grid-template-columns: 1fr; }
+      .result { order: -1; }
+    }
+    @media (max-width: 620px) {
+      .topbar { height: 64px; padding: 0 16px; }
+      .brand { min-width: 0; }
+      .brand-copy small, .connection { display: none; }
+      .brand-copy strong { font-size: 14px; }
+      .layout { display: block; }
+      .rail { padding: 10px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .rail-label { display: none; }
+      .steps { grid-template-columns: repeat(4,1fr); gap: 4px; }
+      .step { display: block; padding: 9px 4px; text-align: center; }
+      .step small { display: none; }
+      .step strong { margin-top: 4px; font-size: 11px; }
+      main { padding: 22px 14px 40px; }
+      .page-head { display: block; }
+      .head-meta { display: none; }
+      h1 { font-size: 32px; }
+      .panel { padding: 20px; }
+      .hook-list, .brief-grid, .meta-grid, .button-row { grid-template-columns: 1fr; }
+      .brief-cell.wide, .meta-cell.wide { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="app"></div>
+  <script>
+    function getHooks() { return state.hooksList.length ? state.hooksList : []; }
+    const state = { stage: 0, mode: '固定达人口播', language: '中文', source: 'url', productReady: false, productRecordId: '', productBrief: null, hooksList: [], loading: false, selectedHook: 0, scriptReady: false, scriptConfirmed: false, scriptText: '', scriptCta: '', scriptVisual: '', videoReady: false, videoTaskId: '', videoStatus: '', videoStoryboard: [], videoPrompt: '', videoResultUrl: '', videoGenerating: false, creatorProfile: '', productImageName: '', productImageUrl: '', uploadStatus: 'idle', uploadError: '', socialChannel: '小红书', socialCopyReady: false };
+    const demoMode = false;
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const modeDescription = { '种草视频': '产品主图直接进入 Seedance 图生视频', '固定达人口播': '先生成达人手持产品图，再图生视频口播' };
+    function canEnterStage(index) {
+      if (index === 0) return true;
+      if (index === 1) return state.productReady && state.hooksList.length > 0;
+      if (index === 2) return state.scriptReady;
+      if (index === 3) return state.videoReady;
+      return false;
+    }
+    function nav() {
+      const labels = [['01','产品输入','选择内容类型与产品资料'],['02','Hook 结果','筛选创意切入角度'],['03','脚本确认','确认最终口播脚本'],['04','视频结果','查看成片与导出']];
+      return labels.map((item, index) => {
+        const locked = !canEnterStage(index) || index > state.stage + 1;
+        return `<button class="step ${state.stage === index ? 'active' : ''}" data-stage="${index}" ${locked ? 'disabled' : ''}><span class="step-num">${item[0]}</span><span><strong>${item[1]}</strong><small>${item[2]}</small></span></button>`;
+      }).join('');
+    }
+    function shell(content) {
+      return `<header class="topbar"><div class="brand"><span class="brand-mark">AI</span><span class="brand-copy"><strong>大海浮光 AIGC 工作台</strong><small>AI AD VIDEO FACTORY</small></span></div><span class="topbar-title">从产品链接到可发布视频</span><div class="topbar-actions"><span class="connection">● n8n 已连接</span><button class="primary" data-action="reset">新建项目</button></div></header><div class="layout"><aside class="rail"><span class="rail-label">工作台</span><nav class="steps">${nav()}</nav></aside><main><div class="main-inner">${content}</div></main></div>`;
+    }
+    function head(eyebrow, title, copy, meta) { return `<div class="page-head"><div><span class="eyebrow">${eyebrow}</span><h1>${title}</h1><p>${copy}</p></div><div class="head-meta"><span>当前阶段</span><strong>${meta}</strong></div></div>`; }
+    async function uploadImage(file) {
+      if (!file) return;
+      state.productImageName = file.name;
+      state.productImageUrl = '';
+      state.uploadError = '';
+      state.uploadStatus = 'uploading';
+      render();
+      if (demoMode) {
+        state.productImageUrl = `https://demo.public-assets.local/${encodeURIComponent(file.name)}`;
+        state.uploadStatus = 'demo';
+        render();
+        return;
+      }
+      try {
+        const body = new FormData();
+        body.append('image', file, file.name);
+        const response = await fetch('/api/assets/image', { method: 'POST', body });
+        const data = await response.json();
+        const url = data.public_url || data.product_image_url || data.image_url || '';
+        if (!response.ok || !url) throw new Error(data.message || '对象存储没有返回 public URL');
+        state.productImageUrl = url;
+        state.uploadStatus = 'uploaded';
+      } catch (error) {
+        state.uploadStatus = 'error';
+        state.uploadError = error.message || '图片上传失败';
+      }
+      render();
+    }
+    function uploadStatus() {
+      if (state.uploadStatus === 'uploading') return '<div class="asset-status">正在上传对象存储，等待 public URL…</div>';
+      if (state.uploadStatus === 'uploaded') return `<div class="asset-status ready">已获得 public URL：${esc(state.productImageUrl)}</div>`;
+      if (state.uploadStatus === 'demo') return `<div class="asset-status">演示模式 public URL：${esc(state.productImageUrl)}（接入 n8n 后替换为真实 TOS 地址）</div>`;
+      if (state.uploadStatus === 'error') return `<div class="asset-status error">${esc(state.uploadError)}</div>`;
+      return '<div class="asset-status">上传后自动写入对象存储，并返回可供 Seedance 读取的 public URL。</div>';
+    }
+    function stageOne() {
+      let rightPanel;
+      if (state.loading) {
+        rightPanel = `<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">生成中…</span></div><div class="empty output-placeholder"><p>正在调用 n8n 生成产品简报和 Hook…</p></div>`;
+      } else if (state.productReady && state.productBrief) {
+        const pb = state.productBrief;
+        const sps = (pb.selling_points || []).map(sp => `<span>${esc(sp)}</span>`).join('');
+        const hp = state.hooksList.slice(0, 8).map(h => `<div class="hook" style="cursor:default"><span class="hook-top"><h3>${esc(h.title)}</h3><span class="hook-score">${esc(String(h.score))}/10</span></span><span class="hook-tags"><span>${esc(h.category)}</span><span>${esc(h.awareness_stage)}</span><span>${esc(h.emotion)}</span></span><p>${esc(h.description)}</p></div>`).join('');
+        rightPanel = `<div class="result-head"><div><span class="result-label">OUTPUT / PRODUCT BRIEF</span><h2>${esc(pb.product_name)}</h2></div><span class="pill ready">已整理 · ${state.hooksList.length} 条 Hook</span></div><div class="brief-grid"><div class="brief-cell"><span>品类</span><p>${esc(pb.category)}</p></div><div class="brief-cell"><span>目标受众</span><p>${esc(pb.target_audience)}</p></div><div class="brief-cell wide"><span>核心卖点</span><div class="chips">${sps || '<span>—</span>'}</div></div><div class="brief-cell wide"><span>痛点</span><p>${esc(pb.pain_points || '—')}</p></div></div><div class="result-head" style="margin-top:28px"><div><span class="result-label">HOOKS PREVIEW</span></div><span class="count">共 ${state.hooksList.length} 条</span></div><div class="hook-list reference-list" style="grid-template-columns:1fr">${hp}</div><div class="result-footer"><span>下一步</span><strong>进入第 02 步选择 Hook →</strong></div>`;
+      } else {
+        rightPanel = `<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">等待输入产品</span></div><div class="empty output-placeholder"><p>粘贴产品链接后点击「生成产品简报」，右侧展示 n8n 返回的产品简报和 Hook 列表。</p></div>`;
+      }
+      return `<div class="page-head"><div><span class="eyebrow">STEP 1 · PRODUCT</span><h1>先输入一个产品链接</h1><p>提交后调用 n8n Webhook，生成产品简报和 Hook 列表。</p></div></div><div class="workspace"><section class="panel"><div class="field-stack"><label class="field"><span>Product URL <em>必填</em></span><textarea class="url-input" id="product-url-input" placeholder="https:// 粘贴商品详情页链接"></textarea></label><label class="field"><span>脚本语言</span><select data-language-select><option ${state.language === '中文' ? 'selected' : ''}>中文</option><option ${state.language === '英文' ? 'selected' : ''}>英文</option></select></label><label class="field"><span>内容类型</span><select data-mode-select><option ${state.mode === '固定达人口播' ? 'selected' : ''}>固定达人口播</option><option ${state.mode === '种草视频' ? 'selected' : ''}>种草视频</option></select></label></div><div class="form-actions"><button class="primary" data-action="prepare" ${state.loading ? 'disabled' : ''}>${state.loading ? '生成中…' : state.productReady ? '重新生成产品简报 ↻' : '生成产品简报'}</button><button class="secondary" data-action="reset">Reset</button></div></section><section class="panel result">${rightPanel}</section></div>`;
+    }
+    function stageTwo() {
+      const hl = getHooks();
+      if (!hl.length) { state.stage = 0; render(); return ''; }
+      const sh = hl[state.selectedHook] || hl[0];
+      const cards = hl.map((h,i) => `<button class="hook ${state.selectedHook === i ? 'active' : ''}" data-hook="${i}"><span class="hook-top"><h3>${esc(h.title)}</h3><span class="hook-score">${esc(String(h.score))}/10</span></span><span class="hook-tags"><span>${esc(h.category)}</span><span>${esc(h.awareness_stage)}</span><span>${esc(h.emotion)}</span></span><p>${esc(h.description)}</p></button>`).join('');
+      return `<div class="hook-layout"><section class="hook-select-panel"><div class="hook-select-title"><span class="eyebrow">STEP 2 · HOOKS</span><h2>筛选与选择</h2><p>从 ${hl.length} 个创意角度中筛选</p></div><div class="hook-filter-stack"><div class="hook-filter"><label for="hook-category">Hook 类型</label><select id="hook-category" aria-label="Hook 类型"><option>全部类型</option><option>对话互动型</option><option>视觉冲击型</option><option>产品展示型</option><option>情绪驱动型</option></select></div><div class="hook-filter"><label for="hook-awareness">认知阶段</label><select id="hook-awareness" aria-label="认知阶段"><option>全部阶段</option><option>2 · 意识到问题</option><option>3 · 找解决方案</option><option>4 · 正在比较产品</option><option>5 · 体验之后</option></select></div><div class="hook-filter"><label for="hook-emotion">情绪触发</label><select id="hook-emotion" aria-label="情绪触发"><option>全部情绪</option><option>好奇</option><option>信任</option><option>共鸣</option></select></div></div><div class="hook-selection"><b>已选择：${esc(sh.title)}</b><small>右侧卡片已标记，可以继续生成脚本。</small></div><button class="primary full" data-action="script">用这个 Hook 生成脚本 →</button></section><section class="hook-output"><div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="count">${hl.length} 条 Hook 可选</span></div><div class="hook-list reference-list">${cards}</div></section></div>`;
+    }
+    function stageThree() {
+      const hookTitle = (state.hooksList[state.selectedHook]||{}).title || '';
+      const script = state.scriptText || '';
+      const output = state.scriptReady && script ? `<div class="script-copy">${esc(script)}</div><div class="meta-grid"><div class="meta-cell"><span>CTA</span><p>${esc(state.scriptCta || '由 n8n 生成')}</p></div><div class="meta-cell wide"><span>画面逻辑</span><p>${esc(state.scriptVisual || '由 n8n 生成')}</p></div></div>` : (state.loading ? `<div class="script-placeholder"><div><strong>正在调用 n8n 生成脚本…</strong><span>请稍候</span></div></div>` : `<div class="script-placeholder"><div><strong>脚本将在这里生成</strong><span>点击左侧"生成脚本"，右侧会展示完整的口播脚本。</span></div></div>`);
+      const confirm = state.scriptReady && script ? `<label class="confirm-line"><input id="confirm-script" type="checkbox" ${state.scriptConfirmed ? 'checked' : ''}><span>我确认这版脚本可以进入视频生成</span></label><button class="primary full" data-action="video" ${state.scriptConfirmed ? '' : 'disabled'}>确认并进入视频 →</button>` : '';
+      return `${head('03 / SCRIPT','把选中的 Hook 扩展成脚本。','这一段可以作为单独交付，也可以继续生成视频。','脚本确认')}<div class="script-layout"><section class="panel"><div class="panel-heading"><span class="panel-index">03</span><div><b>脚本生成</b><small>确认 Hook 后生成口播脚本</small></div></div><div class="review-lines"><div class="review-line"><span>内容类型</span><strong>${esc(state.mode)}</strong></div><div class="review-line"><span>脚本语言</span><strong>${esc(state.language)}</strong></div><div class="review-line"><span>Hook</span><strong>${esc(hookTitle) || '已选择'}</strong></div><div class="review-line"><span>时长目标</span><strong>约 15 秒</strong></div></div><button class="primary full" data-action="generate-script" ${state.loading ? 'disabled' : ''}>${state.loading ? '生成中…' : state.scriptReady ? '重新生成脚本 ↻' : '生成脚本 →'}</button>${confirm}<button class="secondary full" style="margin-top:8px" data-stage="1">返回 Hook</button></section><section class="panel result"><div class="result-head"><div><span class="result-label">OUTPUT / SCRIPT</span><h2>${esc(hookTitle || '—')}</h2></div><span class="pill">${esc(state.language)} / 15s</span></div>${output}</section></div>`;
+    }
+    function stageFour() {
+      const hookTitle = (state.hooksList[state.selectedHook]||{}).title || '—';
+      const productName = state.productBrief?.product_name || '产品';
+      const creator = state.mode === '固定达人口播' ? `<label class="field"><span>口播模特形象 <em>选填</em></span><textarea data-creator-profile placeholder="例如：25 岁亚洲女性，短黑发，干净自然妆，亲切真实。">${esc(state.creatorProfile)}</textarea></label>` : '';
+      const videoStatusHtml = state.videoGenerating ? `<div class="status-card"><strong>⏳ 视频生成中…</strong><small>任务 ${esc(state.videoTaskId)} · Seedance 处理中</small></div>` : state.videoResultUrl ? `<div class="status-card"><strong>✓ 视频生成完成</strong><small>可以直接预览、下载，或交给 ChatCut 做后期。</small></div><div class="video-preview" style="background:#000"><video src="${esc(state.videoResultUrl)}" controls style="width:100%;max-height:400px;border-radius:14px"></video></div>` : `<div class="status-card"><strong>视频任务已提交</strong><small>任务 ID: ${esc(state.videoTaskId || '等待提交')} · 点击下方按钮生成视频</small></div>`;
+      const copy = state.socialChannel === '小红书' ? '小红书文案将由 n8n 生成' : state.socialChannel === '抖音' ? '抖音文案将由 n8n 生成' : 'Instagram 文案将由 n8n 生成';
+      const publishCopy = state.socialCopyReady ? `<textarea class="publish-copy" readonly>${esc(copy)}</textarea><div class="copy-actions"><button class="primary" data-action="copy">复制营销文案</button><button class="secondary" data-action="download">下载成片</button><button class="secondary" data-action="chatcut">打开剪辑入口</button></div>` : `<div class="script-placeholder"><div><strong>营销文案将在这里出现</strong><span>选择平台后点击"生成营销文案"，得到可直接复制发布的版本。</span></div></div>`;
+      return `${head('04 / VIDEO RESULT','从脚本到成片。','提交视频任务后等待 Seedance 生成，查看结果并导出。','视频结果')}<div class="video-layout"><section class="panel"><span class="result-label">VIDEO PREVIEW</span>${videoStatusHtml}</section><section class="panel"><div class="result-head"><div><span class="result-label">VIDEO INPUT</span><h2>素材确认与生成</h2></div><span class="pill">${state.videoResultUrl ? 'ready' : '待生成'}</span></div><div class="field-stack">${creator}<div class="upload"><input id="product-image" type="file" accept="image/*,video/*"><label class="upload-label" for="product-image"><span class="upload-icon">↑</span><span><b>${esc(state.productImageName || '上传补充素材')}</b><small>${state.productImageUrl ? esc(state.productImageUrl) : '图片或视频参考素材，上传后自动生成 URL'}</small></span></label><strong>选择文件</strong></div>${uploadStatus()}</div><div class="summary"><div class="summary-row"><span>产品</span><strong>${esc(productName)}</strong></div><div class="summary-row"><span>Hook</span><strong>${esc(hookTitle)}</strong></div><div class="summary-row"><span>脚本</span><strong>${esc(state.language)} / 约 15 秒</strong></div><div class="summary-row"><span>视频引擎</span><strong>Seedance 2.0 / 9:16</strong></div></div><div class="button-row"><button class="primary" data-action="generate-video" ${state.videoGenerating || !state.videoTaskId ? 'disabled' : ''}>${state.videoGenerating ? '生成中…' : state.videoResultUrl ? '重新生成视频 ↻' : '生成视频 →'}</button><button class="primary" data-action="download" ${state.videoResultUrl ? '' : 'disabled'}>下载成片</button><button class="secondary" data-action="chatcut">交给 ChatCut 剪辑</button></div><button class="secondary full" style="margin-top:10px" data-stage="2">返回脚本确认</button></section></div><section class="panel publish-panel"><div class="result-head"><div><span class="result-label">SOCIAL PUBLISH RESULT</span><h2>社交媒体可发布结果</h2></div><span class="pill">复制即用</span></div><div class="field-stack" style="margin-top:16px"><label class="field"><span>发布平台</span><select data-copy-channel><option ${state.socialChannel === '小红书' ? 'selected' : ''}>小红书</option><option ${state.socialChannel === '抖音' ? 'selected' : ''}>抖音</option><option ${state.socialChannel === 'Instagram' ? 'selected' : ''}>Instagram</option></select></label><button class="primary" data-action="generate-copy">${state.socialCopyReady ? '重新生成营销文案 ↻' : '生成营销文案 →'}</button></div>${publishCopy}</section></div>`;
+    }
+    function render() {
+      try {
+        let content = stageOne();
+        if (state.stage === 1) content = stageTwo();
+        if (state.stage === 2) content = stageThree();
+        if (state.stage === 3) content = stageFour();
+        document.querySelector('#app').innerHTML = shell(content);
+        bind();
+      } catch(e) { console.error('render error:', e); }
+    }
+    function prepareVideoInputs() {
+      document.querySelector('.video-layout .summary-row:first-child')?.remove();
+      const creatorField = document.querySelector('[data-creator-profile]');
+      const creatorRequired = creatorField?.closest('label')?.querySelector('em');
+      if (creatorRequired) creatorRequired.textContent = '选填';
+      const uploadInput = document.querySelector('.video-layout #product-image');
+      if (uploadInput) uploadInput.setAttribute('accept', 'image/*,video/*');
+      const uploadName = document.querySelector('.video-layout .upload-label b');
+      if (uploadName && !state.productImageName) uploadName.textContent = '上传补充素材';
+      const uploadHint = document.querySelector('.video-layout .upload-label small');
+      if (uploadHint && !state.productImageUrl && state.uploadStatus === 'idle') uploadHint.textContent = '图片、视频或参考素材，上传后自动生成 public URL';
+    }
+    function bind() {
+      try {
+      prepareVideoInputs();
+      document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => { state.stage = Number(button.dataset.stage); render(); }));
+      document.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => { state.mode = button.dataset.mode; state.productReady = false; render(); }));
+      document.querySelector('[data-language-select]')?.addEventListener('change', event => { state.language = event.target.value; state.productReady = false; render(); });
+      document.querySelector('[data-mode-select]')?.addEventListener('change', event => { state.mode = event.target.value; state.productReady = false; render(); });
+      document.querySelectorAll('[data-source]').forEach(button => button.addEventListener('click', () => { state.source = button.dataset.source; render(); }));
+      document.querySelectorAll('[data-hook]').forEach(button => button.addEventListener('click', () => { state.selectedHook = Number(button.dataset.hook); render(); }));
+      document.querySelector('[data-action="prepare"]')?.addEventListener('click', async () => {
+        const urlInput = document.querySelector('#product-url-input');
+        const productUrl = urlInput?.value?.trim() || '';
+        if (!productUrl) { alert('请先输入产品链接'); return; }
+        state.loading = true; state.productReady = false; render();
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 30000);
+        try {
+          const res = await fetch('/api/workflow/stage-1/url', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product_url: productUrl, language: state.language, content_type: state.mode }), signal: controller.signal });
+          clearTimeout(timeout);
+          if (!res.ok) throw new Error('n8n 返回 HTTP ' + res.status);
+          const data = await res.json();
+          if (data === null || data === undefined) throw new Error('n8n 返回空响应');
+          if (data.message && !data.ok) throw new Error(data.message);
+          state.productRecordId = data.product_record_id || '';
+          state.productBrief = data.product_brief || null;
+          state.hooksList = Array.isArray(data.hooks) ? data.hooks : [];
+          if (!state.productBrief || !state.hooksList.length) throw new Error('n8n 工作流未返回有效产品数据，请检查 n8n 工作流配置');
+          state.productReady = true;
+        } catch (err) {
+          alert('n8n 调用失败：' + (err.name === 'AbortError' ? '请求超时（30秒）' : err.message));
+          state.productReady = false;
+        }
+        state.loading = false;
+        render();
+      });
+      document.querySelector('[data-action="script"]')?.addEventListener('click', () => { state.stage = 2; render(); });
+      document.querySelector('[data-action="generate-script"]')?.addEventListener('click', async () => {
+        const hook = state.hooksList[state.selectedHook];
+        if (!hook) { alert('请先选择一个 Hook'); return; }
+        state.loading = true; render();
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 30000);
+        try {
+          const res = await fetch('/api/workflow/stage-2', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product_record_id: state.productRecordId, product_brief: state.productBrief, hook: hook, language: state.language, content_type: state.mode }), signal: controller.signal });
+          clearTimeout(timeout);
+          if (!res.ok) throw new Error('n8n 返回 HTTP ' + res.status);
+          const data = await res.json();
+          state.scriptText = data.script_text || data.script || '';
+          state.scriptCta = data.cta || data.script_cta || '';
+          state.scriptVisual = data.visual_logic || data.script_visual || '';
+          state.scriptReady = true;
+          state.scriptConfirmed = false;
+        } catch (err) {
+          alert('脚本生成失败：' + (err.name === 'AbortError' ? '请求超时' : err.message));
+          state.scriptReady = false;
+        }
+        state.loading = false;
+        render();
+      });
+      document.querySelector('[data-action="video"]')?.addEventListener('click', async () => {
+        state.loading = true; render();
+        try {
+          const hook = state.hooksList[state.selectedHook];
+          const payload = {
+            product_record_id: state.productRecordId,
+            product_brief: state.productBrief,
+            hook: hook,
+            script_text: state.scriptText,
+            language: state.language,
+            content_type: state.mode,
+            creator_profile: state.creatorProfile || ''
+          };
+          const res = await fetch('/api/workflow/stage-3', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          if (!res.ok) throw new Error('n8n 返回 HTTP ' + res.status);
+          const data = await res.json();
+          state.videoTaskId = data.video_task_id || data.task_id || '';
+          state.videoStatus = data.status || 'submitted';
+          state.videoStoryboard = Array.isArray(data.storyboard) ? data.storyboard : [];
+          state.videoPrompt = data.video_prompt || '';
+          state.videoReady = true;
+          state.stage = 3;
+        } catch (err) {
+          alert('视频任务创建失败：' + err.message);
+          state.videoReady = false;
+        }
+        state.loading = false;
+        render();
+      });
+      document.querySelectorAll('[data-action="reset"]').forEach(button => button.addEventListener('click', () => { Object.assign(state, {stage:0,mode:'固定达人口播',language:'中文',source:'url',productReady:false,productRecordId:'',productBrief:null,hooksList:[],loading:false,selectedHook:0,scriptReady:false,scriptConfirmed:false,scriptText:'',scriptCta:'',scriptVisual:'',videoReady:false,videoTaskId:'',videoStatus:'',videoStoryboard:[],videoPrompt:'',videoResultUrl:'',videoGenerating:false}); render(); }));
+      document.querySelector('#confirm-script')?.addEventListener('change', event => { state.scriptConfirmed = event.target.checked; render(); });
+      document.querySelector('[data-action="play"]')?.addEventListener('click', event => { event.currentTarget.textContent = event.currentTarget.textContent === '▶' ? '❚❚' : '▶'; });
+      document.querySelector('[data-action="generate-video"]')?.addEventListener('click', async () => {
+        state.videoGenerating = true; render();
+        try {
+          const payload = {
+            video_task_id: state.videoTaskId,
+            product_record_id: state.productRecordId,
+            product_brief: state.productBrief,
+            hook: state.hooksList[state.selectedHook],
+            script_text: state.scriptText,
+            language: state.language,
+            content_type: state.mode,
+            creator_profile: state.creatorProfile || '',
+            video_prompt: state.videoPrompt || '',
+            storyboard: state.videoStoryboard,
+            product_image_url: state.productImageUrl || ''
+          };
+          const res = await fetch('/api/workflow/stage-4', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          if (!res.ok) throw new Error('n8n 返回 HTTP ' + res.status);
+          const data = await res.json();
+          state.videoResultUrl = data.video_url || data.result_url || data.public_url || '';
+          state.videoStatus = data.status || 'completed';
+        } catch (err) {
+          alert('视频生成失败：' + err.message);
+        }
+        state.videoGenerating = false;
+        render();
+      });
+      document.querySelector('[data-action="download"]')?.addEventListener('click', () => {
+        if (state.videoResultUrl) window.open(state.videoResultUrl, '_blank');
+        else alert('视频尚未生成，请先点击"生成视频"。');
+      });
+      document.querySelector('[data-action="chatcut"]')?.addEventListener('click', () => window.open('https://chatcut.com', '_blank'));
+      document.querySelector('#product-image')?.addEventListener('change', event => uploadImage(event.target.files?.[0]));
+      document.querySelector('[data-creator-profile]')?.addEventListener('input', event => { state.creatorProfile = event.target.value; });
+      document.querySelector('[data-copy-channel]')?.addEventListener('change', event => { state.socialChannel = event.target.value; state.socialCopyReady = false; render(); });
+      document.querySelector('[data-action="generate-copy"]')?.addEventListener('click', () => { state.socialCopyReady = true; render(); });
+      document.querySelector('[data-action="copy"]')?.addEventListener('click', async event => { const value = document.querySelector('.publish-copy')?.value || ''; try { await navigator.clipboard.writeText(value); event.currentTarget.textContent = '已复制 ✓'; } catch { alert('请手动复制文案。'); } });
+      } catch(e) { console.error('bind error:', e); }
+    }
+    render();
+    console.log('🚀 大海浮光 AIGC 工作台已就绪 · 阶段:', state.stage);
+  </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+[
+  {
+    "updatedAt": "2026-07-24T13:19:09.869Z",
+    "createdAt": "2026-07-24T13:19:09.869Z",
+    "id": "kSQLnRp2mayHu5bj",
+    "name": "大海浮光 AIGC｜03 脚本到视频任务",
+    "description": "接收确认脚本与可选达人形象，建立 9:16、15 秒的视频生成任务。",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "id": "12920e2f-7dbf-4521-94d9-0e1c850bbc6b",
+        "name": "接收确认脚本",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ai-ad-script-to-video-task-v2",
+          "authentication": "none",
+          "responseMode": "responseNode",
+          "options": {
+            "allowedOrigins": "*"
+          }
+        },
+        "webhookId": "62ed8482-5c72-4315-878d-1e4d9c73eb0f"
+      },
+      {
+        "id": "e4072925-c819-4604-8f3f-c8b114fae0b7",
+        "name": "创建视频任务",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          224,
+          0
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const body = $input.first().json.body || {};\nif (!String(body.script_text || '').trim()) {\n  return [{ json: { ok: false, error: '缺少已确认的 script_text' } }];\n}\nconst taskId = 'video_task_' + Date.now();\nconst creator = String(body.creator_profile || '').trim() || '自然、可信、像朋友推荐产品的年轻达人';\nreturn [{ json: {\n  ok: true,\n  video_task_id: taskId,\n  task_id: taskId,\n  product_record_id: body.product_record_id || '',\n  status: 'submitted',\n  duration_seconds: 15,\n  aspect_ratio: '9:16',\n  provider: 'Seedance 2.0',\n  creator_profile: creator,\n  task_preview: {\n    script_text: body.script_text,\n    language: body.language || '中文',\n    content_type: body.content_type || '固定达人口播',\n    creator_profile: creator\n  }\n} }];"
+        }
+      },
+      {
+        "id": "6f5e41db-875b-47d3-977a-38659fc46b9b",
+        "name": "返回视频任务",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          448,
+          0
+        ],
+        "parameters": {
+          "respondWith": "firstIncomingItem",
+          "enableStreaming": false,
+          "options": {
+            "responseCode": 200
+          }
+        }
+      }
+    ],
+    "connections": {
+      "接收确认脚本": {
+        "main": [
+          [
+            {
+              "node": "创建视频任务",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "创建视频任务": {
+        "main": [
+          [
+            {
+              "node": "返回视频任务",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "availableInMCP": true
+    },
+    "staticData": null,
+    "meta": {
+      "aiBuilderAssisted": true,
+      "builderVariant": "mcp"
+    },
+    "pinData": null,
+    "versionId": "4594cebb-c69e-4c24-8685-e0ff770cea11",
+    "activeVersionId": "4594cebb-c69e-4c24-8685-e0ff770cea11",
+    "versionCounter": 3,
+    "triggerCount": 1,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-24T13:19:09.872Z",
+        "createdAt": "2026-07-24T13:19:09.872Z",
+        "role": "workflow:owner",
+        "workflowId": "kSQLnRp2mayHu5bj",
+        "projectId": "7THXHYUL0q8j8YhX",
+        "project": {
+          "updatedAt": "2026-07-23T12:37:01.650Z",
+          "createdAt": "2026-02-23T09:38:30.317Z",
+          "id": "7THXHYUL0q8j8YhX",
+          "name": "晓荷 luoxiaohe0529@gmail.com <luoxiaohe0529@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "6103da84-913c-4ec2-891b-973134c19bf8"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]

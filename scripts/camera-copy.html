@@ -1,0 +1,12 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Copy camera knowledge</title>
+<button id="copy">Copy full document</button>
+<strong id="status">Ready</strong>
+<script>
+document.querySelector('#copy').addEventListener('click', async () => {
+  const text = await fetch('./camera-knowledge-final.txt').then((response) => response.text());
+  await navigator.clipboard.writeText(text);
+  document.querySelector('#status').textContent = `Copied ${text.length} characters`;
+});
+</script>

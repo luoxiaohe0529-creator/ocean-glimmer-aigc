@@ -1,0 +1,25 @@
+{
+  "name": "dahai-fuguang-aigc-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A role-based AI advertising video workbench powered by Python, n8n, DeepSeek, Gemini, KIE.ai, Seedance, and FFmpeg.",
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
+    "start": "node --env-file-if-exists=.env scripts/dev.mjs",
+    "dev:frontend": "node --env-file-if-exists=.env frontend/server.mjs",
+    "dev:python": "python3 -m python_service.server",
+    "check:server": "node --check frontend/server.mjs",
+    "check:entrypoints": "node scripts/check-entrypoints.mjs",
+    "check:python": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s python_service/tests",
+    "check:workflows": "node scripts/check-public-workflows.mjs",
+    "check:secrets": "node scripts/check-public-secrets.mjs",
+    "install:asset-upload": "node --env-file-if-exists=.env scripts/install-n8n-asset-upload.mjs",
+    "check": "npm run check:server && npm run check:entrypoints && npm run check:python && npm run check:workflows && npm run check:secrets",
+    "export:workflows": "node scripts/export-public-workflows.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.2",
+    "playwright": "^1.62.1"
+  }
+}

@@ -1,0 +1,190 @@
+[
+  {
+    "updatedAt": "2026-07-24T13:19:09.730Z",
+    "createdAt": "2026-07-24T13:19:09.730Z",
+    "id": "Nq1Pq1PRx8ChaHIv",
+    "name": "大海浮光 AIGC｜01 产品链接到简报与 Hook",
+    "description": "接收商品链接，抓取页面标题与描述，生成前端需要的产品简报和 12 条可筛选 Hook。",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "id": "f690c88b-a135-4535-acc2-ea1be630c05b",
+        "name": "接收产品链接",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ai-ad-product-url-v2",
+          "authentication": "none",
+          "responseMode": "responseNode",
+          "options": {
+            "allowedOrigins": "*"
+          }
+        },
+        "webhookId": "4bdab34c-5725-47f9-a85a-aff6c4672f5e"
+      },
+      {
+        "id": "d7b17eaa-f8c2-41f8-ab4e-632fc84b3def",
+        "name": "抓取商品页面",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          224,
+          0
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "={{ $('接收产品链接').item.json.body.product_url }}",
+          "authentication": "none",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (compatible; DahaiFuguangAIGC/1.0)"
+              },
+              {
+                "name": "Accept",
+                "value": "text/html,application/xhtml+xml"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 15000,
+            "redirect": {
+              "redirect": {
+                "followRedirects": true,
+                "maxRedirects": 5
+              }
+            },
+            "response": {
+              "response": {
+                "neverError": true,
+                "responseFormat": "text",
+                "outputPropertyName": "page_html"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "e06e145b-28b5-4f56-b4dd-623e0754c59a",
+        "name": "生成产品简报与 Hook",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          448,
+          0
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const request = $('接收产品链接').first().json.body || {};\nconst html = String($input.first().json.page_html || '');\nconst url = String(request.product_url || '').trim();\nif (!/^https?:\\/\\//i.test(url)) {\n  return [{ json: { ok: false, error: '请输入有效的 http/https 商品链接' } }];\n}\nconst decode = (value) => String(value || '')\n  .replace(/<[^>]+>/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\s+/g, ' ')\n  .trim();\nconst match = (pattern) => decode((html.match(pattern) || [])[1] || '');\nlet productName = match(/<meta[^>]+property=[\"']og:title[\"'][^>]+content=[\"']([^\"']+)/i)\n  || match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i);\nconst description = match(/<meta[^>]+(?:name|property)=[\"'](?:description|og:description)[\"'][^>]+content=[\"']([^\"']+)/i);\nif (!productName) {\n  const parsed = new URL(url);\n  productName = decodeURIComponent(parsed.pathname.split('/').filter(Boolean).pop() || parsed.hostname)\n    .replace(/[-_]+/g, ' ');\n}\nproductName = productName.slice(0, 80) || '未命名产品';\nconst sourceText = (description || productName).slice(0, 240);\nconst sellingPoints = [\n  sourceText || '商品核心价值清晰',\n  '适合通过真实体验建立信任',\n  '可用短视频快速说明使用场景'\n];\nconst brief = {\n  product_name: productName,\n  category: '电商商品',\n  target_audience: '关注实用价值、使用体验与购买决策效率的消费者',\n  core_selling_points: sellingPoints,\n  pain_points: '用户需要快速判断产品是否适合自己，并降低购买前的信息不确定性',\n  source_url: url,\n  source_description: description\n};\nconst specs = [\n  ['反常识开场', '认知阶段', '惊讶', '先打破用户对价格或效果的固有判断'],\n  ['痛点共鸣', '问题阶段', '共鸣', '从真实使用困扰切入'],\n  ['结果前置', '解决方案阶段', '期待', '先展示使用后的直观变化'],\n  ['价格锚点', '购买阶段', '省心', '用成本对比降低决策门槛'],\n  ['场景代入', '问题阶段', '真实', '把产品放进高频生活场景'],\n  ['体验反转', '认知阶段', '好奇', '用前后态度变化制造反差'],\n  ['细节证据', '产品阶段', '信任', '用可验证细节支撑卖点'],\n  ['避坑建议', '解决方案阶段', '安全感', '从选购误区建立专业感'],\n  ['限时行动', '购买阶段', '紧迫', '用明确行动理由推动转化'],\n  ['朋友推荐', '产品阶段', '亲近', '用自然口吻降低广告感'],\n  ['挑战测试', '解决方案阶段', '好奇', '通过测试过程证明产品表现'],\n  ['一句话结论', '购买阶段', '确定', '用清晰结论帮助用户快速决策']\n];\nconst hooks = specs.map((item, index) => ({\n  hook_id: 'hook_' + String(index + 1).padStart(2, '0'),\n  title: index === 0 ? productName + '真的值得买吗？' : item[0] + '：' + productName,\n  score: 10 - (index % 3),\n  category: item[0],\n  awareness_stage: item[1],\n  emotion: item[2],\n  description: item[3] + '。' + (description || sellingPoints[0])\n}));\nreturn [{ json: {\n  ok: true,\n  product_record_id: 'product_' + Date.now(),\n  product_brief: brief,\n  hooks\n} }];"
+        }
+      },
+      {
+        "id": "1af974ea-097c-4275-bd88-9745da75622e",
+        "name": "返回产品简报与 Hook",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          672,
+          0
+        ],
+        "parameters": {
+          "respondWith": "firstIncomingItem",
+          "enableStreaming": false,
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "connections": {
+      "接收产品链接": {
+        "main": [
+          [
+            {
+              "node": "抓取商品页面",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "抓取商品页面": {
+        "main": [
+          [
+            {
+              "node": "生成产品简报与 Hook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "生成产品简报与 Hook": {
+        "main": [
+          [
+            {
+              "node": "返回产品简报与 Hook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "availableInMCP": true
+    },
+    "staticData": null,
+    "meta": {
+      "aiBuilderAssisted": true,
+      "builderVariant": "mcp"
+    },
+    "pinData": null,
+    "versionId": "28757167-c3cf-4e58-9764-eaac6ca7d1c4",
+    "activeVersionId": "28757167-c3cf-4e58-9764-eaac6ca7d1c4",
+    "versionCounter": 3,
+    "triggerCount": 1,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-24T13:19:09.734Z",
+        "createdAt": "2026-07-24T13:19:09.734Z",
+        "role": "workflow:owner",
+        "workflowId": "Nq1Pq1PRx8ChaHIv",
+        "projectId": "7THXHYUL0q8j8YhX",
+        "project": {
+          "updatedAt": "2026-07-23T12:37:01.650Z",
+          "createdAt": "2026-02-23T09:38:30.317Z",
+          "id": "7THXHYUL0q8j8YhX",
+          "name": "晓荷 luoxiaohe0529@gmail.com <luoxiaohe0529@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "6103da84-913c-4ec2-891b-973134c19bf8"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]

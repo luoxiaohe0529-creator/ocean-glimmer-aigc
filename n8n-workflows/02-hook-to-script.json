@@ -1,0 +1,127 @@
+[
+  {
+    "updatedAt": "2026-07-24T13:19:09.803Z",
+    "createdAt": "2026-07-24T13:19:09.803Z",
+    "id": "cSkwBR6notNnVuMA",
+    "name": "大海浮光 AIGC｜02 Hook 到 15 秒脚本",
+    "description": "把前端选中的 Hook 与产品简报扩展成 15 秒口播脚本、CTA 和画面逻辑。",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "id": "88cd931b-590d-469e-a017-a5d06760b440",
+        "name": "接收选中 Hook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ai-ad-hook-to-script-v2",
+          "authentication": "none",
+          "responseMode": "responseNode",
+          "options": {
+            "allowedOrigins": "*"
+          }
+        },
+        "webhookId": "6cbd0ae5-cc72-43cc-a13c-ec376194615e"
+      },
+      {
+        "id": "64909ae1-b9d5-422e-aeb9-40770a1675ab",
+        "name": "扩展为 15 秒口播脚本",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          224,
+          0
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const body = $input.first().json.body || {};\nconst brief = body.product_brief || {};\nconst hook = body.hook || {};\nconst productName = brief.product_name || '这款产品';\nconst title = hook.title || productName + '真的值得买吗？';\nconst points = Array.isArray(brief.core_selling_points) ? brief.core_selling_points : [];\nconst point1 = points[0] || '解决真实使用痛点';\nconst point2 = points[1] || '体验自然、上手简单';\nconst language = body.language || '中文';\nconst contentType = body.content_type || '固定达人口播';\nconst script = [\n  '【0-3s 开场】' + title,\n  '【3-7s 痛点】以前我最在意的是：' + (brief.pain_points || '买之前信息太多，却很难判断是否适合自己。'),\n  '【7-12s 产品】实际体验后，' + productName + '最打动我的是' + point1 + '，而且' + point2 + '。',\n  '【12-15s 行动】如果你也在找更省心的选择，可以点开详情看看。'\n].join('\\n\\n');\nreturn [{ json: {\n  ok: true,\n  script_record_id: 'script_' + Date.now(),\n  product_record_id: body.product_record_id || '',\n  script_text: script,\n  script,\n  cta: '点开详情，确认它是否适合你。',\n  script_cta: '点开详情，确认它是否适合你。',\n  visual_logic: '0-3 秒人物近景提出 Hook；3-7 秒展示痛点场景；7-12 秒产品特写与使用动作；12-15 秒人物回到镜头并给出 CTA。',\n  script_visual: '0-3 秒人物近景提出 Hook；3-7 秒展示痛点场景；7-12 秒产品特写与使用动作；12-15 秒人物回到镜头并给出 CTA。',\n  duration_seconds: 15,\n  language,\n  content_type: contentType\n} }];"
+        }
+      },
+      {
+        "id": "0291e33c-0196-4eba-b2be-e0600197feee",
+        "name": "返回脚本",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          448,
+          0
+        ],
+        "parameters": {
+          "respondWith": "firstIncomingItem",
+          "enableStreaming": false,
+          "options": {
+            "responseCode": 200
+          }
+        }
+      }
+    ],
+    "connections": {
+      "接收选中 Hook": {
+        "main": [
+          [
+            {
+              "node": "扩展为 15 秒口播脚本",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "扩展为 15 秒口播脚本": {
+        "main": [
+          [
+            {
+              "node": "返回脚本",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "availableInMCP": true
+    },
+    "staticData": null,
+    "meta": {
+      "aiBuilderAssisted": true,
+      "builderVariant": "mcp"
+    },
+    "pinData": null,
+    "versionId": "0304ad98-81dd-45aa-a508-e79899b76ba8",
+    "activeVersionId": "0304ad98-81dd-45aa-a508-e79899b76ba8",
+    "versionCounter": 3,
+    "triggerCount": 1,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-24T13:19:09.805Z",
+        "createdAt": "2026-07-24T13:19:09.805Z",
+        "role": "workflow:owner",
+        "workflowId": "cSkwBR6notNnVuMA",
+        "projectId": "7THXHYUL0q8j8YhX",
+        "project": {
+          "updatedAt": "2026-07-23T12:37:01.650Z",
+          "createdAt": "2026-02-23T09:38:30.317Z",
+          "id": "7THXHYUL0q8j8YhX",
+          "name": "晓荷 luoxiaohe0529@gmail.com <luoxiaohe0529@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "6103da84-913c-4ec2-891b-973134c19bf8"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]
