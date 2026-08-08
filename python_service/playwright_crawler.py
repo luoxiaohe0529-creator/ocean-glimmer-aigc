@@ -117,10 +117,13 @@ def _curlcffi_fetch(url: str) -> dict:
         return _blocked_result(url, "curl_cffi 未安装")
 
     mobile_url = _convert_to_mobile(url)
+    fast_mode = os.getenv("STAGE1_FAST_MODE", "1").strip() == "1"
+    max_attempts = 1 if fast_mode else 3
+    request_timeout = 12 if fast_mode else 20
 
     try:
         import time, random
-        for attempt in range(1, 4):
+        for attempt in range(1, max_attempts + 1):
             # Small random delay between retries to avoid rate limiting
             if attempt > 1:
                 time.sleep(random.uniform(2, 5))
@@ -136,12 +139,12 @@ def _curlcffi_fetch(url: str) -> dict:
                     'Referer': 'https://www.google.com/',
                     'User-Agent': f'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.{ua_suffix} Safari/537.36',
                 },
-                timeout=20,
+                timeout=request_timeout,
             )
             final_url = str(resp.url)
 
             if resp.status_code != 200:
-                if attempt < 3:
+                if attempt < max_attempts:
                     continue
                 return _blocked_result(final_url, f"HTTP {resp.status_code}")
 
@@ -152,12 +155,12 @@ def _curlcffi_fetch(url: str) -> dict:
             is_boring_page = any(t in (resp.text[:2000]) for t in boring_titles) and len(resp.text) < 10000
             
             if is_blocked or is_boring_page:
-                if attempt < 3:
+                if attempt < max_attempts:
                     continue
                 return _blocked_result(final_url, f"反爬拦截: {final_url[:120]}")
 
             if len(resp.text) < 500:
-                if attempt < 3:
+                if attempt < max_attempts:
                     continue
                 return _blocked_result(final_url, f"页面内容过短 ({len(resp.text)} chars)")
 
@@ -184,7 +187,7 @@ def _playwright_fetch(url: str) -> dict:
         resp = httpx.post(
             f"{scraper_base_url}/scrape",
             json={"url": _convert_to_mobile(url)},
-            timeout=35,
+            timeout=20 if os.getenv("STAGE1_FAST_MODE", "1").strip() == "1" else 35,
         )
         if resp.status_code != 200:
             return _blocked_result(url, f"Scraper HTTP {resp.status_code}")
@@ -208,7 +211,8 @@ def _httpx_fetch(url: str) -> dict:
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.7",
     }
-    with httpx.Client(follow_redirects=True, timeout=20, headers=headers) as client:
+    request_timeout = 12 if os.getenv("STAGE1_FAST_MODE", "1").strip() == "1" else 20
+    with httpx.Client(follow_redirects=True, timeout=request_timeout, headers=headers) as client:
         response = client.get(url)
         response.raise_for_status()
     final_url = str(response.url)
@@ -243,7 +247,8 @@ def _resolve_short_link(url: str) -> str:
     if domain not in short_domains:
         return url
     try:
-        resp = httpx.get(url, follow_redirects=False, timeout=10,
+        request_timeout = 6 if os.getenv("STAGE1_FAST_MODE", "1").strip() == "1" else 10
+        resp = httpx.get(url, follow_redirects=False, timeout=request_timeout,
                          headers={'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15'})
         if resp.status_code in (301, 302, 303, 307, 308):
             location = resp.headers.get('location', '')
@@ -253,7 +258,7 @@ def _resolve_short_link(url: str) -> str:
                 # If still a short link, follow one more level
                 parsed2 = urlparse(resolved)
                 if parsed2.netloc.lower() in short_domains:
-                    resp2 = httpx.get(resolved, follow_redirects=False, timeout=10,
+                    resp2 = httpx.get(resolved, follow_redirects=False, timeout=request_timeout,
                                      headers={'User-Agent': 'Mozilla/5.0'})
                     if resp2.status_code in (301, 302, 303, 307, 308):
                         loc2 = resp2.headers.get('location', '')

@@ -1,6 +1,6 @@
 # Python service
 
-Stage 1, Stage 2 and Stage 3 run here because they are direct HTTP + LLM + JSON tasks. Stage 1 follows a fixed order: crawler, DeepSeek factual product analysis, advertising-planning Wiki retrieval, then Doubao Responses for multimodal 12 Hooks and compact Mood Boards. Stage 2 uses the existing Gemini 3.1 Pro channel with the selected Hook, Mood Board and director Wiki; Stage 3 uses the resulting script with the camera Wiki. The service also exposes KIE.ai task adapters and a local FFmpeg editing endpoint.
+Stage 1, Stage 2 and Stage 3 run here because they are direct HTTP + LLM + JSON tasks. Stage 1 always reads the advertising-planning Wiki. By default, its fast path uses one Doubao Responses call after the Wiki retrieval; setting `STAGE1_FAST_MODE=0` restores the separate Doubao factual-analysis call followed by Wiki retrieval and the creative call. Stage 2 uses the existing Gemini 3.1 Pro channel with the selected Hook, Mood Board and director Wiki; Stage 3 uses the resulting script with the camera Wiki. The English Stage 2 text path can use DeepSeek. The service also exposes KIE.ai task adapters and a local FFmpeg editing endpoint.
 
 Endpoints:
 
@@ -15,7 +15,7 @@ Endpoints:
 - `POST /providers/kie/status`
 - `GET /knowledge/filters?content_type=高端TVC`
 
-Configuration is read from the project `.env`. Use `PYTHON_MOCK_MODE=1` for local UI tests without calling external models.
+Configuration is read from the project `.env`. Runtime stages never use local content templates: they require their configured model and the matching live Feishu Wiki.
 
 The root `npm start` command also starts the Node Playwright scraper on `SCRAPER_SERVICE_URL` (default `http://127.0.0.1:9876`). Install its browser once with `npm exec playwright install chromium`.
 

@@ -46,7 +46,7 @@ Wiki 文档正文不会整篇无限灌入模型。`python_service/feishu_knowled
 
 每个阶段只请求自己的角色 Wiki，不读取另外两库。Stage 1 内部顺序是“爬虫 → 产品事实模型 → 广告策划 Wiki → 创意模型”；Stage 2 只读取编剧导演 Wiki；Stage 3 只读取摄影摄像 Wiki。服务进程内默认缓存 5 分钟，提示词按阶段限制在 4000～5200 字符。这样前端等待的是一次角色级读取，而不是把全部文档逐个塞入模型。
 
-如果 Wiki 暂时不可用，服务使用内置的最小结构化安全契约保证链路可运行，并在 `knowledge_trace` 标明 `fallback`。只有真实 Wiki 正文读取成功时，阶段来源才标记为 `wiki`。
+Wiki 是唯一运行时知识源。Wiki 未配置、无权限、正文为空或读取失败时，服务会明确停止该阶段；Python 不提供本地知识模板，也不会生成替代 Hook、Mood Board 或脚本。
 
 ## 运行方式
 
@@ -63,7 +63,7 @@ flowchart LR
 
 1. 前端按内容类型请求 `/api/knowledge/filters`。
 2. Python 从对应角色 Wiki 提取筛选项；未授权时返回内置安全配置。
-3. Stage 1 先调用产品事实模型，再读取广告策划 Wiki，最后调用创意模型生成 12 个 Hook 和简要 Mood Board。
+3. Stage 1 两种模式都会读取广告策划 Wiki：默认快速模式用一次豆包创意调用完成输出；`STAGE1_FAST_MODE=0` 时，先调用产品事实模型，再读取 Wiki，最后调用创意模型生成 12 个 Hook 和简要 Mood Board。Wiki 不会因快速模式被跳过。
 4. 前端选择一个 Hook，连同对应的 `creative_plan` 和完整 `selected_mood_board` 原样传给 Stage 2。
 5. Stage 2 只读取编剧导演 Wiki，生成脚本和分镜；Stage 3 只读取摄影摄像 Wiki，生成镜头提示词。
 6. `filter_values`、已选创意方案、Mood Board、脚本、分辨率和无字幕约束继续传给 n8n Stage 4。
@@ -103,4 +103,4 @@ FEISHU_CAMERA_WIKI_TOKEN=
 http://127.0.0.1:4173/api/knowledge/filters?content_type=高端TVC
 ```
 
-返回 `"source":"wiki"` 表示真实 Wiki 已接通；阶段接口的 `knowledge_trace.source` 为 `wiki` 表示对应角色 Wiki 正文已进入上下文；返回 `"source":"fallback"` 表示应用凭证、文档协作权限或网络仍未生效。
+返回 `"source":"wiki"` 表示真实 Wiki 已接通；阶段接口的 `knowledge_trace.source` 为 `wiki` 表示对应角色 Wiki 正文已进入上下文；返回 `"source":"unavailable"` 表示应用凭证、文档协作权限、正文或网络仍未生效，生成不会继续。

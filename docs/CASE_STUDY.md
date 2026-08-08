@@ -12,7 +12,7 @@
 
 ```mermaid
 flowchart LR
-  A[产品链接 / 主题 / 图片] --> B[DeepSeek：产品事实]
+  A[产品链接 / 主题 / 图片] --> B[豆包 Responses：产品事实]
   B --> C[广告策划 Wiki]
   C --> D[豆包 Responses：12 个 Hook + Mood Board]
   D --> E{用户选择 Hook / 创意方案}
@@ -36,7 +36,7 @@ flowchart LR
 
 ### 2. 知识边界
 
-[python_service/feishu_knowledge.py](../python_service/feishu_knowledge.py) 将广告策划、编剧导演、摄影摄像三个 Wiki 角色隔离。每个阶段只读取自己的知识角色，并在 `knowledge_trace` 中记录来源是 Wiki 还是本地 fallback。
+[python_service/feishu_knowledge.py](../python_service/feishu_knowledge.py) 将广告策划、编剧导演、摄影摄像三个 Wiki 角色隔离。每个阶段只读取自己的知识角色，并在 `knowledge_trace` 中记录真实 Wiki 的读取状态；没有本地内容 fallback。
 
 ### 3. 媒体编排
 

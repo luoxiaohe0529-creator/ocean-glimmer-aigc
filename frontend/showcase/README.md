@@ -1,8 +1,8 @@
 # 公开展示素材
 
-本目录只存放作品集使用的脱敏前端和中英文视频。原始素材、运行数据、API 凭证与 n8n 执行记录不在公开目录中。
+本目录只存放作品集使用的安全前端快照和中英文视频。原始素材、API 凭证与 n8n 执行记录不在公开目录中。
 
-`workbench/open-design-demo.html` 是静态展示页，只用于演示历史工作台交互，不是 `localhost:4173` 的生产入口，也不参与正式的 Stage 1 到 Stage 6 请求链路。生产页面统一使用仓库根目录的 `frontend/open-design.html` 与 `frontend/server.mjs`。
+`workbench/open-design-demo.html` 是 2026-08-09 真实运行结果的只读快照，包含 3 个创意方向、3 个 Mood Board 和 12 条 Hook。它不包含密钥，也不会发起模型请求；生产页面仍统一使用仓库根目录的 `frontend/open-design.html` 与 `frontend/server.mjs`。
 
 ## 中文视频｜国内电商
 

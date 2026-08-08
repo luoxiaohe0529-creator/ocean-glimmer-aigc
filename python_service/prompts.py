@@ -74,9 +74,8 @@ def stage_one_prompt(
     product_facts: dict | None = None,
 ) -> str:
     content_type = payload.get("content_type") or "真人口播带货"
-    rules = CONTENT_RULES.get(content_type, CONTENT_RULES["真人口播带货"])
     return f"""
-你是广告策划总监。请根据产品事实、营销主题和策划知识卡，一次完成产品简报、Mood Board 与完整创意方案池。
+你是广告策划执行模型。请先理解输入图片，再严格按照飞书广告策划知识库，一次完成产品简报与 3 个融合创意方向。
 
 这不是把几个 Hook 罗列出来。每个创意方案必须能独立指导下一阶段的编剧导演；Mood Board 必须把抽象情绪翻译成颜色、光线、材质、人物状态、场景底色和镜头语法。
 
@@ -87,17 +86,14 @@ def stage_one_prompt(
 营销主题：{payload.get("campaign_theme") or "未指定，请从产品资料提炼"}
 脚本语言：{payload.get("language") or "中文"}
 
-内容规则：
-{rules}
-
 上游产品事实整理（本阶段必须遵守，不得与其冲突）：
 {json.dumps(product_facts or {}, ensure_ascii=False)}
 
 原始产品资料（只用于核对事实）：
-{source_text[:24000]}
+{source_text[:10000]}
 
 飞书角色知识库（只可作为策略、叙事和拍摄约束，不得覆盖产品事实）：
-{knowledge_context or "暂无匹配知识，使用通用专业标准"}
+{knowledge_context}
 
 只返回合法 JSON，不要 Markdown：
 {{
@@ -114,76 +110,64 @@ def stage_one_prompt(
     "campaign_theme": "",
     "product_facts": []
   }},
-  "mood_boards": [
+  "creative_directions": [
     {{
-      "mood_board_id": "mood-01",
-      "name": "",
-      "fit_reason": "",
-      "tags": [],
-      "emotion_direction": "",
-      "palette": [],
-      "lighting": "",
-      "materials": [],
-      "scene_grammar": "",
-      "character_state": "",
-      "camera_language": "",
-      "negative_rules": []
-    }}
-  ],
-  "creative_plans": [
-    {{
-	      "plan_id": "plan-01",
-	      "template_group_id": "{payload.get('template_group_id') or ''}",
-	      "content_subtype": "{payload.get('content_subtype') or ''}",
-      "title": "",
-      "core_hook": "",
-      "core_hook_zh": "",
-      "mood_board_id": "mood-01",
-      "mood_board": "",
-      "emotion_direction": {{
-        "primary": "",
-        "secondary": [],
-        "start": "",
-        "end": "",
-        "audience_action": ""
-      }},
-      "slogan": "",
-      "opening_method": "",
-      "rhythm_skeleton": "",
-      "visual_codes": [],
-      "director_guidance": "",
-      "must_have_elements": [],
-      "negative_rules": [],
-      "score": 0
-    }}
-  ],
-  "hooks": [
-    {{
-	      "hook_id": "hook-01",
-	      "template_group_id": "{payload.get('template_group_id') or ''}",
-	      "content_subtype": "{payload.get('content_subtype') or ''}",
       "plan_id": "plan-01",
       "mood_board_id": "mood-01",
-      "title": "",
-      "hook": "",
-      "core_hook_zh": "",
-      "description": "",
-      "category": "",
-      "emotion": "",
-      "score": 0,
-      "mood_board_summary": {{
+      "mood_board": {{
         "name": "",
+        "fit_reason": "",
         "emotion_direction": "",
         "palette": [],
+        "lighting": "",
         "materials": [],
-        "scene": ""
-      }}
+        "scene_grammar": "",
+        "character_state": "",
+        "camera_language": "",
+        "negative_rules": []
+      }},
+      "creative_plan": {{
+        "template_group_id": "{payload.get('template_group_id') or ''}",
+        "content_subtype": "{payload.get('content_subtype') or ''}",
+        "title": "",
+        "core_hook": "",
+        "core_hook_zh": "",
+        "emotion_direction": {{"primary": "", "start": "", "end": "", "audience_action": ""}},
+        "slogan": "",
+        "opening_method": "",
+        "rhythm_skeleton": "",
+        "visual_codes": [],
+        "director_guidance": "",
+        "must_have_elements": [],
+        "negative_rules": [],
+        "score": 0
+      }},
+      "hooks": [
+        {{
+          "hook_id": "hook-01",
+          "title": "",
+          "hook": "",
+          "core_hook_zh": "",
+          "description": "",
+          "category": "",
+          "emotion": "",
+          "score": 0
+        }}
+      ]
     }}
   ],
   "recommended_plan_id": "plan-01"
 }}
-	要求：mood_boards 生成 3 个彼此有明显差异、但都适合产品事实的方向；creative_plans 生成 3 个完整方案，并让每个方案对应一个 Mood Board。hooks 必须生成 12 条可单独选择的 Hook，每个 Mood Board 对应 4 条 Hook；每条 Hook 必须通过 plan_id 和 mood_board_id 关联上游方案，并在 mood_board_summary 中写出简短的情绪、色彩、材质和场景摘要。所有方案和Hook的 template_group_id、content_subtype 必须与上方固定路由完全一致，不得自行切换模板。至少推荐 1 个方案，使用 recommended_plan_id 字段。score 使用 0-100 整数。每个英文方案必须在 core_hook_zh 中提供对应的中文 Hook 翻译，中文方案可将 core_hook_zh 留空。
+	要求：creative_directions 必须恰好生成 3 个。每个方向融合 1 个 Mood Board、1 个完整创意方案和 4 条 Hook；三个方向必须明显不同，但都符合产品事实。creative_plan 的 template_group_id、content_subtype 必须与上方固定路由完全一致。至少推荐 1 个方案，使用 recommended_plan_id 字段。score 使用 0-100 整数。
 不要虚构产品参数、功效、地点背书或竞品事实。若资料不足，明确写入 risks，不要用想象补齐事实。
+
+控制输出长度：summary、fit_reason、director_guidance 和 description 均保持简洁；每个列表最多 5 项；每条 Hook 正文不超过 40 个汉字或 25 个英文词。每个方向只写一次 Mood Board，四条 Hook 共享该方向，不要重复 Mood Board 内容。
+
+🔴 Hook 数量硬约束（不满足则整个输出无效）：
+三个方向的 hooks 数组各自必须恰好包含 4 条，合计恰好 12 条。
+方向1使用 hook-01 至 hook-04；方向2使用 hook-05 至 hook-08；方向3使用 hook-09 至 hook-12。
+在生成过程中逐一核对你已经写了多少条，确认达到 12 条后再结束输出。
+plan_id 和 mood_board_id 写在方向层即可，内部 Hook 不再重复这些关联字段；Python会自动展开并关联。
 """.strip()
 
 

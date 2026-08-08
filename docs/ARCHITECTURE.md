@@ -11,8 +11,8 @@ flowchart TB
   UI["大海浮光 AIGC 前端"] --> SERVER["Node.js 本地服务"]
   SERVER --> PYTHON["Python 内容与媒体服务"]
   SERVER --> N8N["n8n Webhook API"]
-  PYTHON --> DEEPSEEK["DeepSeek · 产品事实"]
-  PYTHON --> DOUBAO["豆包 Responses · Stage 1 多模态创意"]
+  PYTHON --> DOUBAO["豆包 Responses · Stage 1 事实与创意"]
+  PYTHON --> DEEPSEEK["DeepSeek · 英文 Stage 2 文本（可选）"]
   PYTHON --> GEMINI["Gemini 3.1 Pro · 编剧导演"]
   PYTHON --> KNOWLEDGE["飞书三个角色知识库"]
   PYTHON --> FFMPEG["FFmpeg 剪辑、配乐与字幕"]
@@ -37,7 +37,7 @@ flowchart TB
 
 | 前端角色 | n8n 工作流 | 原因 |
 | --- | --- | --- |
-| 广告策划 | Python Stage 1 + DeepSeek + Doubao Responses | 页面抓取 → DeepSeek 产品事实 → 广告策划 Wiki → 豆包读取产品图并生成 Mood Board、12 个 Hook 与结构化 JSON |
+| 广告策划 | Python Stage 1 + Doubao Responses | 页面抓取 → 豆包产品事实 → 广告策划 Wiki → 豆包读取产品图并生成 Mood Board、12 个 Hook 与结构化 JSON |
 | 编剧导演 | Python Stage 2 + Gemini 3.1 Pro | 读取编剧导演知识，生成脚本与导演分镜 |
 | 摄影摄像 | Python Stage 3 + Gemini-KIE；n8n 04 / 05 | 读取摄影摄像知识，生成精细分镜；n8n 负责后续图片、视频任务与轮询 |
 | 后期剪辑 | Python FFmpeg Worker | 截取、画幅转换、配乐混音和字幕烧录 |
@@ -48,8 +48,7 @@ flowchart TB
 
 | 能力 | 默认供应商 | 运行边界 | 失败策略 |
 | --- | --- | --- | --- |
-| 产品事实 | DeepSeek | Python | 事实整理失败就停止 Stage 1，不让创意模型猜测 |
-| 产品事实与产品简报 | DeepSeek | Python | 只整理可验证事实，不提前创作 Hook |
+| 产品事实与产品简报 | 豆包 Responses | Python | 读取页面资料和产品图，只整理可验证事实，不提前创作 Hook |
 | Mood Board 与创意方案池 | 豆包 Responses | Python | 读取广告策划 Wiki 和产品图后生成 12 个 Hook 与结构化结果 |
 | 编剧与导演分镜 | Gemini 3.1 Pro | Python | 可配置回退 DeepSeek |
 | 主人公形象 | KIE.ai GPT Image 2 | n8n 05 提交、等待、轮询与回写 | 保留任务 ID，可重新生成 |

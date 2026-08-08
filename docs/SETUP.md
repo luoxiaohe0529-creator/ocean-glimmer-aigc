@@ -20,7 +20,7 @@ cp .env.example .env
 npm run dev
 ```
 
-在 `.env` 中填写 `DEEPSEEK_API_KEY`、`DOUBAO_API_KEY` 与 `KIE_API_KEY`。`FFMPEG_PATH` 可以留空，服务会从系统 `PATH` 查找 ffmpeg；只有在自定义安装路径时才需要填写。Stage 1 创意生成改用豆包 Responses 多模态接口，直接接收产品图 URL；Stage 2 中文导演脚本和 Stage 3 摄影分镜仍通过 KIE.ai 的 Gemini 3.1 Pro 通道。要启用动态知识筛选器，还需配置飞书 App 凭证和三个角色 Wiki；详见 [飞书知识库接入](FEISHU_KNOWLEDGE.md)。`npm start` 会从唯一入口统一启动 Python、Node 网关与 Playwright 商品爬虫，n8n 需要单独启动。
+在 `.env` 中填写 `DOUBAO_API_KEY` 与 `KIE_API_KEY`；英文 Stage 2 文本路径还需要 `DEEPSEEK_API_KEY`。`FFMPEG_PATH` 可以留空，服务会从系统 `PATH` 查找 ffmpeg；只有在自定义安装路径时才需要填写。Stage 1 的产品事实整理和创意生成都使用豆包 Responses 多模态接口，直接接收产品图 URL；Stage 2 中文导演脚本和 Stage 3 摄影分镜仍通过 KIE.ai 的 Gemini 3.1 Pro 通道。要启用动态知识筛选器，还需配置飞书 App 凭证和三个角色 Wiki；详见 [飞书知识库接入](FEISHU_KNOWLEDGE.md)。`npm start` 会从唯一入口统一启动 Python、Node 网关与 Playwright 商品爬虫，n8n 需要单独启动。
 
 默认地址：`http://localhost:4173/open-design.html`
 

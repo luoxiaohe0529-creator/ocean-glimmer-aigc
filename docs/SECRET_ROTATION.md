@@ -15,7 +15,7 @@
 
 1. 在各服务后台撤销或轮换旧凭证，并记录轮换时间，不记录凭证内容。
 2. 更新本机 `.env`、n8n Credentials 和部署环境变量；`.env` 只保存在本机，不要提交。
-3. 先用 `PYTHON_MOCK_MODE=1 npm run check` 验证仓库结构，再用新凭证做一次最小化健康检查。
+3. 先运行 `npm run check` 验证仓库结构，再用新凭证做一次最小化健康检查。
 4. 在 GitHub PR 的 Checks 区确认 `Repository checks / check` 为绿色。
 5. 完成轮换后，将 PR 从 Draft 改为 Ready for review，再合并到 `main`。
 

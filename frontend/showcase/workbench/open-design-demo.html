@@ -1,7 +1,7 @@
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>大海浮光AIGC工作台</title>
 <style>
 :root{--canvas:#f6f6f8;--surface:#fff;--soft:#fbfbfc;--ink:#14141a;--muted:#666670;--faint:#8f8f99;--line:#d6d6de;--blue:#0070e3;--blue-soft:#edf5ff;--green:#1f8c59;--dark:#111318;--radius:18px;font-family:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:var(--ink);background:var(--canvas)}
-*{box-sizing:border-box}body{margin:0;min-width:320px;background:var(--canvas)}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{min-height:100vh}
+*{box-sizing:border-box}html{overscroll-behavior:none;background:var(--canvas)}body{margin:0;min-width:320px;background:var(--canvas);overscroll-behavior:none}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{min-height:100vh}
 .topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:18px;height:72px;padding:0 32px;background:rgba(255,255,255,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
 .brand{display:flex;align-items:center;gap:14px;min-width:240px}.brand-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--ink);color:#fff;font-size:12px;font-weight:800}
 .brand-copy strong,.brand-copy small{display:block}.brand-copy strong{font-size:16px;letter-spacing:-.04em}.brand-copy small{margin-top:3px;color:var(--faint);font-size:9px;letter-spacing:.2em}
@@ -17,6 +17,8 @@ main{min-width:0;padding:44px 54px 72px}.main-inner{max-width:1120px;margin:0 au
 .stage-wait{min-height:380px;padding:56px 46px;border:1px solid #cfe2f7;border-radius:14px;background:linear-gradient(180deg,#f8fbff 0%,#fff 100%)}.stage-wait-mark{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 20px;border:1px solid #b8d5f4;border-radius:14px;background:#fff;color:var(--blue);font-size:22px;box-shadow:0 10px 28px rgba(0,112,227,.1)}.stage-wait h3{margin:0;text-align:center;font-size:20px}.stage-wait>p{max-width:430px;margin:10px auto 28px;color:var(--muted);font-size:12px;line-height:1.65;text-align:center}.wait-progress{height:4px;margin-bottom:24px;overflow:hidden;border-radius:99px;background:#e3edf8}.wait-progress span{display:block;width:38%;height:100%;border-radius:inherit;background:var(--blue);animation:waitSlide 1.5s ease-in-out infinite}.wait-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.wait-step{padding:13px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--muted);font-size:10px;text-align:center}.wait-step:first-child{border-color:#a8cff4;background:var(--blue-soft);color:var(--blue);font-weight:700}@keyframes waitSlide{0%{transform:translateX(-110%)}50%{transform:translateX(85%)}100%{transform:translateX(270%)}}
 .script-layout{display:grid;grid-template-columns:286px minmax(0,1fr);gap:16px;align-items:start}.hook-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:28px;align-items:start}.hook-select-panel{min-width:0;padding:30px;border:1px solid var(--line);border-radius:24px;background:var(--surface)}.hook-select-title h2{margin:0;font-size:0}.hook-select-title h2::after{content:'选一个切入角度';display:block;color:var(--ink);font-size:28px;font-weight:700}.hook-select-title p{margin:10px 0 0;color:var(--muted);font-size:14px}.hook-filter-stack{display:grid;gap:14px;margin-top:20px}.hook-filter{display:grid;gap:6px}.hook-filter label{color:var(--muted);font-size:12px}.hook-filter select{min-height:42px;padding:0 12px;border-radius:10px;font-size:13px}.hook-selection{margin-top:20px;padding:14px 16px;border-left:4px solid var(--blue);background:var(--blue-soft)}.hook-selection b{display:block;font-size:14px}.hook-selection small{display:block;margin-top:6px;color:var(--muted);font-size:11px}.hook-output{min-width:0}.hook-output .result-head{padding-bottom:12px}.hook-output .result-head .count{background:transparent;color:var(--ink);font-weight:700}
 .hook-list{display:grid;grid-template-columns:1fr;gap:8px;padding-top:13px}.hook{min-width:0;padding:14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);cursor:pointer;text-align:left}.hook:hover,.hook.active{border-color:var(--blue);background:var(--blue-soft)}.hook-top{display:flex;justify-content:space-between;gap:8px}.hook h3{margin:0;font-size:13px}.hook-score{color:var(--blue);font-size:12px;font-weight:750}.hook p{margin:7px 0 8px;color:var(--muted);font-size:10px;line-height:1.5}.hook-tags{display:flex;flex-wrap:wrap;gap:5px}.hook-tags span{padding:4px 6px;border-radius:5px;background:rgba(255,255,255,.75);color:var(--muted);font-size:9px}.hook-tag-keyword{padding:3px 8px!important;border-radius:99px!important;background:rgba(0,112,227,.12)!important;color:var(--blue)!important;font-size:9px!important;font-weight:650!important}
+.hook-mood-inline{margin-top:10px;padding:9px 10px;border-left:3px solid #8fc1ff;border-radius:7px;background:#f6faff}.hook-mood-inline>span{display:block;color:var(--blue);font-size:9px;font-weight:750;letter-spacing:.03em}.hook-mood-inline strong{display:block;margin-top:3px;color:var(--ink);font-size:10px;line-height:1.4}.hook-mood-inline p{margin:4px 0 0;color:var(--muted);font-size:9px;line-height:1.45}
+.route-selector{display:grid;gap:8px}.route-selector>span{color:var(--muted);font-size:11px;font-weight:650}.route-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.route-option{min-height:44px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);font-size:11px;font-weight:650;text-align:left}.route-option:hover{border-color:#9bc7f5;color:var(--ink)}.route-option.active{border-color:var(--blue);background:var(--blue-soft);color:var(--blue);box-shadow:0 0 0 2px rgba(0,112,227,.07)}.route-summary{margin-top:14px;padding:12px 14px;border:1px solid #cfe2f7;border-radius:8px;background:#f7fbff}.route-summary>span{display:block;color:var(--blue);font-size:9px;font-weight:750;letter-spacing:.08em}.route-summary strong{display:block;margin-top:5px;font-size:12px;line-height:1.5}.route-summary small{display:block;margin-top:5px;color:var(--muted);font-size:10px;line-height:1.5}.hook-route{display:inline-flex;margin-top:8px;padding:3px 7px;border:1px solid rgba(0,112,227,.17);border-radius:5px;background:#fff;color:var(--blue);font-size:9px;font-weight:700}.knowledge-path{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 16px;padding:12px 14px;border:1px solid #cfe2f7;border-radius:8px;background:#f7fbff}.knowledge-path span{color:var(--blue);font-size:9px;font-weight:750;letter-spacing:.08em}.knowledge-path strong{font-size:11px;text-align:right}.knowledge-path small{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:500}.mood-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:7px}.mood-compact span{padding:5px 6px;border-radius:5px;background:#fff;color:var(--muted);font-size:9px;line-height:1.35}.mood-compact b{color:var(--ink);font-weight:650}@media(max-width:620px){.route-options,.mood-compact{grid-template-columns:1fr}.knowledge-path{align-items:flex-start;flex-direction:column}.knowledge-path strong{text-align:left}}
 .review-lines{display:grid;margin:12px 0 18px;border-top:1px solid var(--line)}.review-line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.review-line span{color:var(--muted)}.script-copy{padding:18px;border-left:3px solid var(--blue);background:var(--soft);font-size:14px;line-height:1.8;white-space:pre-wrap}.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.meta-cell{padding:13px;border:1px solid var(--line);border-radius:10px}.meta-cell.wide{grid-column:1/-1}.meta-cell span{color:var(--muted);font-size:10px}.meta-cell p{margin:6px 0 0;font-size:12px}.storyboard-grid{display:grid;gap:10px;margin-top:18px}.storyboard-shot{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--surface)}.shot-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--soft)}.shot-num{font-size:13px;font-weight:700}.shot-time{font-size:11px;color:var(--blue);font-weight:650}.shot-body{padding:14px 16px;display:grid;gap:8px}.shot-desc span{font-size:10px;color:var(--faint);font-weight:650}.shot-desc p{margin:0;font-size:12px;line-height:1.55}.shot-prompt{margin-top:4px;padding:10px 12px;border-radius:8px;background:#f8f5ff}.shot-prompt span{display:block;margin-bottom:5px;font-size:10px;color:#7c5cbf;font-weight:700}.shot-prompt code{display:block;font-size:11px;line-height:1.45;color:var(--muted);white-space:pre-wrap;word-break:break-all}.script-toggle{margin-bottom:4px;border:1px solid var(--line);border-radius:11px;overflow:hidden}.script-toggle summary{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;list-style:none}.script-toggle summary::-webkit-details-marker{display:none}.summary{display:grid;margin:12px 0 18px}.summary-row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:11px}.summary-row span{color:var(--muted)}.button-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.upload-preview{position:relative;width:60px;height:60px;border-radius:8px;overflow:hidden;border:1px solid var(--line);flex-shrink:0}.upload-preview img{width:100%;height:100%;object-fit:cover}.upload-preview button{position:absolute;top:1px;right:1px;width:14px;height:14px;border:0;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font-size:8px;cursor:pointer;display:grid;place-items:center;padding:0;line-height:1}
 @media(max-width:900px){.topbar-title{display:none}main{padding:32px 24px 56px}.workspace,.script-layout,.hook-layout{grid-template-columns:1fr}}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@media(max-width:620px){.topbar{height:64px;padding:0 16px}.layout{display:block}.rail{position:sticky;top:64px;z-index:8;height:auto;overflow:visible;padding:10px;border-right:0;border-bottom:1px solid var(--line)}.rail-label{display:none}.steps{grid-template-columns:repeat(3,1fr);gap:4px}.step{display:block;padding:9px 4px;text-align:center}.step small{display:none}main{padding:22px 14px 40px}.page-head{display:block}.head-meta{display:none}h1{font-size:32px}.panel{padding:20px}}
 .combined-director{margin-top:34px;padding-top:34px;border-top:1px solid var(--line)}
@@ -48,11 +50,41 @@ main{min-width:0;padding:44px 54px 72px}.main-inner{max-width:1120px;margin:0 au
 .creative-storyboard-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}.creative-storyboard-layout>.panel{min-width:0;height:100%;margin:0}.creative-storyboard-layout .storyboard-sheet{width:min(100%,280px)}.media-reference-row{margin-top:22px}.media-reference-row>.character-panel{margin-bottom:0}@media(max-width:980px){.creative-storyboard-layout{grid-template-columns:1fr}.creative-storyboard-layout>.panel{height:auto}}@media(max-width:820px){.creative-storyboard-layout .storyboard-reference-panel{height:auto}}
 .creative-control-panel{display:flex;flex-direction:column}.creative-control-panel .notice.selected-hook{position:relative;margin-top:18px;padding:16px;border:2px solid var(--blue);border-radius:12px;background:var(--blue-soft);box-shadow:0 8px 22px rgba(0,112,227,.1)}.creative-control-panel .selected-hook-label{display:block;color:var(--blue);font-size:10px;font-weight:750}.creative-control-panel .selected-hook strong{display:block;margin-top:5px;color:var(--ink);font-size:15px;line-height:1.45}.creative-control-panel .selected-hook p{margin:8px 0 0;color:var(--muted);font-size:11px;line-height:1.65}.creative-core-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.creative-core-grid .field:last-child{grid-column:1/-1}.creative-advanced{margin-top:12px;border:1px solid var(--line);border-radius:10px;background:var(--soft);overflow:hidden}.creative-advanced summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;padding:0 14px;list-style:none;cursor:pointer;color:var(--ink);font-size:11px;font-weight:700}.creative-advanced summary::-webkit-details-marker{display:none}.creative-advanced summary::after{content:"+";color:var(--blue);font-size:16px;font-weight:500}.creative-advanced[open] summary::after{content:"−"}.creative-advanced-copy{color:var(--muted);font-size:9px;font-weight:500}.creative-advanced-fields{display:grid;gap:10px;padding:0 14px 14px;border-top:1px solid var(--line)}.creative-advanced-fields .field:first-child{margin-top:14px}.creative-action-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:auto;padding-top:16px}.creative-action-row .primary{min-height:46px}.creative-back{width:46px;padding:0;font-size:17px}.storyboard-reference-panel{display:flex;flex-direction:column}.storyboard-reference-panel .storyboard-sheet,.storyboard-reference-panel>.empty{flex:0 0 auto}.character-preview>.image-zoom-target{display:grid;place-items:center;width:100%;height:100%}.image-zoom-target{position:relative;cursor:zoom-in}.image-zoom-target::after{content:"放大";position:absolute;right:8px;top:8px;padding:5px 8px;border-radius:6px;background:rgba(17,19,24,.72);color:#fff;font-size:9px;font-weight:700;opacity:0;transform:translateY(-3px);transition:opacity .18s ease,transform .18s ease;pointer-events:none}.image-zoom-target:hover::after,.image-zoom-target:focus-visible::after{opacity:1;transform:translateY(0)}.image-zoom-target:focus-visible{outline:2px solid var(--blue);outline-offset:3px}.image-lightbox{position:fixed;inset:0;z-index:1000;display:none;place-items:center;padding:28px;background:rgba(11,13,18,.88);backdrop-filter:blur(10px)}.image-lightbox.open{display:grid}.image-lightbox-dialog{position:relative;display:grid;place-items:center;width:min(1120px,100%);height:min(88vh,900px)}.image-lightbox img{display:block;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 28px 80px rgba(0,0,0,.42)}.image-lightbox-close{position:absolute;right:0;top:0;z-index:1;display:grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid rgba(255,255,255,.3);border-radius:50%;background:rgba(17,19,24,.72);color:#fff;font-size:22px;line-height:1}.image-lightbox-caption{position:absolute;left:50%;bottom:0;transform:translateX(-50%);padding:7px 11px;border-radius:7px;background:rgba(17,19,24,.72);color:#fff;font-size:10px;white-space:nowrap}@media(max-width:620px){.creative-core-grid{grid-template-columns:1fr}.creative-core-grid .field:last-child{grid-column:auto}.creative-action-row{grid-template-columns:1fr 44px}.image-lightbox{padding:14px}}
 .video-wait{position:relative;display:grid;align-content:center;min-height:360px;padding:34px;overflow:hidden;background:#111318;color:#fff}.video-wait:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(38,132,255,.12) 48%,transparent 76%);transform:translateX(-100%);animation:videoScan 2.8s linear infinite}.video-wait-inner{position:relative;display:grid;justify-items:center;width:min(100%,620px);margin:auto;text-align:center}.video-wait-orbit{position:relative;display:grid;place-items:center;width:62px;height:62px;margin-bottom:18px;border:1px solid rgba(255,255,255,.18);border-radius:50%}.video-wait-orbit:before{content:"";position:absolute;inset:-1px;border:2px solid transparent;border-top-color:#62a9ff;border-right-color:#62a9ff;border-radius:50%;animation:spin 1.1s linear infinite}.video-wait-orbit i{width:8px;height:8px;border-radius:50%;background:#62a9ff;box-shadow:0 0 18px rgba(98,169,255,.9)}.video-wait h3{margin:0;font-size:20px}.video-wait-copy{margin:9px 0 0;color:#aeb5c1;font-size:11px;line-height:1.7}.video-wait-time{margin-top:12px;color:#78b6ff;font-size:11px;font-variant-numeric:tabular-nums}.video-wait-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;width:100%;margin-top:25px}.video-wait-step{position:relative;padding:11px 8px;border:1px solid rgba(255,255,255,.13);border-radius:7px;background:rgba(255,255,255,.035);color:#7f8794;text-align:left}.video-wait-step span,.video-wait-step strong{display:block}.video-wait-step span{margin-bottom:4px;font-size:8px}.video-wait-step strong{font-size:10px}.video-wait-step.active{border-color:#4d9cff;background:rgba(0,112,227,.15);color:#a9d1ff}.video-wait-step.done{border-color:rgba(65,190,126,.42);background:rgba(31,140,89,.14);color:#7ed5a7}.video-wait-step.done:after{content:"✓";position:absolute;top:8px;right:8px;font-size:9px}.video-return-note{margin-top:16px;color:#7f8794;font-size:9px}@keyframes videoScan{to{transform:translateX(100%)}}@media(max-width:700px){.video-wait{padding:28px 18px}.video-wait-steps{grid-template-columns:1fr 1fr}}
+.image-lightbox:not(.open){display:none!important;pointer-events:none!important}body,html,#app,.layout,main{border:none!important;outline:none!important}body::after,html::after,#app::after{display:none!important}button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #94a3b8!important}
+</style>
+<style>
+.mood-board-review{margin-top:22px;padding:20px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,#f7fbff,#fff)}
+.mood-board-review-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.mood-board-review-head h3{margin:7px 0 0;font-size:18px}.mood-board-review-head p{margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.55}.mood-board-chip-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.mood-board-chip{min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;text-align:left}.mood-board-chip.active{border-color:var(--blue);box-shadow:0 0 0 2px rgba(0,112,227,.09);background:var(--blue-soft)}.mood-board-chip strong,.mood-board-chip span{display:block}.mood-board-chip strong{font-size:12px}.mood-board-chip span{margin-top:5px;color:var(--muted);font-size:10px;line-height:1.45}.mood-board-detail{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:11px;background:#fff}.mood-board-detail-title span{color:var(--blue);font-size:10px;font-weight:700}.mood-board-detail-title strong{display:block;margin-top:5px;font-size:15px}.mood-board-detail-title p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.55}.mood-board-handoff{margin-top:12px;padding:12px;border-radius:9px;background:#14141a;color:#dce8f8}.mood-board-handoff span{display:block;margin-bottom:7px;color:#8fc1ff;font-size:10px;font-weight:700}.mood-board-handoff code{display:block;max-height:180px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:10px;line-height:1.5}@media(max-width:620px){.mood-board-review-head{display:block}.mood-board-review-head .pill{margin-top:12px}.mood-board-chip-list{grid-template-columns:1fr}.mood-board-detail .brief-grid{grid-template-columns:1fr}}
 </style></head>
-<body><div id="app" class="app"><header class="topbar"><div class="brand"><span class="brand-mark">AI</span><span class="brand-copy"><strong>大海浮光 AIGC 工作台</strong><small>AI AD VIDEO FACTORY</small></span></div><span class="topbar-title">从产品链接到可发布视频</span><div class="topbar-actions"><span class="connection">● n8n 已连接</span><button class="primary" data-action="reset">+ 新建</button><button class="secondary cancel-gen-btn" data-action="cancel-generation" style="display:none;background:#fef2f2;border-color:#fca5a5;color:#dc2626;margin-left:8px">✕ 取消</button></div></header><div class="layout"><aside class="rail"><span class="rail-label">工作台</span><nav class="steps"><button class="step active" data-stage="0"><span class="step-num">01</span><span><strong>广告策划</strong><small>产品简报 · 传播策略 · Hook</small></span></button><button class="step " data-stage="1"><span class="step-num">02</span><span><strong>编导编剧</strong><small>创意优化 · 脚本 · 导演分镜</small></span></button><button class="step " data-stage="3"><span class="step-num">03</span><span><strong>摄影摄像</strong><small>分镜图 · 视频生成 · 成片</small></span></button></nav></aside><main><div class="main-inner"><div class="page-head"><div><span class="eyebrow">02 / 编导编剧</span><h1>分镜脚本</h1><p>两步：先生成脚本，再拆为分镜头。</p></div><div class="head-meta"><span>当前阶段</span><strong>编导编剧</strong></div></div><div class="script-layout"><section class="panel"><div class="panel-heading"><span class="panel-index">03</span><div><b>分镜脚本</b><small>点击生成脚本</small></div></div><div class="review-lines"><div class="review-line"><span>类型</span><strong>真人口播带货</strong></div><div class="review-line"><span>Hook</span><strong>—</strong></div><div class="review-line"><span>时长</span><strong><select id="dur-sel" style="width:auto;min-width:80px;padding:2px 6px"><option selected="">15s</option><option>30s</option><option>45s</option><option>60s</option></select></strong></div></div><button class="primary full" data-action="gen-script">🎬 第一步：生成 15 秒脚本 →</button><button class="secondary full" style="margin-top:8px" data-stage="1">← 返回创意</button></section><section class="panel result"><div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">等待生成</span></div><div class="empty output-placeholder"><p>点击「生成脚本」后 AI 写 15 秒视频脚本，再点「生成分镜」拆为分镜头。</p></div></section></div></div></main></div></div>
+<body><div id="app" class="app"><header class="topbar"><div class="brand"><span class="brand-mark">AI</span><span class="brand-copy"><strong>大海浮光 AIGC 工作台</strong><small>AI AD VIDEO FACTORY</small></span></div><span class="topbar-title">从产品链接到可发布视频</span><div class="topbar-actions"><span class="connection">● n8n 已连接</span><button class="primary" data-action="reset">+ 新建</button><button class="secondary cancel-gen-btn" data-action="cancel-generation" style="display:none;background:#fef2f2;border-color:#fca5a5;color:#dc2626;margin-left:8px">✕ 取消</button></div></header><div class="layout"><aside class="rail"><span class="rail-label">工作台</span><nav class="steps"><button class="step active" data-stage="0"><span class="step-num">01</span><span><strong>广告策划</strong><small>产品简报 · 传播策略 · Hook</small></span></button><button class="step " data-stage="1"><span class="step-num">02</span><span><strong>编导编剧</strong><small>创意优化 · 脚本 · 导演分镜</small></span></button><button class="step " data-stage="3"><span class="step-num">03</span><span><strong>摄影摄像</strong><small>分镜图 · 视频生成 · 成片</small></span></button></nav></aside><main><div class="main-inner"><div class="page-head"><div><span class="eyebrow">02 / 编导编剧</span><h1>分镜脚本</h1><p>两步：先生成脚本，再拆为分镜头。</p></div><div class="head-meta"><span>当前阶段</span><strong>编导编剧</strong></div></div><div class="script-layout"><section class="panel"><div class="panel-heading"><span class="panel-index">03</span><div><b>分镜脚本</b><small>点击生成脚本</small></div></div><div class="review-lines"><div class="review-line"><span>类型</span><strong>真人口播带货</strong></div><div class="review-line"><span>Hook</span><strong>—</strong></div><div class="review-line"><span>时长</span><strong><select id="dur-sel" style="width:auto;min-width:80px;padding:2px 6px">'+durOptions()+'</select></strong></div></div><button class="primary full" data-action="gen-script">🎬 第一步：生成 15 秒脚本 →</button><button class="secondary full" style="margin-top:8px" data-stage="1">← 返回创意</button></section><section class="panel result"><div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">等待生成</span></div><div class="empty output-placeholder"><p>点击「生成脚本」后 AI 写 15 秒视频脚本，再点「生成分镜」拆为分镜头。</p></div></section></div></div></main></div></div>
 <script>
-var state;try{state=JSON.parse(localStorage.getItem("adflow_state")||"null")||null;}catch(e){state=null;}state=state&&typeof state==="object"?state:{};var defaults={stage:0,mode:"真人口播带货",language:"中文",productUrl:"",productImages:[],campaignTheme:"",productReady:false,productRecordId:"",productBrief:null,hooksList:[],productImage:"",loading:false,stage1Loading:false,loadingMsg:"",loadingImage:false,duration:15,selectedHook:0,creativeWorldview:{},filterValues:{},scriptReady:false,scriptText:"",storyboardReady:false,storyboard:[],storyboardImage:"",generatingImage:-1,videoTaskId:"",videoResultUrl:"",videoSegments:[],creatorProfile:"",storyboardImages:[]};for(var dk in defaults){if(!(dk in state))state[dk]=defaults[dk];}if(!Array.isArray(state.hooksList))state.hooksList=[];if(!Array.isArray(state.productImages))state.productImages=[];state.productImages=dedupeProductImages(state.productImages).filter(function(i){return typeof i.url==="string"&&i.url.startsWith("https://");});if(!Array.isArray(state.storyboard))state.storyboard=[];
+var SHOWCASE_GROUPS=[
+  {id:"01",name:"樱粉晚霞甜酷穿搭向",emotion:"鲜活甜酷，元气浪漫，带着傍晚樱花晚霞的松弛雀跃",palette:["樱粉","蜜桃橘","浅金","淡紫晚霞色","奶白"],materials:["丝绸吊带","珍珠发夹","樱花腮红","冰饮玻璃杯","亮面手机机身"],scene:"城市江边/天台樱花树下，背景是粉橘渐变晚霞，落樱零星飘落",hooks:[
+    ["晚霞反射Hook",88,"视觉冲击Hook","惊艳","开篇拍粉色镜头模组反射晚霞，1秒切少女拿手机配同色樱粉裙的穿搭特写"],
+    ["同色穿搭Hook",86,"穿搭共鸣Hook","惊喜","快剪不同粉/蓝/紫穿搭，每帧手机都和穿搭颜色完美呼应"],
+    ["落樱碰镜Hook",85,"氛围感Hook","浪漫","落樱掉在粉色镜头模组，指尖拂过，切少女在樱花树下举手机自拍"],
+    ["对镜自拍Hook",87,"社交分享Hook","种草","1秒切不同对镜自拍姿势，手机渐变机身是画面唯一视觉焦点"]]},
+  {id:"02",name:"冰爽气泡度假梦幻向",emotion:"清透冰爽，松弛治愈，带着气泡水般的鲜活雀跃与海边度假的慵懒",palette:["冰蓝","透白","气泡银","浅紫","淡粉高光"],materials:["透明气泡水","玻璃弹珠","丝绸防晒衫","湿发碎发","镜面手机后盖反光"],scene:"海边浅滩/无边泳池旁，水面浮着樱花花瓣，透明气泡飘在空中，冰饮冒着白汽",hooks:[
+    ["气泡撞机Hook",89,"清凉感Hook","爽感","开篇透明气泡撞蓝紫机身破裂，溅起水珠，切少女握手机碰冰汽水瓶"],
+    ["水波纹反光Hook",86,"场景共鸣Hook","治愈","拍水波纹光影在渐变后盖流动，切少女举手机拍海，手机和海同色"],
+    ["浮樱水面Hook",84,"色彩匹配Hook","惊喜","水面浮着樱花瓣，倒影里映出手机渐变机身，切少女赤脚踩水拿手机"],
+    ["湿手握持Hook",83,"触感Hook","舒适","沾水珠的手摸过金属中框，特写凉感，切少女把手机贴脸降温的可爱动作"]]},
+  {id:"03",name:"樱花云境超现实浪漫向",emotion:"软萌梦幻，浪漫治愈，像踏入樱花味的云端童话，充满少女心的轻盈感",palette:["马卡龙粉","baby蓝","云白","淡紫","珠光银"],materials:["棉花糖云朵","樱花瓣","透明泡泡","绒面草地","哑光+亮面拼接机身"],scene:"云端樱花岛，粉色摩天轮立在水边，水面倒映手机机身，泡泡飘在空中，樱花瓣缓缓下落",hooks:[
+    ["云端落樱Hook",92,"超现实Hook","好奇","开篇樱花瓣飘过粉色云朵，落在手机镜头模组上，切云端樱花岛全景"],
+    ["泡泡映机Hook",91,"浪漫Hook","心动","透明泡泡飘过，泡泡里映出粉色摩天轮和手机的粉蓝机身，切少女伸手碰泡泡"],
+    ["镜面倒影Hook",90,"视觉冲击Hook","惊艳","手机立在粉色水边，倒影把机身和粉蓝天际连为一体，镜头旋转拉远看到整个樱花岛"],
+    ["闪粉记忆点Hook",89,"记忆点Hook","向往","细碎闪粉星光落在渐变后盖上，慢慢拉远看到整个机身和身后的樱花云境"]]}
+];
+var SHOWCASE_MOODS=SHOWCASE_GROUPS.map(function(g){return{mood_board_id:"mood-"+g.id,name:g.name,emotion_direction:g.emotion,palette:g.palette,materials:g.materials,scene_grammar:g.scene,camera_language:"社媒氛围快剪"};});
+var SHOWCASE_PLANS=SHOWCASE_GROUPS.map(function(g){return{plan_id:"plan-"+g.id,mood_board_id:"mood-"+g.id,title:g.name,template_group_id:"tvc-social-fastcut-v3",content_subtype:"社媒氛围快剪TVC",core_hook:g.hooks[0][4],score:g.hooks[0][1]};});
+var SHOWCASE_HOOKS=[];SHOWCASE_GROUPS.forEach(function(g,gi){g.hooks.forEach(function(h,hi){var index=gi*4+hi+1;SHOWCASE_HOOKS.push({hook_id:"hook-"+String(index).padStart(2,"0"),plan_id:"plan-"+g.id,mood_board_id:"mood-"+g.id,title:h[0],score:h[1],category:h[2],emotion:h[3],description:h[4],hook:h[4],template_group_id:"tvc-social-fastcut-v3",content_subtype:"社媒氛围快剪TVC",mood_board_summary:{name:g.name,emotion_direction:g.emotion,palette:g.palette,materials:g.materials,scene:g.scene,camera_language:"社媒氛围快剪"}});});});
+var state={_version:2,stage:0,mode:"高端TVC",language:"中文",productUrl:"",productImages:[],campaignTheme:"夏日穿搭/美妆、樱花晚霞梦幻、夏日冰爽气泡度假，快节奏，1秒一个镜头，与樱花元素结合，时尚少女角色",pasteText:"",productReady:true,productRecordId:"showcase-real-run-20260809",productBrief:{product_name:"渐变色时尚手机创意案例",category:"手机与数码",summary:"基于产品视觉、营销主题与飞书广告策划知识库生成的真实 Stage 1 运行快照。",selling_points:["粉蓝渐变视觉识别","机身与穿搭色彩呼应","适合年轻女性生活方式表达"],pain_points:["传统数码广告偏参数化","产品难以自然融入少女生活方式"],target_audience:"18–30岁、关注穿搭、美妆与社媒氛围感的年轻女性",campaign_theme:"夏日樱花、晚霞、冰爽气泡与快节奏少女穿搭"},hooksList:SHOWCASE_HOOKS,creativePlans:SHOWCASE_PLANS,moodBoards:SHOWCASE_MOODS,selectedPlanId:"plan-01",templateGroupId:"tvc-social-fastcut-v3",contentSubtype:"社媒氛围快剪TVC",productCategory:"手机与数码",productImage:"",loading:false,stage1Loading:false,stage1Error:"",loadingMsg:"",loadingImage:false,duration:30,resolution:"480p",resolutionTouched:true,selectedHook:0,creativeWorldview:{},filterValues:{},scriptReady:false,scriptText:"",storyboardReady:false,storyboard:[],storyboardImage:"",generatingImage:-1,videoTaskId:"",videoResultUrl:"",videoSegments:[],creatorProfile:"",storyboardImages:[],knowledgeTrace:{stage1:{source:"wiki",role:"广告策划",api_attempted:true,wiki_document_count:1}}};
+var defaults={stage:0,mode:"真人口播带货",language:"中文",productUrl:"",productImages:[],campaignTheme:"",pasteText:"",productReady:false,productRecordId:"",productBrief:null,hooksList:[],creativePlans:[],moodBoards:[],selectedPlanId:"",templateGroupId:"",contentSubtype:"",productCategory:"",productImage:"",loading:false,stage1Loading:false,stage1Error:"",loadingMsg:"",loadingImage:false,duration:15,resolution:"480p",resolutionTouched:false,selectedHook:0,creativeWorldview:{},filterValues:{},scriptReady:false,scriptText:"",storyboardReady:false,storyboard:[],storyboardImage:"",generatingImage:-1,videoTaskId:"",videoResultUrl:"",videoSegments:[],creatorProfile:"",storyboardImages:[]};for(var dk in defaults){if(!(dk in state))state[dk]=defaults[dk];}state.loading=false;state.stage1Loading=false;state.videoLoading=false;state.directorLoading=false;state.loadingImage=false;state.characterLoading=false;state.editingLoading=false;state.generationStep="";
+if(!state.knowledgeTrace||typeof state.knowledgeTrace!=="object")state.knowledgeTrace={};
+if(!state.pipelineTrace||typeof state.pipelineTrace!=="object")state.pipelineTrace={};
+if(typeof state.imageUploadError!=="string")state.imageUploadError="";
 var esc=function(v){v=String(v||"");return v.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");};
+function durOptions(){var isEn=state.language==="英文";var opts=isEn?[8,16,24,32]:[15,30,45,60];return opts.map(function(v){return'<option value="'+v+'"'+(state.duration===v?' selected':'')+'>'+v+'s</option>';}).join("");}
 function formatHookScore(value){
   var score=Number(value);
   if(!Number.isFinite(score))return"—/100";
@@ -60,26 +92,111 @@ function formatHookScore(value){
   score=Math.max(0,Math.min(100,score));
   return String(Math.round(score))+"/100";
 }
+var TVC_ROUTES={"":{label:"智能推荐",group:""},"品牌叙事TVC":{label:"品牌叙事",group:"tvc-brand-v3"},"社媒氛围快剪TVC":{label:"社媒氛围快剪",group:"tvc-social-fastcut-v3"},"产品材质视觉TVC":{label:"产品材质视觉",group:"tvc-material-v3"}};
+function routeDefaults(mode){if(mode==="真人口播带货")return{subtype:"真人口播带货",group:"live-general-v3"};if(mode==="好物推荐")return{subtype:"好物推荐",group:"review-general-v3"};return{subtype:"",group:""};}
+function routeLabel(){if(state.mode!=="高端TVC")return state.mode;return(TVC_ROUTES[state.contentSubtype]||{}).label||state.contentSubtype||"智能推荐";}
+function routePath(){return[state.mode,routeLabel(),state.productCategory].filter(Boolean).join(" → ");}
+function directorTemplateLabel(){if(state.mode==="真人口播带货")return"真人口播导演";if(state.mode==="好物推荐")return"好物推荐导演";if(state.contentSubtype==="品牌叙事TVC")return"电影叙事导演";if(state.contentSubtype==="产品材质视觉TVC")return"产品材质视觉导演";return"社媒氛围快剪导演";}
+function cameraTemplateLabel(){if(state.mode==="真人口播带货")return"真人口播摄影";if(state.mode==="好物推荐")return"好物推荐摄影";if(state.contentSubtype==="品牌叙事TVC")return"电影叙事摄影";if(state.contentSubtype==="产品材质视觉TVC")return"微距材质摄影";return"快剪视觉摄影";}
 function dedupeProductImages(items){var seen=new Set();return (Array.isArray(items)?items:[]).filter(function(item){if(!item)return false;var name=String((item&&item.name)||"").trim().toLowerCase(),url=String((item&&item.url)||item||"").trim(),key=name?"name:"+name:"url:"+url;if(!url||seen.has(key))return false;seen.add(key);return true;}).slice(0,9);}
-var saveState=function(){try{var s={};for(var k in state)s[k]=state[k];delete s.loading;delete s.videoLoading;delete s.videoStartedAt;delete s.productDocuments;delete s.characterReferenceImages;localStorage.setItem("adflow_state",JSON.stringify(s));if(state.videoResultUrl){localStorage.setItem("adflow_video_result",JSON.stringify({video_url:state.videoResultUrl,video_task_id:state.videoTaskId||"",product_record_id:state.productRecordId||"",product_brief:state.productBrief||null,hook:state.hooksList[state.selectedHook]||null,duration:state.duration||15,updated_at:new Date().toISOString()}));}}catch(e){}};
-function nav(){var L=[["01","广告策划","产品资料 · 策略简报 · Hook",0],["02","编剧导演","创意指令 · 分镜脚本 · 拍摄参考",1],["03","摄影摄像","角色形象 · 视频生成 · 成片",3]];return L.map(function(n){return'<button class="step '+(state.stage===n[3]?"active":"")+'" data-stage="'+n[3]+'"><span class="step-num">'+n[0]+'</span><span><strong>'+n[1]+'</strong><small>'+n[2]+'</small></span></button>';}).join("");}
-function shell(c){return'<header class="topbar"><div class="brand"><span class="brand-mark">AI</span><span class="brand-copy"><strong>大海浮光 AIGC 工作台</strong><small>AI AD VIDEO FACTORY</small></span></div><span class="topbar-title">从产品链接到可发布视频</span><div class="topbar-actions"><span class="connection">● n8n 已连接</span><button class="primary" data-action="reset">+ 新建</button><button class="secondary cancel-gen-btn" data-action="cancel-generation" style="display:none;background:#fef2f2;border-color:#fca5a5;color:#dc2626;margin-left:8px">✕ 取消</button></div></header><div class="layout"><aside class="rail"><span class="rail-label">工作台</span><nav class="steps">'+nav()+'</nav></aside><main><div class="main-inner">'+c+'</div></main></div><div class="image-lightbox" id="image-lightbox" role="dialog" aria-modal="true" aria-label="图片放大预览"><div class="image-lightbox-dialog"><button type="button" class="image-lightbox-close" data-close-lightbox aria-label="关闭图片预览">×</button><img id="image-lightbox-img" src="" alt=""><span class="image-lightbox-caption" id="image-lightbox-caption"></span></div></div>';}
+var saveState=function(){};
+function nav(){var L=[["01","广告策划","产品资料 · 策略简报 · Hook",0],["02","编剧导演","创意指令 · 分镜脚本 · 拍摄参考",1],["03","摄影摄像","角色形象 · 视频生成 · 成片",3],["04","后期剪辑","自动剪辑 · 画质增强 · 高清交付",4]];return L.map(function(n){return'<button class="step '+(state.stage===n[3]?"active":"")+'" data-stage="'+n[3]+'"><span class="step-num">'+n[0]+'</span><span><strong>'+n[1]+'</strong><small>'+n[2]+'</small></span></button>';}).join("");}
+function shell(c){return'<header class="topbar"><div class="brand"><span class="brand-mark">AI</span><span class="brand-copy"><strong>大海浮光 AIGC 工作台</strong><small>AI AD VIDEO FACTORY</small></span></div><span class="topbar-title">从产品链接到可发布视频</span><div class="topbar-actions"><span class="connection">● 系统已连接</span><button class="primary" data-action="reset">+ 新建</button><button class="secondary cancel-gen-btn" data-action="cancel-generation" style="display:none;background:#fef2f2;border-color:#fca5a5;color:#dc2626;margin-left:8px">✕ 取消</button></div></header><div class="layout"><aside class="rail"><span class="rail-label">工作台</span><nav class="steps">'+nav()+'</nav></aside><main><div class="main-inner">'+c+'</div></main></div><div class="image-lightbox" id="image-lightbox" role="dialog" aria-modal="true" aria-label="图片放大预览"><div class="image-lightbox-dialog"><button type="button" class="image-lightbox-close" data-close-lightbox aria-label="关闭图片预览">×</button><img id="image-lightbox-img" src="" alt=""><span class="image-lightbox-caption" id="image-lightbox-caption"></span></div></div>';}
 function H(e,t,p,m){return'<div class="page-head"><div><span class="eyebrow">'+e+'</span><h1>'+t+'</h1><p>'+p+'</p></div><div class="head-meta"><span>当前阶段</span><strong>'+m+'</strong></div></div>';}
-function S0(){var R="";if(state.stage1Loading)R='<div class="result-head"><div><span class="result-label">OUTPUT / ANALYZING</span></div><span class="pill">处理中…</span></div><div class="stage-wait"><div class="stage-wait-mark">⌁</div><h3>正在生成产品策略简报</h3><p>系统正在读取商品页面，提炼卖点、目标人群与传播角度。完成后会在这里展示产品简报和 Hook。</p><div class="wait-progress"><span></span></div><div class="wait-steps"><div class="wait-step">01 · 抓取产品页面</div><div class="wait-step">02 · 分析产品信息</div><div class="wait-step">03 · 生成简报与 Hook</div></div></div>';else if(state.productReady&&state.productBrief){var pb=state.productBrief,pn=pb.product_name||pb["产品名称"]||"",cat=pb.category||pb["品类"]||"",aud=pb.target_audience||pb["目标人群"]||pb["目标受众"]||"",sps=pb.selling_points||pb["核心卖点"]||[],spsArr=Array.isArray(sps)?sps:[String(sps||"")],spsHtml=spsArr.filter(function(x){return x;}).map(function(sp){return"<span>"+esc(typeof sp==="string"?sp:String(sp))+"</span>";}).join("")||"<span>—</span>",pain=pb.pain_points||pb["刺骨痛点"]||pb["痛点"]||"",scenario=pb.use_scenario||pb["使用场景"]||"",hHtml=state.hooksList.map(function(h,i){return'<button class="hook '+(state.selectedHook===i?"active":"")+'" data-hook="'+i+'"><span class="hook-top"><h3>'+(i+1)+". "+esc(h.title)+'</h3><span class="hook-score">'+esc(formatHookScore(h.score))+"</span></span><span class=\"hook-tags\"><span>"+esc(h.category||"")+"</span><span>"+esc(h.awareness_stage||"")+"</span><span>"+esc(h.emotion||"")+"</span></span><p>"+esc(h.description||h.hook||"")+"</p></button>";}).join("");R='<div class="result-head"><div><span class="result-label">OUTPUT / PRODUCT BRIEF</span><h2>'+esc(pn)+'</h2></div><span class="pill ready">'+esc(state.mode)+" 简报 · "+state.hooksList.length+" 条 Hook</span></div><div class=\"brief-grid\"><div class=\"brief-cell\"><span>品类</span><p>"+esc(cat||"—")+'</p></div><div class="brief-cell"><span>目标人群</span><p>'+esc(aud||"—")+'</p></div><div class="brief-cell wide"><span>核心卖点</span><div class="chips">'+spsHtml+'</div></div><div class="brief-cell wide"><span>痛点</span><p>'+esc(pain||"—")+"</p></div>"+(scenario?'<div class="brief-cell wide"><span>使用场景</span><p>'+esc(scenario)+"</p></div>":"")+'</div><div class="result-head" style="margin-top:28px"><div><span class="result-label">HOOK 创意</span></div><span class="count">共 '+state.hooksList.length+' 条</span></div><div class="hook-list reference-list" style="grid-template-columns:1fr">'+hHtml+'</div><div class="result-footer"><span>已选：'+esc((state.hooksList[state.selectedHook]||{}).title||"点击一条 Hook")+"</span></div>";}else R='<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">等待输入</span></div><div class="empty output-placeholder"><p>粘贴产品链接后点击「抓取并生成简报」。</p></div>';var selectedForConfirm=state.hooksList[state.selectedHook]||{},cb=state.productReady?'<div class="selected-hook-confirm"><span>已选 Hook</span><strong>'+esc(selectedForConfirm.title||"点击右侧 Hook 选择")+'</strong><div class="selected-hook-confirm-score">⭐ '+esc(formatHookScore(selectedForConfirm.score))+'</div><p>'+esc(selectedForConfirm.description||selectedForConfirm.hook||"")+'</p><button class="primary full" data-action="confirm-hook" style="margin-top:10px">确认 Hook →</button></div>':"";return H("01 / 广告策划","输入产品链接","提交后 n8n 抓取产品页面并生成简报和 Hook。","广告策划")+'<div class="workspace"><section class="panel"><div class="field-stack">'+'<label class="field"><span>Product URL <em>必填</em></span><textarea class="url-input" id="url-inp" placeholder="https:// 粘贴商品链接">'+esc(state.productUrl)+'</textarea></label>'+'<label class="field"><span>营销主题 <em>选填</em></span><textarea id="theme-inp" placeholder="母亲节送礼、618大促…" style="min-height:52px">'+esc(state.campaignTheme)+'</textarea></label>'+'<label class="field"><span>产品图片 <em>'+(state.productImages||[]).length+'/9</em></span><div style="padding:14px;border:1px dashed #c7c8d0;border-radius:14px;background:linear-gradient(135deg,#fafbfd,#f5f5f8)"><div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">'+(state.productImages||[]).map(function(u,i){return'<div class="upload-preview"><img src="'+esc(u.url||u)+'" alt="" onerror="this.parentElement.remove()"><button data-rimg="'+i+'">✕</button></div>';}).join("")+((state.productImages||[]).length<9?'<label for="img-inp" style="width:60px;height:60px;border-radius:8px;border:1px dashed #c7c8d0;background:var(--surface);cursor:pointer;display:grid;place-items:center;color:var(--blue);font-size:24px">+</label>':"")+(!(state.productImages||[]).length?'<label for="img-inp" style="display:flex;align-items:center;gap:12px;cursor:pointer;flex:1"><span style="display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--blue-soft);color:var(--blue);font-size:20px;flex-shrink:0">🖼️</span><span><b style="font-size:13px;display:block">上传产品图</b><small style="font-size:10px;color:var(--faint);display:block;margin-top:4px">JPG/PNG/WebP · 最多 9 张</small></span></label>':"")+'</div><input type="file" id="img-inp" accept="image/*" multiple hidden></div></label>'+'<label class="field"><span>语言</span><select id="lang-sel"><option '+(state.language==="中文"?"selected":"")+'>中文</option><option '+(state.language==="英文"?"selected":"")+'>英文</option></select></label>'+'<label class="field"><span>内容类型</span><select id="mode-sel"><option '+(state.mode==="真人口播带货"?"selected":"")+'>真人口播带货</option><option '+(state.mode==="好物推荐"?"selected":"")+'>好物推荐</option><option '+(state.mode==="高端TVC"?"selected":"")+'>高端TVC</option></select></label>'+'</div><div class="form-actions"><button class="primary" data-action="fetch" '+(state.stage1Loading?"disabled":"")+'>'+(state.stage1Loading?"生成中…":state.productReady?"重新抓取 ↻":"抓取并生成简报")+'</button><button class="secondary" data-action="reset">重置</button></div><div class="notice" style="margin-top:14px;padding:11px 14px;border-radius:10px;background:#fbfbfc;font-size:12px"><span style="color:var(--muted)">抓取配置：</span><strong style="color:var(--ink)">'+esc(state.mode)+'</strong><span style="color:var(--muted);margin:0 6px">·</span><span style="color:var(--muted)">'+esc(state.language)+'</span>'+(state.campaignTheme?'<span style="color:var(--muted);margin:0 6px">·</span>主题：<strong style="color:#c87033">'+esc(state.campaignTheme)+'</strong>':'')+'</div>'+cb+'</section><section class="panel result">'+R+"</section></div>";}
+function S0(){var R="";if(state.stage1Loading)R='<div class="result-head"><div><span class="result-label">OUTPUT / ANALYZING</span></div><span class="pill">处理中…</span></div><div class="stage-wait"><div class="stage-wait-mark">⌁</div><h3>正在生成产品策略简报</h3><p>系统正在读取商品页面，提炼卖点、目标人群与传播角度。完成后会在这里展示产品简报和 Hook。</p><div class="wait-progress"><span></span></div><div class="wait-steps"><div class="wait-step">01 · 抓取产品页面</div><div class="wait-step">02 · 分析产品信息</div><div class="wait-step">03 · 生成简报与 Hook</div></div></div>';else if(state.productReady&&state.productBrief){var pb=state.productBrief,pn=pb.product_name||pb["产品名称"]||"",cat=pb.category||pb["品类"]||"",aud=pb.target_audience||pb["目标人群"]||pb["目标受众"]||"",sps=pb.selling_points||pb["核心卖点"]||[],spsArr=Array.isArray(sps)?sps:[String(sps||"")],spsHtml=spsArr.filter(function(x){return x;}).map(function(sp){return"<span>"+esc(typeof sp==="string"?sp:String(sp))+"</span>";}).join("")||"<span>—</span>",pain=pb.pain_points||pb["刺骨痛点"]||pb["痛点"]||"",scenario=pb.use_scenario||pb["使用场景"]||"",hHtml=state.hooksList.map(function(h,i){return'<button class="hook '+(state.selectedHook===i?"active":"")+'" data-hook="'+i+'"><span class="hook-top"><h3>'+(i+1)+". "+esc(h.title)+'</h3><span class="hook-score">'+esc(formatHookScore(h.score))+"</span></span><span class=\"hook-tags\"><span>"+esc(h.category||"")+"</span><span>"+esc(h.awareness_stage||"")+"</span><span>"+esc(h.emotion||"")+"</span></span><p>"+esc(h.description||h.hook||"")+"</p></button>";}).join("");R='<div class="result-head"><div><span class="result-label">OUTPUT / PRODUCT BRIEF</span><h2>'+esc(pn)+'</h2></div><span class="pill ready">'+esc(state.mode)+" 简报 · "+state.hooksList.length+" 条 Hook</span></div><div class=\"brief-grid\"><div class=\"brief-cell\"><span>品类</span><p>"+esc(cat||"—")+'</p></div><div class="brief-cell"><span>目标人群</span><p>'+esc(aud||"—")+'</p></div><div class="brief-cell wide"><span>核心卖点</span><div class="chips">'+spsHtml+'</div></div><div class="brief-cell wide"><span>痛点</span><p>'+esc(pain||"—")+"</p></div>"+(scenario?'<div class="brief-cell wide"><span>使用场景</span><p>'+esc(scenario)+"</p></div>":"")+'</div><div class="result-head" style="margin-top:28px"><div><span class="result-label">HOOK 创意</span></div><span class="count">共 '+state.hooksList.length+' 条</span></div><div class="hook-list reference-list" style="grid-template-columns:1fr">'+hHtml+'</div><div class="result-footer"><span>已选：'+esc((state.hooksList[state.selectedHook]||{}).title||"点击一条 Hook")+"</span></div>";}else R='<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">等待输入</span></div><div class="empty output-placeholder"><p>填写产品链接、营销主题或上传产品图后，即可生成简报与 Hook。</p></div>';var selectedForConfirm=state.hooksList[state.selectedHook]||{},cb=state.productReady?'<div class="selected-hook-confirm"><span>已选 Hook</span><strong>'+esc(selectedForConfirm.title||"点击右侧 Hook 选择")+'</strong><div class="selected-hook-confirm-score">⭐ '+esc(formatHookScore(selectedForConfirm.score))+'</div><p>'+esc(selectedForConfirm.description||selectedForConfirm.hook||"")+'</p><button class="primary full" data-action="confirm-hook" style="margin-top:10px">确认 Hook →</button></div>':"";return H("01 / 广告策划","输入产品链接","可抓取产品页面，也可根据营销主题与产品图直接生成简报和 Hook。","广告策划")+'<div class="workspace"><section class="panel"><div class="field-stack">'+'<label class="field"><span>Product URL <em>选填</em></span><textarea class="url-input" id="url-inp" placeholder="选填：粘贴商品链接，或仅填写营销主题">'+esc(state.productUrl)+'</textarea></label>'+'<label class="field"><span>营销主题 <em>选填</em></span><textarea id="theme-inp" placeholder="母亲节送礼、618大促…" style="min-height:52px">'+esc(state.campaignTheme)+'</textarea></label>'+'<label class="field"><span>产品图片 <em>'+(state.productImages||[]).length+'/9</em></span><div style="padding:14px;border:1px dashed #c7c8d0;border-radius:14px;background:linear-gradient(135deg,#fafbfd,#f5f5f8)"><div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">'+(state.productImages||[]).map(function(u,i){return'<div class="upload-preview"><img src="'+esc(u.url||u)+'" alt="产品图"><button data-rimg="'+i+'">✕</button></div>';}).join("")+((state.productImages||[]).length<9?'<label for="img-inp" style="width:60px;height:60px;border-radius:8px;border:1px dashed #c7c8d0;background:var(--surface);cursor:pointer;display:grid;place-items:center;color:var(--blue);font-size:24px">+</label>':"")+(!(state.productImages||[]).length?'<label for="img-inp" style="display:flex;align-items:center;gap:12px;cursor:pointer;flex:1"><span style="display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--blue-soft);color:var(--blue);font-size:20px;flex-shrink:0">🖼️</span><span><b style="font-size:13px;display:block">上传产品图</b><small style="font-size:10px;color:var(--faint);display:block;margin-top:4px">JPG/PNG/WebP · 最多 9 张</small></span></label>':"")+'</div><input type="file" id="img-inp" accept="image/*" multiple hidden></div></label>'+'<label class="field"><span>语言</span><select id="lang-sel"><option '+(state.language==="中文"?"selected":"")+'>中文</option><option '+(state.language==="英文"?"selected":"")+'>英文</option></select></label>'+'<label class="field"><span>内容类型</span><select id="mode-sel"><option '+(state.mode==="真人口播带货"?"selected":"")+'>真人口播带货</option><option '+(state.mode==="好物推荐"?"selected":"")+'>好物推荐</option><option '+(state.mode==="高端TVC"?"selected":"")+'>高端TVC</option></select></label>'+'</div><div class="form-actions"><button class="primary" data-action="fetch" '+(state.stage1Loading?"disabled":"")+'>'+(state.stage1Loading?"生成中…":state.productReady?"重新生成 ↻":"生成简报与 Hook")+'</button><button class="secondary" data-action="reset">重置</button></div><div class="notice" style="margin-top:14px;padding:11px 14px;border-radius:10px;background:#fbfbfc;font-size:12px"><span style="color:var(--muted)">抓取配置：</span><strong style="color:var(--ink)">'+esc(state.mode)+'</strong><span style="color:var(--muted);margin:0 6px">·</span><span style="color:var(--muted)">'+esc(state.language)+'</span>'+(state.campaignTheme?'<span style="color:var(--muted);margin:0 6px">·</span>主题：<strong style="color:#c87033">'+esc(state.campaignTheme)+'</strong>':'')+'</div>'+cb+'</section><section class="panel result">'+R+"</section></div>";}
 
 function S1(){var hl=state.hooksList,pb=state.productBrief||{},sh=hl[state.selectedHook]||{},cw=state.creativeWorldview||{},mode=state.mode,hasCW=cw.mode===mode||!!(cw["达人画像"]||cw["产品切入点"]||cw["创意概念"]);var selOpt=function(opts,val){var h='<option value="">— 选择 —</option>';for(var i=0;i<opts.length;i++)h+='<option value="'+esc(opts[i])+'"'+(opts[i]===val?' selected':'')+'>'+esc(opts[i])+'</option>';return h;};var modeFilters={"真人口播带货":[{id:"creator_vibe",label:"达人气质",opts:["邻家亲和","专业可信","幽默搞怪","知性优雅","活力元气"]},{id:"speaking_style",label:"说话风格",opts:["闺蜜聊天","专业讲解","戏剧化演绎","沉稳叙述","轻松种草"]},{id:"use_scene",label:"使用场景",opts:["早晨护肤","化妆台前","户外街拍","日常通勤","睡前护理"]}],"好物推荐":[{id:"selling_angle",label:"产品卖点",opts:["成分科技","功效实测","价格优势","设计美学","使用体验"]},{id:"compare_dim",label:"对比维度",opts:["vs竞品对比","升级前后","有vs无","多款横评","性价比"]},{id:"visual_style",label:"视觉风格",opts:["极简白底","微距特写","数据图叠层","生活场景","产品旋转"]}],"高端TVC":[{id:"emotion_tone",label:"情绪基调",opts:["克制诗意","热血澎湃","温暖治愈","冷峻高级","复古怀旧"]},{id:"visual_lang",label:"视觉语言",opts:["暖金逆光","慢镜头","浅景深","航拍俯视","对称构图"]},{id:"narrative",label:"叙事结构",opts:["问题→解决","时间流转","意象隐喻","人物独白","场景切换"]}]};var filters=modeFilters[mode]||modeFilters["真人口播带货"];var fw=cw||{};var fv=state.filterValues||{};var hasContent=!!(fv.creator_vibe||fv.speaking_style||fv.use_scene||fv.selling_angle||fv.compare_dim||fv.visual_style||fv.emotion_tone||fv.visual_lang||fv.narrative);var filterHtml=filters.map(function(f){var val=fv[f.id]||fw[f.id]||"";return'<label class="field"><span>'+f.label+'</span><select id="f-'+f.id+'" class="filter-sel">'+selOpt(f.opts,val)+'</select></label>';}).join("");var hooksHtml=hl.map(function(h,i){return'<button class="hook '+(state.selectedHook===i?"active":"")+'" data-hook="'+i+'"><span class="hook-top"><h3>'+(i+1)+'. '+esc(h.title)+'</h3><span class="hook-score">'+esc(formatHookScore(h.score))+'</span></span><span class="hook-tags"><span class="hook-tag-keyword">'+esc(h.category||"")+'</span><span class="hook-tag-keyword">'+esc(h.emotion||"")+'</span><span>'+esc(h.awareness_stage||"")+'</span></span><p>'+esc(h.description||h.hook||"")+'</p></button>';}).join("");var left='<div style="padding:14px 16px;border-left:4px solid var(--blue);background:var(--blue-soft);border-radius:10px;margin-bottom:18px"><span style="font-size:10px;color:var(--blue);font-weight:700">📌 选中的 Hook</span><strong style="display:block;margin-top:6px;font-size:14px">'+esc(sh.title||"未选择")+'</strong>'+(sh.title?'<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="hook-tag-keyword" style="padding:4px 10px;border-radius:99px;background:rgba(0,112,227,.15);color:var(--blue);font-size:11px;font-weight:650">'+esc(sh.category||"")+'</span><span class="hook-tag-keyword" style="padding:4px 10px;border-radius:99px;background:rgba(200,112,51,.12);color:#c87033;font-size:11px;font-weight:650">'+esc(sh.emotion||"")+'</span><span style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.75);color:var(--muted);font-size:10px">'+esc(sh.awareness_stage||"")+'</span><span style="padding:3px 8px;border-radius:6px;background:rgba(0,112,227,.08);color:var(--blue);font-size:10px">'+esc(formatHookScore(sh.score))+'</span></div>':"")+'</div><div class="field-stack" style="margin-bottom:14px"><div class="hook-filter"><label style="font-size:12px;color:var(--ink);font-weight:700">🎨 '+esc(mode)+' 筛选器</label>'+filterHtml+'</div></div><button class="secondary full" data-action="optimize-hook" style="margin-top:10px">🤖 AI 优化创意</button><button class="primary full" data-action="go-script" style="margin-top:10px" '+(hasContent?'':'disabled')+'>'+(hasContent?'确认创意 → 编导编剧':'请先选择筛选条件')+'</button><details style="margin-top:10px"><summary style="cursor:pointer;font-size:11px;color:var(--muted);padding:6px 0">📋 查看全部 Hook（'+hl.length+' 条）</summary><div class="hook-list" style="max-height:260px;overflow-y:auto;margin-top:8px">'+hooksHtml+'</div></details><button class="secondary full" style="margin-top:12px" data-stage="0">← 返回简报</button>';var right;var pn=pb["产品名称"]||pb["product_name"]||"";var sell=(pb["核心卖点"]||pb.selling_points||"");if(Array.isArray(sell))sell=sell.join(" · ");else sell=String(sell||"");var briefText="";if(mode==="真人口播带货"){briefText=(fv.creator_vibe||"")+(fv.creator_vibe&&fv.speaking_style?"，":"")+(fv.speaking_style||"")+(fv.use_scene?"，在"+(fv.use_scene)+"中推荐":"")+(sh.title?"。「"+esc(sh.title)+"」":"");}else if(mode==="好物推荐"){briefText="从"+(fv.selling_angle||"产品卖点")+"切入"+(fv.compare_dim?"，通过"+(fv.compare_dim)+"说服":"")+(fv.visual_style?"，"+fv.visual_style+"风格呈现":"");}else{briefText=(fv.emotion_tone||"")+(fv.emotion_tone&&fv.visual_lang?"，":"")+(fv.visual_lang||"")+(fv.narrative?"，叙事：「"+fv.narrative+"」":"");}if(!briefText.trim())briefText="选择左侧筛选条件后，此处将实时预览创意方向";var filterCards="";if(mode==="真人口播带货"){filterCards='<div class="brief-cell"><span>达人画像</span><p>'+esc(fv.creator_vibe||"—")+'</p></div><div class="brief-cell"><span>说话风格</span><p>'+esc(fv.speaking_style||"—")+'</p></div><div class="brief-cell wide"><span>使用场景</span><p>'+esc(fv.use_scene||"—")+'</p></div>';}else if(mode==="好物推荐"){filterCards='<div class="brief-cell"><span>产品卖点</span><p>'+esc(fv.selling_angle||"—")+'</p></div><div class="brief-cell"><span>对比维度</span><p>'+esc(fv.compare_dim||"—")+'</p></div><div class="brief-cell wide"><span>视觉风格</span><p>'+esc(fv.visual_style||"—")+'</p></div>';}else{filterCards='<div class="brief-cell"><span>情绪基调</span><p>'+esc(fv.emotion_tone||"—")+'</p></div><div class="brief-cell"><span>视觉语言</span><p>'+esc(fv.visual_lang||"—")+'</p></div><div class="brief-cell wide"><span>叙事结构</span><p>'+esc(fv.narrative||"—")+'</p></div>';}right='<div class="result-head"><div><span class="result-label">OUTPUT / CREATIVE BRIEF</span><h2>'+esc(sh.title||"— 选择 Hook —")+'</h2></div><span class="pill '+(hasContent?"ready":"")+'">'+(hasContent?"实时预览":"等待选择")+'</span></div>'+(pn?'<div class="notice"><strong>📦 '+esc(pn)+'</strong>'+(sell?'<span style="margin-left:10px;color:var(--muted)">'+esc(sell)+'</span>':'')+'</div>':'')+'<div style="padding:18px;margin:14px 0;border-left:3px solid var(--blue);background:var(--blue-soft);border-radius:8px"><p style="margin:0;font-size:14px;line-height:1.7;color:var(--ink)">'+esc(briefText)+(hasContent?'':'')+'</p></div><div class="brief-grid">'+filterCards+'</div><button class="primary full" data-action="go-script" style="margin-top:16px" '+(hasContent?'':'disabled')+'>'+(hasContent?'确认创意 → 编导编剧':'请先选择筛选条件')+'</button>';return H("02 / 广告策划","创意方向","Hook 筛选与创意世界观","创意策划")+'<div class="hook-layout"><section class="hook-select-panel">'+left+'</section><section class="hook-output panel" style="border-radius:24px">'+right+'</section></div>';}
-function S2(){var hl=state.hooksList,sh=hl[state.selectedHook]||{},script=state.scriptText||"",sb=state.storyboard||[],hasAll=state.scriptReady&&state.storyboardReady,R="",L="";if(state.loading)R='<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">生成中…</span></div><div class="empty output-placeholder"><p>'+(state.loadingMsg||'')+'</p></div>'+(state.scriptReady&&state.scriptText?'<details class="script-toggle" open style="margin-top:16px"><summary><span>📝 已有脚本</span></summary><div class="script-copy" style="margin-top:8px;font-size:13px">'+esc(state.scriptText)+"</div></details>":"")+'';else if(hasAll&&sb.length){var st=script?'<details class="script-toggle" open><summary><span>📝 '+(state.mode==="高端TVC"?"创意脚本":state.mode==="好物推荐"?"展示文案":"完整视频脚本")+'</span><small>展开</small></summary><div class="script-copy" style="margin-top:8px;font-size:13px">'+esc(script)+"</div></details>":"";var sbCards=sb.map(function(s,i){var ts=s.time||s.timestamp||"",desc=s.visual||s.description||"",action=s.action||s.camera_movement||"",prompt=s.seedance_prompt||s.video_prompt||"",sub=s.subtitle||s.dialogue||"";return'<div class="storyboard-shot"><div class="shot-header"><span class="shot-num">🎬 镜头 '+(i+1)+'</span><span class="shot-time">'+esc(ts)+'</span></div><div class="shot-body"><div class="shot-desc"><span>画面</span><p>'+esc(desc)+"</p></div>"+(action?'<div class="shot-desc"><span>运镜</span><p>'+esc(action)+"</p></div>":"")+(sub?'<div class="shot-desc"><span>台词</span><p>'+esc(sub)+"</p></div>":"")+(prompt?'<div class="shot-prompt"><span>🎬 Seedance Prompt</span><code>'+esc(prompt.slice(0,120))+(prompt.length>120?"…":"")+"</code></div>":"")+"</div></div>";}).join("");R=st+'<div class="result-head" style="margin-top:14px"><div><span class="result-label">OUTPUT / STORYBOARD</span><h2>'+esc(sh.title||"—")+'</h2></div><span class="pill ready">'+sb.length+" 镜头</span></div><div class=\"storyboard-grid\">"+sbCards+"</div>";}else R='<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">等待生成</span></div><div class="empty output-placeholder"><p>点击「生成脚本」后 AI 写 15 秒视频脚本，再点「生成分镜」拆为分镜头。</p></div>';if(hasAll)L='<div class="notice"><strong>分镜脚本已生成 ✓</strong></div><button class="primary full" data-action="go-video" style="background:var(--green);border-color:var(--green)">→ 摄影摄像</button><button class="secondary full" style="margin-top:10px" data-action="gen-storyboard">🔄 重新生成分镜</button>';else if(state.scriptReady)L='<div class="notice"><strong>脚本已生成 ✓</strong></div><button class="primary full" data-action="gen-storyboard" '+(state.loading?"disabled":"")+'>'+(state.loading?"生成中…":"🎬 生成分镜 →")+"</button>"+'<button class="secondary full" style="margin-top:8px" data-action="gen-script">🔄 重新生成脚本</button>';else L='<button class="primary full" data-action="gen-script" '+(state.loading?"disabled":"")+'>'+(state.loading?"生成中…":"🎬 第一步：生成 15 秒脚本 →")+"</button>";return H("02 / 编导编剧","分镜脚本","两步：先生成脚本，再拆为分镜头。","编导编剧")+'<div class="script-layout"><section class="panel"><div class="panel-heading"><span class="panel-index">03</span><div><b>'+(hasAll?"已完成":state.scriptReady?"脚本就绪":"分镜脚本")+"</b><small>"+(hasAll?"脚本+分镜就绪":state.scriptReady?"点击生成分镜":"点击生成脚本")+'</small></div></div><div class="review-lines"><div class="review-line"><span>类型</span><strong>'+esc(state.mode)+'</strong></div><div class="review-line"><span>Hook</span><strong>'+esc(sh.title||"—")+'</strong></div><div class="review-line"><span>时长</span><strong><select id="dur-sel" style="width:auto;min-width:80px;padding:2px 6px"><option value="15" '+(state.duration===15?"selected":"")+'>15s</option><option value="30" '+(state.duration===30?"selected":"")+'>30s</option><option value="45" '+(state.duration===45?"selected":"")+'>45s</option><option value="60" '+(state.duration===60?"selected":"")+'>60s</option></select></strong></div></div>'+L+'<button class="secondary full" style="margin-top:8px" data-stage="1">← 返回创意</button></section><section class="panel result">'+R+"</section></div>";}
+function S2(){var hl=state.hooksList,sh=hl[state.selectedHook]||{},script=state.scriptText||"",sb=state.storyboard||[],hasAll=state.scriptReady&&state.storyboardReady,R="",L="";if(state.loading)R='<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">生成中…</span></div><div class="empty output-placeholder"><p>'+(state.loadingMsg||'')+'</p></div>'+(state.scriptReady&&state.scriptText?'<details class="script-toggle" open style="margin-top:16px"><summary><span>📝 已有脚本</span></summary><div class="script-copy" style="margin-top:8px;font-size:13px">'+esc(state.scriptText)+"</div></details>":"")+'';else if(hasAll&&sb.length){var st=script?'<details class="script-toggle" open><summary><span>📝 '+(state.mode==="高端TVC"?"创意脚本":state.mode==="好物推荐"?"展示文案":"完整视频脚本")+'</span><small>展开</small></summary><div class="script-copy" style="margin-top:8px;font-size:13px">'+esc(script)+"</div></details>":"";var sbCards=sb.map(function(s,i){var ts=s.time||s.timestamp||"",desc=s.visual||s.description||"",action=s.action||s.camera_movement||"",prompt=s.seedance_prompt||s.video_prompt||"",sub=s.subtitle||s.dialogue||"";return'<div class="storyboard-shot"><div class="shot-header"><span class="shot-num">🎬 镜头 '+(i+1)+'</span><span class="shot-time">'+esc(ts)+'</span></div><div class="shot-body"><div class="shot-desc"><span>画面</span><p>'+esc(desc)+"</p></div>"+(action?'<div class="shot-desc"><span>运镜</span><p>'+esc(action)+"</p></div>":"")+(sub?'<div class="shot-desc"><span>台词</span><p>'+esc(sub)+"</p></div>":"")+(prompt?'<div class="shot-prompt"><span>🎬 Seedance Prompt</span><code>'+esc(prompt.slice(0,120))+(prompt.length>120?"…":"")+"</code></div>":"")+"</div></div>";}).join("");R=st+'<div class="result-head" style="margin-top:14px"><div><span class="result-label">OUTPUT / STORYBOARD</span><h2>'+esc(sh.title||"—")+'</h2></div><span class="pill ready">'+sb.length+" 镜头</span></div><div class=\"storyboard-grid\">"+sbCards+"</div>";}else R='<div class="result-head"><div><span class="result-label">OUTPUT</span></div><span class="pill">等待生成</span></div><div class="empty output-placeholder"><p>点击「生成脚本」后 AI 写 15 秒视频脚本，再点「生成分镜」拆为分镜头。</p></div>';if(hasAll)L='<div class="notice"><strong>分镜脚本已生成 ✓</strong></div><button class="primary full" data-action="go-video" style="background:var(--green);border-color:var(--green)">→ 摄影摄像</button><button class="secondary full" style="margin-top:10px" data-action="gen-storyboard">🔄 重新生成分镜</button>';else if(state.scriptReady)L='<div class="notice"><strong>脚本已生成 ✓</strong></div><button class="primary full" data-action="gen-storyboard" '+(state.loading?"disabled":"")+'>'+(state.loading?"生成中…":"🎬 生成分镜 →")+"</button>"+'<button class="secondary full" style="margin-top:8px" data-action="gen-script">🔄 重新生成脚本</button>';else L='<button class="primary full" data-action="gen-script" '+(state.loading?"disabled":"")+'>'+(state.loading?"生成中…":"🎬 第一步：生成 15 秒脚本 →")+"</button>";return H("02 / 编导编剧","分镜脚本","两步：先生成脚本，再拆为分镜头。","编导编剧")+'<div class="script-layout"><section class="panel"><div class="panel-heading"><span class="panel-index">03</span><div><b>'+(hasAll?"已完成":state.scriptReady?"脚本就绪":"分镜脚本")+"</b><small>"+(hasAll?"脚本+分镜就绪":state.scriptReady?"点击生成分镜":"点击生成脚本")+'</small></div></div><div class="review-lines"><div class="review-line"><span>类型</span><strong>'+esc(state.mode)+'</strong></div><div class="review-line"><span>Hook</span><strong>'+esc(sh.title||"—")+'</strong></div><div class="review-line"><span>时长</span><strong><select id="dur-sel" style="width:auto;min-width:80px;padding:2px 6px">'+durOptions()+'</select></strong></div></div>'+L+'<button class="secondary full" style="margin-top:8px" data-stage="1">← 返回创意</button></section><section class="panel result">'+R+"</section></div>";}
 
 function S3(){var sh=(state.hooksList[state.selectedHook]||{}),sb=state.storyboard||[],script=state.scriptText||"",hasImg=!!state.storyboardImage;var sbP=hasImg?'<img src="'+esc(state.storyboardImage)+'" style="max-width:100%;border-radius:14px;border:1px solid var(--line)" alt="分镜图">':(state.loadingImage?'<div class="empty" style="min-height:200px"><p>'+esc(state.loadingMsg||'🖼️ AI 正在生成分镜图…')+'</p><div style="margin-top:12px;width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite;margin-left:auto;margin-right:auto"></div></div>':'<div class="empty" style="min-height:200px"><p>分镜图可选，不生成也能直接做视频。</p></div>');var segs=state.videoSegments||[];var vid=state.videoResultUrl?'<video src="'+esc(state.videoResultUrl)+'" controls style="width:100%;max-height:320px;border-radius:12px"></video>':(segs.length>0?'<div style="display:grid;gap:10px">'+segs.map(function(s,i){return'<div style="border:1px solid var(--line);border-radius:10px;overflow:hidden"><div style="padding:8px 12px;background:var(--soft);font-size:11px;color:var(--muted)">🎬 第'+(i+1)+'段·'+(s.duration||15)+'s</div>'+(s.video_url||s.url?'<video src="'+esc(s.video_url||s.url)+'" controls style="width:100%;max-height:200px"></video>':'<div style="padding:20px;text-align:center;color:var(--muted)">生成中…</div>')+'</div>';}).join("")+'<button class="primary full" data-action="concat-video" style="margin-top:10px" '+(segs.every(function(s){return s.video_url||s.url;})?'':'disabled')+'>'+(segs.every(function(s){return s.video_url||s.url;})?'🎬 合成成片→':'等待所有分段…')+'</button></div>':(state.loading&&!state.loadingImage?'<div class="empty" style="min-height:120px;padding:20px;display:grid;place-items:center;gap:12px"><p style="margin:0;font-size:14px;color:var(--ink)">'+esc(state.loadingMsg||'🎬 正在生成视频…')+'</p><div style="width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite"></div><p style="margin:0;font-size:11px;color:var(--muted)">Seedance 生成中，请耐心等待</p></div>':'<div class="empty" style="min-height:120px;padding:20px"><p>点击下方按钮生成视频成片。</p></div>'));return H("04 / 摄影摄像","分镜图 & 成片","分镜图可选，先生成分镜再生成视频","摄影摄像")+'<div class="script-layout"><section class="panel"><div class="story-hook-card"><span>📌 Hook</span><strong>'+esc(sh.title||"—")+'</strong><div class="story-hook-card-score">⭐ '+esc(formatHookScore(sh.score))+'</div></div><div class="result-head"><div><span class="result-label">分镜图预览</span><h2>分镜图</h2></div>'+(hasImg?'<span class="pill ready">已生成</span>':'<span class="pill">'+(sb.length||0)+' 镜头</span>')+"</div>"+sbP+'<div style="display:flex;gap:10px;margin-top:14px"><button class="primary" data-action="gen-sb-image" '+(state.loadingImage?"disabled":"")+'>'+(state.loadingImage?"生成中…":hasImg?"🔄 重新生成":"生成分镜图（可选）→")+"</button></div></section>"+'<section class="panel"><div class="result-head"><div><span class="result-label">视频</span><h2>生成成片</h2></div></div>'+vid+'<div class="summary"><div class="summary-row"><span>产品</span><strong>'+esc((state.productBrief||{}).product_name||(state.productBrief||{})["产品名称"]||"—")+'</strong></div><div class="summary-row"><span>Hook</span><strong>'+esc(sh.title||"—")+"</strong></div></div>"+'<div class="button-row"><button class="primary" data-action="gen-video" '+(!state.loading&&!state.videoTaskId?"disabled":"")+'>'+(state.loading?(state.generationStep==="submit"?"⏳ 提交中…":state.generationStep==="polling"?"⏳ 渲染中…":"生成中…"):state.videoResultUrl?"🔄 重新生成":"生成视频 →")+"</button>"+'<button class="secondary" data-action="download" '+(state.videoResultUrl?"":"disabled")+'>下载</button></div><button class="secondary full" style="margin-top:10px" data-stage="2">← 返回分镜</button></section></div>';}
 
-function combinedDirectorSection(){var sh=state.hooksList[state.selectedHook]||{},script=state.scriptText||"",sb=state.storyboard||[],fv=state.filterValues||{},cw=state.creativeWorldview||{};var creativeValues=Object.keys(fv).map(function(k){return fv[k];}).filter(Boolean);if(!creativeValues.length)creativeValues=Object.keys(cw).filter(function(k){return k!=="mode"&&k!=="hook";}).map(function(k){return cw[k];}).filter(Boolean);var status=state.loading?"生成中":sb.length?"分镜就绪":script?"脚本就绪":"等待生成";var body="";if(state.loading){body='<div class="director-progress"><div><div class="director-spinner"></div><strong>'+esc(state.loadingMsg||"AI 正在生成…")+'</strong><p style="color:var(--muted);margin:8px 0 0">当前页面可以保持打开，结果会自动写入下方。</p></div></div>';}else if(sb.length){var cards=sb.map(function(s,i){var ts=s.time||s.timestamp||"",desc=s.visual||s.description||"",action=s.action||s.camera_movement||"",prompt=s.seedance_prompt||s.video_prompt||"",sub=s.subtitle||s.dialogue||"";return'<div class="storyboard-shot"><div class="shot-header"><span class="shot-num">镜头 '+(i+1)+'</span><span class="shot-time">'+esc(ts)+'</span></div><div class="shot-body"><div class="shot-desc"><span>画面</span><p>'+esc(desc)+'</p></div>'+(action?'<div class="shot-desc"><span>运镜</span><p>'+esc(action)+'</p></div>':'')+(sub?'<div class="shot-desc"><span>台词</span><p>'+esc(sub)+'</p></div>':'')+(prompt?'<div class="shot-prompt"><span>Seedance Prompt</span><code>'+esc(prompt.slice(0,140))+(prompt.length>140?"…":"")+'</code></div>':'')+'</div></div>';}).join("");body=(script?'<div class="director-script">'+esc(script)+'</div>':'')+'<div class="result-head"><div><span class="result-label">SELECTED DIRECTION / STORYBOARD</span><h2>'+esc(sh.title||"分镜脚本")+'</h2></div><span class="pill ready">'+sb.length+' 镜头</span></div><div class="storyboard-grid">'+cards+'</div><div class="director-actions"><button class="primary" data-action="go-video">进入摄影摄像 →</button><button class="primary" data-action="gen-storyboard" style="background:var(--blue);border-color:var(--blue)">重新生成分镜</button></div>';}else if(script){body='<div class="result-head"><div><span class="result-label">SCRIPT READY</span><h2>把完整表达拆成镜头</h2></div><span class="pill ready">脚本已生成</span></div><div class="director-script">'+esc(script)+'</div><div class="director-actions"><button class="primary" data-action="gen-storyboard">生成分镜 →</button><button class="primary" data-action="gen-script" style="background:var(--blue);border-color:var(--blue)">重新生成脚本</button></div>';}else{body='<div class="director-empty"><div><strong>创意方向会在这里变成可拍摄的镜头</strong><p>完成上方的创意选择后生成脚本，再将脚本拆成画面、运镜、台词与视频提示词。</p><button class="primary" data-action="gen-script" style="margin-top:18px">生成脚本 →</button></div></div>';}return'<section class="combined-director" id="director-output"><div class="combined-director-head"><div><span class="eyebrow">编导编剧</span><h2>选定创意的分镜脚本</h2><p>上半段决定广告怎么说，下半段把选择翻译成能直接生成与拍摄的镜头。</p></div><span class="pill '+(sb.length?"ready":"")+'">'+status+'</span></div><div class="director-grid"><aside class="director-control"><span class="director-kicker">SELECTED CREATIVE</span><div class="director-summary"><div><span>内容类型</span><strong>'+esc(state.mode)+'</strong></div><div><span>广告切入</span><strong>'+esc(sh.title||"—")+'</strong></div><div><span>创意描述</span><strong>'+esc(creativeValues.join(" · ")||"等待选择")+'</strong></div><div><span>目标时长</span><strong><select id="dur-sel" style="width:auto;min-width:82px;padding:4px 8px"><option value="15" '+(state.duration===15?"selected":"")+'>15s</option><option value="30" '+(state.duration===30?"selected":"")+'>30s</option><option value="45" '+(state.duration===45?"selected":"")+'>45s</option><option value="60" '+(state.duration===60?"selected":"")+'>60s</option></select></strong></div></div><button class="secondary full" data-stage="0">← 返回产品简报</button></aside><div class="director-output">'+body+'</div></div><button class="primary full" type="button" data-action="generate-character" style="margin-top:14px;background:var(--green);border-color:var(--green)" '+(state.characterLoading||!state.characterDescription.trim()?"disabled":"")+'>'+(state.characterLoading?"正在生成形象…":state.characterImage?"重新生成形象":"生成角色形象")+'<</button></section>';}
+function combinedDirectorSection(){var sh=state.hooksList[state.selectedHook]||{},script=state.scriptText||"",sb=state.storyboard||[],fv=state.filterValues||{},cw=state.creativeWorldview||{};var creativeValues=Object.keys(fv).map(function(k){return fv[k];}).filter(Boolean);if(!creativeValues.length)creativeValues=Object.keys(cw).filter(function(k){return k!=="mode"&&k!=="hook";}).map(function(k){return cw[k];}).filter(Boolean);var status=state.loading?"生成中":sb.length?"分镜就绪":script?"脚本就绪":"等待生成";var body="";if(state.loading){body='<div class="director-progress"><div><div class="director-spinner"></div><strong>'+esc(state.loadingMsg||"AI 正在生成…")+'</strong><p style="color:var(--muted);margin:8px 0 0">当前页面可以保持打开，结果会自动写入下方。</p></div></div>';}else if(sb.length){var cards=sb.map(function(s,i){var ts=s.time||s.timestamp||"",desc=s.visual||s.description||"",action=s.action||s.camera_movement||"",prompt=s.seedance_prompt||s.video_prompt||"",sub=s.subtitle||s.dialogue||"";return'<div class="storyboard-shot"><div class="shot-header"><span class="shot-num">镜头 '+(i+1)+'</span><span class="shot-time">'+esc(ts)+'</span></div><div class="shot-body"><div class="shot-desc"><span>画面</span><p>'+esc(desc)+'</p></div>'+(action?'<div class="shot-desc"><span>运镜</span><p>'+esc(action)+'</p></div>':'')+(sub?'<div class="shot-desc"><span>台词</span><p>'+esc(sub)+'</p></div>':'')+(prompt?'<div class="shot-prompt"><span>Seedance Prompt</span><code>'+esc(prompt.slice(0,140))+(prompt.length>140?"…":"")+'</code></div>':'')+'</div></div>';}).join("");body=(script?'<div class="director-script">'+esc(script)+'</div>':'')+'<div class="result-head"><div><span class="result-label">SELECTED DIRECTION / STORYBOARD</span><h2>'+esc(sh.title||"分镜脚本")+'</h2></div><span class="pill ready">'+sb.length+' 镜头</span></div><div class="storyboard-grid">'+cards+'</div><div class="director-actions"><button class="primary" data-action="go-video">进入摄影摄像 →</button><button class="primary" data-action="gen-storyboard" style="background:var(--blue);border-color:var(--blue)">重新生成分镜</button></div>';}else if(script){body='<div class="result-head"><div><span class="result-label">SCRIPT READY</span><h2>把完整表达拆成镜头</h2></div><span class="pill ready">脚本已生成</span></div><div class="director-script">'+esc(script)+'</div><div class="director-actions"><button class="primary" data-action="gen-storyboard">生成分镜 →</button><button class="primary" data-action="gen-script" style="background:var(--blue);border-color:var(--blue)">重新生成脚本</button></div>';}else{body='<div class="director-empty"><div><strong>创意方向会在这里变成可拍摄的镜头</strong><p>完成上方的创意选择后生成脚本，再将脚本拆成画面、运镜、台词与视频提示词。</p><button class="primary" data-action="gen-script" style="margin-top:18px">生成脚本 →</button></div></div>';}return'<section class="combined-director" id="director-output"><div class="combined-director-head"><div><span class="eyebrow">编导编剧</span><h2>选定创意的分镜脚本</h2><p>上半段决定广告怎么说，下半段把选择翻译成能直接生成与拍摄的镜头。</p></div><span class="pill '+(sb.length?"ready":"")+'">'+status+'</span></div><div class="director-grid"><aside class="director-control"><span class="director-kicker">SELECTED CREATIVE</span><div class="director-summary"><div><span>内容类型</span><strong>'+esc(state.mode)+'</strong></div><div><span>广告切入</span><strong>'+esc(sh.title||"—")+'</strong></div><div><span>创意描述</span><strong>'+esc(creativeValues.join(" · ")||"等待选择")+'</strong></div><div><span>目标时长</span><strong><select id="dur-sel" style="width:auto;min-width:82px;padding:4px 8px">'+durOptions()+'</select></strong></div></div><button class="secondary full" data-stage="0">← 返回产品简报</button></aside><div class="director-output">'+body+'</div></div><button class="primary full" type="button" data-action="generate-character" style="margin-top:14px;background:var(--green);border-color:var(--green)" '+(state.characterLoading||!state.characterDescription.trim()?"disabled":"")+'>'+(state.characterLoading?"正在生成形象…":state.characterImage?"重新生成形象":"生成角色形象")+'</button></section>';}
 var creativeStageBase=S1;
-S1=function(){var html=creativeStageBase();html=html.replace(/data-action="go-script"/g,'data-action="gen-script"').replace(/确认创意 → 编导编剧/g,"确认创意并生成脚本").replace(/请先选择筛选条件/g,"选择创意方向后生成脚本");return html+combinedDirectorSection();};
+S1=function(){var html=creativeStageBase();return html.replace(/data-action="go-script"/g,'data-action="generate-creative-director"').replace(/data-action="gen-script"/g,'data-action="generate-creative-director"').replace(/data-action="gen-storyboard"/g,'data-action="generate-creative-director"').replace(/确认创意 → 编导编剧/g,"确认创意并生成脚本").replace(/请先选择筛选条件/g,"选择创意方向后生成脚本");};
 
-function render(){try{var c;if(state.stage===2)state.stage=1;if(state.stage===0)c=S0();if(state.stage===1)c=S1();if(state.stage===3)c=S3();document.querySelector("#app").innerHTML=shell(c);var cb=document.querySelector("[data-action=\"cancel-generation\"]");if(cb)cb.style.display=(state.loading||state.videoLoading||state.stage1Loading||state.directorLoading||state.loadingImage||state.characterLoading)?"inline-flex":"none";bind();saveState();}catch(e){console.error("render:",e);}}
+function render(){try{var c;if(state.stage===2)state.stage=1;if(state.stage===0)c=S0();if(state.stage===1)c=S1();if(state.stage===3)c=S3();if(state.stage===4)c=S4();document.querySelector("#app").innerHTML=shell(c);var cb=document.querySelector("[data-action=\"cancel-generation\"]");if(cb)cb.style.display=(state.loading||state.videoLoading||state.stage1Loading||state.directorLoading||state.loadingImage||state.characterLoading||state.editingLoading)?"inline-flex":"none";bind();saveState();}catch(e){console.error("render:",e);}}
 
-var delegatedClickBound=false;
-function bind(){try{if(!delegatedClickBound){delegatedClickBound=true;document.addEventListener("click",function(e){var t=e.target.closest("[data-stage]");if(t){state.stage=Number(t.dataset.stage);render();return;}var a=e.target.closest("[data-action]");if(!a)return;var act=a.dataset.action;if(act==="confirm-hook"){state.stage=1;render();}else if(act==="go-script"){state.stage=2;render();}else if(act==="go-video"){state.stage=3;render();}else if(act==="gen-worldview"){var hook=state.hooksList[state.selectedHook];if(!hook){alert("请先选 Hook");return;}var pb=state.productBrief||{},sell=(function(s){if(!s)return"";if(Array.isArray(s))return s.join(" · ");return String(s);})(pb.selling_points||pb["核心卖点"]||"");var defaults={};if(state.mode==="真人口播带货")defaults={"达人画像":"25-30岁女性，邻家气质，亲和力强，小红书护肤博主","说话风格":"像闺蜜聊天，不用专业术语，节奏快而不赶","口播角度":hook.title};else if(state.mode==="好物推荐")defaults={"产品切入点":hook.title,"说服逻辑":sell||hook.description||"","视觉风格":"极简白底/微距特写/数据图叠层"};else defaults={"创意概念":hook.description||hook.hook||"","情感基调":"克制、诗意、电影感","视觉方向":"暖金逆光/慢镜头/浅景深"};var idMap={creator_vibe:"达人画像",speaking_style:"说话风格",use_scene:"使用场景",selling_angle:"产品卖点",compare_dim:"对比维度",visual_style:"视觉风格",emotion_tone:"情绪基调",visual_lang:"视觉语言",narrative:"叙事结构"};var cw={mode:state.mode,hook:hook.title};var fv=state.filterValues||{};for(var fid in idMap){var el=document.querySelector("#f-"+fid);var uv=(fv[fid]||(el?el.value.trim():""));var label=idMap[fid];cw[label]=uv||defaults[label]||"";}state.creativeWorldview=cw;render();}else if(act==="optimize-hook"){if(state.loading)return;var hk=state.hooksList[state.selectedHook];if(!hk){alert("请先选 Hook");return;}state.loading=true;state.loadingMsg="🤖 AI 正在优化创意…";render();(async function(){try{var o=await fetch("/api/workflow/stage-2/optimize",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"optimize_hook",product_brief:state.productBrief,hooks:state.hooksList,selected_hook:hk,marketing_goal:state.campaignTheme||"",platform:state.mode==="真人口播带货"?"抖音":state.mode==="好物推荐"?"小红书":"全平台",creative_worldview:state.creativeWorldview,filter_values:state.filterValues,language:state.language})});if(!o.ok)throw new Error("HTTP "+o.status);var d=await o.json();if(d.optimized_hooks&&d.optimized_hooks.length){state.hooksList=d.optimized_hooks;state.selectedHook=0;state.creativeWorldview=d.creative_brief||state.creativeWorldview;alert("✅ 创意优化完成！共 "+d.optimized_hooks.length+" 条优化 Hook，已推荐最佳 Hook。");}else{alert("优化返回空结果，请重试");}}catch(err){alert("创意优化失败："+err.message);}state.loading=false;state.loadingMsg="";render();})();}else if(act==="gen-script"){if(state.loading)return;var hk=state.hooksList[state.selectedHook];if(!hk){alert("请先选 Hook");return;}state.loading=true;state.loadingMsg="🎬 AI 正在生成 15 秒完整视频脚本…";render();(async function(){try{var s2=await fetch("/api/fast/stage-2",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_record_id:state.productRecordId,product_brief:state.productBrief,hook:hk,language:state.language,content_type:state.mode,duration:state.duration,filter_values:state.filterValues||{},voice_type:(state.filterValues||{}).voice_type||"真人口播",ad_type:(state.filterValues||{}).ad_type||""})}).then(function(r){if(!r.ok)return fetch("/api/fast/stage-2",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_record_id:state.productRecordId,product_brief:state.productBrief,hook:hk,language:state.language,content_type:state.mode,duration:state.duration,filter_values:state.filterValues||{},voice_type:(state.filterValues||{}).voice_type||"真人口播",ad_type:(state.filterValues||{}).ad_type||""})}).then(function(r){if(!r.ok)return fetch("/api/fast/stage-2",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_record_id:state.productRecordId,product_brief:state.productBrief,hook:hk,language:state.language,content_type:state.mode,duration:state.duration})});return r;}).then(function(r){return r;});return r;}).then(function(r){return r;});if(!s2.ok)throw new Error("HTTP "+s2.status);var d2=await s2.json();state.scriptText=d2.script_text||d2.script||"";state.scriptReady=true;}catch(err){alert("脚本生成失败："+err.message);state.scriptReady=false;}state.loading=false;state.loadingMsg="";render();})();}else if(act==="gen-storyboard"){if(state.loading)return;if(!state.scriptReady||!state.scriptText){alert("请先生成脚本");return;}state.loading=true;state.loadingMsg="🎬 AI 正在生成分镜…";render();(async function(){try{var hk2=state.hooksList[state.selectedHook];var s3=await fetch("/api/fast/stage-3",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_record_id:state.productRecordId,product_brief:state.productBrief,hook:hk2,script_text:state.scriptText,language:state.language,content_type:state.mode,creator_profile:state.creatorProfile||"",duration:state.duration})});if(!s3.ok)throw new Error("HTTP "+s3.status);var d3=await s3.json();state.videoTaskId=d3.video_task_id||d3.task_id||"";state.storyboard=Array.isArray(d3.storyboard)?d3.storyboard:[];state.storyboardReady=state.storyboard.length>0;}catch(err){alert("分镜生成失败："+err.message);state.storyboardReady=false;}state.loading=false;state.loadingMsg="";render();})();}else if(act==="gen-sb-image"){if(state.loadingImage)return;if(!state.storyboard.length){alert("请先生成分镜");return;}state.loadingImage=true;state.loadingMsg="🖼️ AI 正在生成分镜图…";render();(async function(){try{var r=await fetch("/api/workflow/stage-5",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_record_id:state.productRecordId,product_brief:state.productBrief,storyboard:state.storyboard,content_type:state.mode,product_images:(state.productImages||[]).map(function(i){var u=i.url||i;return typeof u==="string"&&u.startsWith("https://")?u:null;}).filter(Boolean),creative_worldview:state.creativeWorldview,filter_values:state.filterValues})});var txt=await r.text();if(!txt)throw new Error("空响应 (HTTP "+r.status+")");try{var d=JSON.parse(txt);}catch(pe){throw new Error("响应非JSON: "+txt.slice(0,100));}if(!r.ok)throw new Error("HTTP "+r.status+": "+(d.error||d.message||""));state.storyboardImage=(d.images&&d.images[0])||(d.urls&&d.urls[0])||(d.storyboard_images&&d.storyboard_images[0]&&(d.storyboard_images[0].image_url||d.storyboard_images[0].url))||"";state.storyboardImages=d.storyboard_images||[];}catch(err){alert("分镜图生成失败："+err.message);}state.loadingImage=false;state.loadingMsg="";render();})();}else if(act==="confirm-sb"){alert("分镜图已确认！");}else if(act==="gen-video"){if(state.loading)return;if(!state.videoTaskId){alert("请先在 Stage 2 生成分镜脚本");return;}state.loading=true;state._abortCtrl=new AbortController();state.generationStep="submit";state.loadingMsg="正在提交视频任务…";state.videoSegments=[];state.videoResultUrl="";render();(async function(){try{var r=await fetch("/api/workflow/stage-4",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({video_task_id:state.videoTaskId,product_record_id:state.productRecordId,product_brief:state.productBrief,hook:state.hooksList[state.selectedHook],script_text:state.scriptText,language:state.language,content_type:state.mode,storyboard:state.storyboard,product_images:(state.productImages||[]).map(function(i){return i.url||i;}),storyboard_images:state.storyboardImages||[],storyboard_image:state.storyboardImage,duration:state.duration}),signal:state._abortCtrl.signal});if(!r.ok)throw new Error("HTTP "+r.status);state.generationStep="polling";state.loadingMsg="Seedance 正在渲染视频…";render();var d=await r.json();state.videoSegments=d.segments||[];state.videoResultUrl=d.video_url||d.result_url||d.public_url||(d.segments&&d.segments.length===1?d.segments[0].video_url||d.segments[0].url:"");}catch(err){if(err.name!=="AbortError")alert("视频生成失败："+err.message);}state.loading=false;state.loadingMsg="";state.generationStep="";render();})();}else if(act==="cancel-generation"){if(state._abortCtrl){try{state._abortCtrl.abort();}catch(e){}}state.loading=false;state.stage1Loading=false;state.loadingImage=false;state.directorLoading=false;state.generationStep="";state.loadingMsg="";state.characterLoading=false;render();}else if(act==="concat-video"){if(state.loading)return;if(!state.videoSegments.length){alert("请先生成视频分段");return;}state.loading=true;state.loadingMsg="🎬 正在合成成片…";render();(async function(){try{var r=await fetch("/api/workflow/stage-6",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({segments:state.videoSegments,product_record_id:state.productRecordId})});if(!r.ok)throw new Error("HTTP "+r.status);var d=await r.json();state.videoResultUrl=d.video_url||d.result_url||d.public_url||"";state.videoSegments=[];}catch(err){alert("合成失败："+err.message);}state.loading=false;state.loadingMsg="";render();})();}});}document.querySelectorAll("[data-hook]").forEach(function(b){b.addEventListener("click",function(){state.selectedHook=Number(b.dataset.hook);render();});});document.querySelector("#lang-sel")?.addEventListener("change",function(e){var u=document.querySelector("#url-inp");if(u)state.productUrl=u.value;state.language=e.target.value;state.productReady=false;render();});document.querySelector("#mode-sel")?.addEventListener("change",function(e){var u=document.querySelector("#url-inp");if(u)state.productUrl=u.value;state.mode=e.target.value;state.productReady=false;render();});document.querySelector("#url-inp")?.addEventListener("input",function(e){state.productUrl=e.target.value;});document.querySelector("#theme-inp")?.addEventListener("input",function(e){state.campaignTheme=e.target.value;});document.querySelector("#dur-sel")?.addEventListener("change",function(e){state.duration=Number(e.target.value);render();});document.querySelectorAll(".filter-sel").forEach(function(s){s.addEventListener("change",function(){var fid=s.id.replace("f-","");if(!state.filterValues)state.filterValues={};state.filterValues[fid]=s.value;render();});});document.querySelector('[data-action="fetch"]')?.addEventListener("click",async function(){var u=document.querySelector("#url-inp")?.value?.trim();if(!u){alert("请输入产品链接");return;}state.stage1Loading=true;state.productReady=false;state.productUrl=u;render();try{var r=await fetch("/api/fast/stage-1",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_url:u,language:state.language,content_type:state.mode,campaign_theme:state.campaignTheme,product_images:(state.productImages||[]).map(function(i){return i.url||i;})})}).then(function(r){if(!r.ok&&r.status===502)return fetch("/api/fast/stage-1",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_url:u,language:state.language,content_type:state.mode,campaign_theme:state.campaignTheme,product_images:(state.productImages||[]).map(function(i){return i.url||i;})})}).then(function(r){if(!r.ok&&r.status===502)return fetch("/api/fast/stage-1",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_url:u,language:state.language,content_type:state.mode,campaign_theme:state.campaignTheme,product_images:(state.productImages||[]).map(function(i){return i.url||i;})})});return r;}).then(function(r){return r;});return r;}).then(function(r){return r;});var responseText=await r.text(),d={};try{d=responseText?JSON.parse(responseText):{};}catch(parseError){d={message:responseText};}if(!r.ok)throw new Error((d.message||d.error||responseText||("HTTP "+r.status))+" (HTTP "+r.status+")");if(!d||(d.message&&!d.ok))throw new Error(d.message||"空响应");state.productRecordId=d.product_record_id||"";state.productBrief=d.product_brief||null;state.hooksList=Array.isArray(d.hooks)?d.hooks:[];state.productImage=d.product_main_image_url||d.product_image||"";if(!state.productBrief||!state.hooksList.length)throw new Error("n8n 未返回有效数据");state.productReady=true;state.selectedHook=0;state.creativeWorldview={};}catch(err){alert("失败："+(err.name==="AbortError"?"请求超时":err.message));state.productReady=false;}state.stage1Loading=false;render();});document.querySelectorAll('[data-action="reset"]').forEach(function(b){b.addEventListener("click",function(){localStorage.removeItem("adflow_state");Object.assign(state,{stage:0,mode:"真人口播带货",language:"中文",productUrl:"",productImages:[],campaignTheme:"",productReady:false,productRecordId:"",productBrief:null,hooksList:[],productImage:"",loading:false,stage1Loading:false,loadingMsg:"",loadingImage:false,duration:15,selectedHook:0,creativeWorldview:{},filterValues:{},scriptReady:false,scriptText:"",storyboardReady:false,storyboard:[],storyboardImage:"",generatingImage:-1,videoTaskId:"",videoResultUrl:"",videoSegments:[],creatorProfile:""});render();});});document.querySelector('[data-action="download"]')?.addEventListener("click",function(){if(state.videoResultUrl)window.open(state.videoResultUrl,"_blank");else alert("视频尚未生成");});document.querySelector("#img-inp")?.addEventListener("change",function(e){var existingNames=new Set((state.productImages||[]).map(function(img){return String((img&&img.name)||"").trim().toLowerCase();}).filter(Boolean)),files=Array.from(e.target.files||[]).filter(function(file){var key=String(file.name||"").trim().toLowerCase();if(!key||existingNames.has(key))return false;existingNames.add(key);return true;}).slice(0,Math.max(0,9-(state.productImages||[]).length));e.target.value="";if(!files.length){alert("这张图片已经上传过了");return;}var pending=files.map(function(file){return{name:file.name,url:URL.createObjectURL(file),_local:true,size:file.size,lastModified:file.lastModified};});state.productImages=dedupeProductImages([].concat(state.productImages||[],pending));render();(async function(){try{var dus=[];for(var i=0;i<files.length;i++){var du=await new Promise(function(r){var fr=new FileReader();fr.onload=function(ev){r(ev.target.result);};fr.readAsDataURL(files[i]);});dus.push({name:files[i].name,dataUrl:du});}var r=await fetch("/api/upload-images",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(dus)});var d=await r.json();if(d.ok){var remote=d.images;state.productImages=dedupeProductImages((state.productImages||[]).map(function(img){var m=remote.find(function(rr){return rr.name===img.name;});return m?{name:m.name,url:m.url,_local:false}:img;}));render();}}catch(err){console.warn("bg upload:",err.message);}})();});document.querySelector("#app")?.addEventListener("click",function(e){var b=e.target.closest("[data-rimg]");if(b){state.productImages.splice(Number(b.dataset.rimg),1);render();}});}catch(e){console.error("bind:",e);}}
+function bind(){
+  if(window.__adflowBaseBindingsBound)return;
+  window.__adflowBaseBindingsBound=true;
+  document.addEventListener("input",function(event){
+    if(event.target.id==="url-inp")state.productUrl=event.target.value;
+    if(event.target.id==="theme-inp")state.campaignTheme=event.target.value;
+  },true);
+  document.addEventListener("change",function(event){
+    var target=event.target;
+    if(target.id==="lang-sel"){
+      state.language=target.value;
+      state.duration=target.value==="英文"?8:15;
+      state.productReady=false;
+      render();
+      return;
+    }
+    if(target.id==="mode-sel"){
+      state.mode=target.value;
+      state.productReady=false;
+      state.productBrief=null;
+      state.hooksList=[];
+      state.creativePlans=[];
+      state.moodBoards=[];
+      state.selectedPlanId="";
+      state.selectedHook=0;
+      var route=routeDefaults(state.mode);
+      state.contentSubtype=route.subtype;
+      state.templateGroupId=route.group;
+      render();
+      return;
+    }
+    if(target.id==="dur-sel"){
+      state.duration=Number(target.value);
+      render();
+      return;
+    }
+    if(target.classList&&target.classList.contains("filter-sel")){
+      state.filterValues=state.filterValues||{};
+      state.filterValues[target.id.replace("f-","")]=target.value;
+      render();
+      return;
+    }
+    if(target.id!=="img-inp")return;
+    var existingNames=new Set((state.productImages||[]).map(function(image){return String((image&&image.name)||"").trim().toLowerCase();}).filter(Boolean));
+    var files=Array.from(target.files||[]).filter(function(file){
+      var name=String(file.name||"").trim().toLowerCase();
+      if(!name||existingNames.has(name))return false;
+      existingNames.add(name);
+      return true;
+    }).slice(0,Math.max(0,9-(state.productImages||[]).length));
+    target.value="";
+    if(!files.length){alert("这张图片已经上传过了");return;}
+    var pending=files.map(function(file){return{name:file.name,url:URL.createObjectURL(file),_local:true,size:file.size,lastModified:file.lastModified};});
+    state.imageUploadError="";
+    state.productImages=dedupeProductImages([].concat(state.productImages||[],pending));
+    render();
+    Promise.all(files.map(function(file){return new Promise(function(resolve,reject){var reader=new FileReader();reader.onload=function(){resolve({name:file.name,dataUrl:reader.result});};reader.onerror=function(){reject(reader.error||new Error("读取图片失败"));};reader.readAsDataURL(file);});})).then(function(items){
+      return fetch("/api/upload-images",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(items)});
+    }).then(function(response){return response.json().then(function(data){if(!response.ok)throw new Error(data.message||data.error||("HTTP "+response.status));return data;});}).then(function(data){
+      var remote=(data.images||[]).filter(function(item){return item&&item.ok!==false&&typeof item.url==="string"&&item.url.startsWith("https://");});
+      var failed=(data.images||[]).filter(function(item){return item&&!item.ok&&item.name;});
+      state.productImages=dedupeProductImages((state.productImages||[]).map(function(image){var match=remote.find(function(item){return item.name===image.name;});return match?{name:match.name,url:match.url,_local:false}:image;}).filter(function(image){return !image._local||!failed.some(function(item){return item&&item.name===image.name;});}));
+      state.imageUploadError="";
+      render();
+    }).catch(function(err){console.warn("Image upload failed:",err&&err.message);state.imageUploadError=err&&err.message||"上传失败";var pendingNames=new Set(files.map(function(f){return f.name;}));state.productImages=(state.productImages||[]).filter(function(image){return !(image._local&&pendingNames.has(image.name));});render();});
+  },true);
+  document.addEventListener("click",function(event){
+    var imageButton=event.target.closest("[data-rimg]");
+    if(imageButton){
+      event.preventDefault();
+      state.productImages.splice(Number(imageButton.dataset.rimg),1);
+      render();
+      return;
+    }
+    var downloadButton=event.target.closest('[data-action="download"]');
+    if(downloadButton){
+      if(state.videoResultUrl)window.open(state.videoResultUrl,"_blank");
+      else if(!downloadButton.disabled)alert("视频尚未生成");
+    }
+  },true);
+}
 if(!("creativeBrief" in state))state.creativeBrief={};
 if(!("scriptSegments" in state))state.scriptSegments=[];
 if(!("directorNotes" in state))state.directorNotes={};
@@ -234,7 +351,7 @@ function mergedCreativeStage(){
   var advancedFilters=advancedDefs.map(selectField).join("");
   var visibleBriefValues=labels.map(function(label){return briefValue(brief,label);}),hasVisibleBrief=visibleBriefValues.some(function(value){return value&&value!=="—";});
   var briefHtml=labels.map(function(label,i){return'<div class="creative-field '+(i===labels.length-1?"wide":"")+'"><span>'+label+'</span><p>'+esc(visibleBriefValues[i])+'</p></div>';}).join("");
-  var duration='<select id="dur-sel"><option value="15" '+(state.duration===15?"selected":"")+'>15 秒 · 1 段</option><option value="30" '+(state.duration===30?"selected":"")+'>30 秒 · 2 段</option><option value="45" '+(state.duration===45?"selected":"")+'>45 秒 · 3 段</option><option value="60" '+(state.duration===60?"selected":"")+'>60 秒 · 4 段</option></select>';
+  var duration='<select id="dur-sel">'+durOptions()+'</select>';
   var hookCutIn=sh.category||sh.awareness_stage||sh.emotion||"创意切入";
   var upper='<section class="panel creative-control-panel"><div class="result-head"><div><span class="result-label">CREATIVE / 创意指令</span><h2>编剧导演</h2></div></div><div class="notice selected-hook"><span class="selected-hook-label">选中的 Hook</span><strong>'+esc(sh.title||"请先返回选择 Hook")+'</strong><div class="stage2-hook-context"><span>'+esc(state.mode)+'</span><span>'+esc(hookCutIn)+'</span></div><p>'+esc(sh.description||sh.hook||"")+'</p></div><div class="creative-core-grid">'+coreFilters+'<label class="field"><span>目标时长</span>'+duration+'</label></div><details class="creative-advanced" open><summary><span>高级创意设置</span><span class="creative-advanced-copy">'+(state.mode==="真人口播带货"?"人物、表达与场景":state.mode==="好物推荐"?"卖点、比较与展示":"情绪、影像与叙事")+'</span></summary><div class="creative-advanced-fields">'+advancedFilters+'</div></details><div class="creative-action-row"><button class="primary full creative-primary" data-action="generate-creative-director" '+(state.directorLoading?"":!sh.title?"disabled":"")+(state.storyboardReady?' style="background:var(--green);border-color:var(--green)"':"")+'>'+(state.directorLoading?(state.generationStep==="script"?"⏳ 第1步 生成脚本…":"⏳ 第2步 拆解分镜…"):state.storyboardReady?"✅ 生成完成！进入摄影摄像 →":"生成分镜脚本 →")+'</button><button class="secondary creative-back" data-stage="0" aria-label="返回产品简报" title="返回产品简报">←</button></div></section>';
   var lower="";
@@ -244,32 +361,80 @@ function mergedCreativeStage(){
   return H("02 / 编剧导演","编剧导演","选择创意方向并生成完整脚本与可拍摄分镜。","编剧导演")+upper+lower;
 }
 S1=mergedCreativeStage;
+function navigateToStage(stage){
+  state.stage=stage;
+  saveState();
+  render();
+  requestAnimationFrame(function(){window.scrollTo({top:0,behavior:"smooth"});});
+}
+// Keep navigation isolated from business action listeners added by later modules.
+document.addEventListener("click",function(event){
+  if(event.__adflowHandled)return;
+  var stageButton=event.target&&event.target.closest&&event.target.closest("[data-stage]");
+  if(!stageButton)return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.__adflowHandled=true;
+  navigateToStage(Number(stageButton.dataset.stage));
+},true);
+document.addEventListener("click",function(event){
+  var confirmHook=event.target.closest('[data-action="confirm-hook"]');
+  var goVideo=event.target.closest('[data-action="go-video"]');
+  if(!confirmHook&&!goVideo)return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  event.__adflowHandled=true;
+  if(confirmHook){
+    var hook=(state.hooksList||[])[state.selectedHook]||{};
+    if(!hook.title){alert("请先选择一条 Hook");return;}
+    if(hook.plan_id)state.selectedPlanId=hook.plan_id;
+    navigateToStage(1);
+    return;
+  }
+  if(!state.storyboardReady&&!(state.storyboard||[]).length){alert("请先生成并确认分镜脚本");return;}
+  navigateToStage(3);
+},true);
 document.addEventListener("click",function(e){
-  var button=e.target.closest('[data-action="generate-creative-director"]');
+  var regenerate=e.target.closest('[data-action="regenerate-creative"]');
+  var button=e.target.closest('[data-action="generate-creative-director"]')||regenerate;
   if(!button||state.directorLoading)return;
   e.preventDefault();
+  e.stopPropagation();
+  e.__adflowHandled=true;
+  if(state.storyboardReady&&!regenerate){
+    e.stopImmediatePropagation();
+    navigateToStage(3);
+    return;
+  }
   (async function(){
     var hook=state.hooksList[state.selectedHook];
     if(!hook){alert("请先选择 Hook");return;}
     state.directorLoading=true;state.generationStep="script";state.scriptReady=false;state.storyboardReady=false;state.scriptText="";state.storyboard=[];state.storyboardSegments=[];render();
     try{
       var voiceType=(state.filterValues||{}).voice_type||"真人口播";
-      var common={product_record_id:state.productRecordId,product_brief:state.productBrief,hooks:state.hooksList,selected_hook:hook,hook:hook,marketing_goal:state.campaignTheme||"",platform:state.mode==="真人口播带货"?"抖音":state.mode==="好物推荐"?"小红书":"全平台",content_type:state.mode,language:state.language,duration:state.duration,creative_worldview:state.creativeWorldview||{},filter_values:state.filterValues||{},voice_type:voiceType,audio_type:voiceType,no_voice:voiceType==="纯音乐（无口播）"};
+      var selectedPlan=(state.creativePlans||[]).find(function(item){return item&&item.plan_id===state.selectedPlanId;})||{};
+      var selectedMood=(state.moodBoards||[]).find(function(item){return item&&item.mood_board_id===selectedPlan.mood_board_id;})||{};
+      var common={product_record_id:state.productRecordId,product_brief:state.productBrief,hooks:state.hooksList,selected_hook:hook,hook:hook,creative_plan:selectedPlan,selected_plan:selectedPlan,selected_mood_board:selectedMood,selected_plan_id:state.selectedPlanId||"",template_group_id:hook.template_group_id||selectedPlan.template_group_id||state.templateGroupId||"",content_subtype:hook.content_subtype||selectedPlan.content_subtype||state.contentSubtype||"",product_category:state.productCategory||"",director_instruction:state.directorInstruction||"",marketing_goal:state.campaignTheme||"",platform:state.mode==="真人口播带货"?"抖音":state.mode==="好物推荐"?"小红书":"全平台",content_type:state.mode,language:state.language,duration:state.duration,creative_worldview:state.creativeWorldview||{},filter_values:state.filterValues||{},voice_type:voiceType,audio_type:voiceType,no_voice:voiceType==="纯音乐（无口播）",resolution:state.resolution||"480p"};
       state.creativeBrief=buildCreativeBriefFallback(common);
-      var scriptResponse=await fetch("/api/fast/stage-2",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({},common,{creative_brief:state.creativeBrief,action:"generate_script_and_storyboard",filter_values:state.filterValues||{},voice_type:(state.filterValues||{}).voice_type||"真人口播",ad_type:(state.filterValues||{}).ad_type||""}))}).then(function(r){if(!r.ok)return fetch("/api/fast/stage-2",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({},common,{creative_brief:state.creativeBrief,action:"generate_script_and_storyboard"}))});return r;});
+      var scriptResponse=await fetch("/api/fast/stage-2",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({},common,{creative_brief:state.creativeBrief,action:"generate_script_and_storyboard",filter_values:state.filterValues||{},voice_type:(state.filterValues||{}).voice_type||"真人口播",ad_type:(state.filterValues||{}).ad_type||""}))});
       if(!scriptResponse.ok)throw new Error("脚本生成 HTTP "+scriptResponse.status);
       var scripted=await scriptResponse.json();
+      state.knowledgeTrace.stage2=scripted.knowledge_trace||{source:scripted.knowledge_source||"unknown",role:scripted.knowledge_role||"编剧导演",api_attempted:!!scripted.knowledge_triggered};
       state.scriptText=scripted.script_text||scripted.script||scripted.full_script||"";
+      state.scriptTextZh=scripted.script_text_zh||"";
+      state.directorInstruction=scripted.director_instruction||"";
       state.scriptSegments=Array.isArray(scripted.script_segments)?scripted.script_segments:[];
       if(!state.scriptText&&common.no_voice)state.scriptText="无口播。以纯音乐推进画面节奏，围绕「"+(hook.title||"产品核心卖点")+"」展示产品、使用场景与品牌落点。";
       if(!state.scriptText)throw new Error("脚本结果为空");
       state.scriptReady=true;saveState();state.generationStep="director";render();
-      var directorResponse=await fetch("/api/fast/stage-3",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({},common,{hook:hook,script_text:state.scriptText,script_segments:state.scriptSegments,creative_brief:state.creativeBrief,creator_profile:state.creatorProfile||""}))});
+      var directorResponse=await fetch("/api/fast/stage-3",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({},common,{hook:hook,script_text:state.scriptText,script_segments:state.scriptSegments||[],duration:state.duration,filter_values:state.filterValues||{},creative_plan:common.creative_plan,director_instruction:state.directorInstruction||"",resolution:state.resolution||"480p"}))});
       if(!directorResponse.ok)throw new Error("导演分镜 HTTP "+directorResponse.status);
       var directed=await directorResponse.json();
+      state.knowledgeTrace.stage3=directed.knowledge_trace||{source:directed.knowledge_source||"unknown",role:directed.knowledge_role||"摄影摄像",api_attempted:!!directed.knowledge_triggered};
       state.directorNotes=directed.director_notes||{};
       state.storyboard=Array.isArray(directed.storyboard)?directed.storyboard:[];
-      state.storyboardSegments=Array.isArray(directed.segments)?directed.segments:[];
+      state.storyboardSegments=Array.isArray(directed.segments)&&directed.segments.length?directed.segments:[{index:1,start:0,end:state.duration,script_text:state.scriptText,storyboard:state.storyboard}];
       state.videoTaskId=directed.video_task_id||directed.task_id||"";
       state.storyboardReady=state.storyboard.length>0||state.storyboardSegments.length>0;saveState();
       if(!state.storyboardReady)throw new Error("分镜结果为空");
@@ -311,8 +476,8 @@ S0=function(){
   if(state.productSource==="document"){
     html=html.replace(/<label class="field"><span>Product URL[\s\S]*?<\/label>/,documentInputBlock());
     html=html.replace(/data-action="fetch"/g,'data-action="fetch-document"');
-    html=html.replace(/抓取并生成简报/g,"解析并生成简报").replace(/重新抓取 ↻/g,"重新解析 ↻");
-    html=html.replace("粘贴产品链接后点击「抓取并生成简报」。","上传产品资料后点击「解析并生成简报」。");
+    html=html.replace(/生成简报与 Hook/g,"解析并生成简报").replace(/重新生成 ↻/g,"重新解析 ↻");
+    html=html.replace("粘贴产品链接后点击「生成简报与 Hook」。","上传产品资料后点击「解析并生成简报」。");
     html=html.replace("系统正在读取商品页面","系统正在读取产品资料").replace("01 · 抓取产品页面","01 · 解析产品资料");
   }
   return html;
@@ -334,7 +499,7 @@ function storyboardReferencePanel(){
   var script=state.scriptText||"";
   var scriptPreview=script?'<details class="script-toggle" open style="margin-bottom:14px;margin-top:6px"><summary><span>📝 视频脚本</span><small>点击收起</small></summary><div class="script-copy" style="max-height:200px;overflow-y:auto;font-size:12px;line-height:1.6">'+esc(script)+'</div></details>':'<div class="notice" style="margin-bottom:14px;font-size:11px;color:var(--muted)">📝 尚未生成脚本，先在 Stage 2 生成分镜脚本。</div>';
   var image=images[0]||"",hasImage=!!image;
-  var preview=hasImage?'<figure class="storyboard-sheet image-zoom-target" tabindex="0" role="button" data-preview-image="'+esc(image)+'" data-preview-caption="9:16 分镜多宫格"><img src="'+esc(image)+'" alt="9:16 分镜多宫格"><span>9:16 分镜多宫格</span></figure>':state.loadingImage?'<div class="empty" style="width:min(100%,360px);margin:0 auto;aspect-ratio:9/16;display:grid;place-items:center"><div style="text-align:center"><div class="video-spinner" style="border-color:#dfe5ef;border-top-color:var(--blue);margin:0 auto 18px;width:56px;height:56px;border-width:5px"></div><strong style="font-size:16px;display:block">'+esc(state.loadingMsg||"AI 正在生成 9:16 分镜多宫格")+'</strong><p style="margin:8px 0 0;color:var(--muted);font-size:11px">Seedream 正在渲染中，请稍候</p></div></div>':'<div class="empty" style="width:min(100%,360px);margin:18px auto 0;aspect-ratio:9/16"><div><strong>9:16 分镜多宫格</strong><p>所有镜头会排在同一张竖版图片中。</p></div></div>';
+  var preview=hasImage?'<figure class="storyboard-sheet image-zoom-target" tabindex="0" role="button" data-preview-image="'+esc(image)+'" data-preview-caption="9:16 分镜多宫格"><img src="'+esc(image)+'" alt="9:16 分镜多宫格"><span>9:16 分镜多宫格</span></figure>':state.loadingImage?'<div class="empty" style="width:min(100%,360px);margin:0 auto;aspect-ratio:9/16;display:grid;place-items:center"><div style="text-align:center"><div class="video-spinner" style="border-color:#dfe5ef;border-top-color:var(--blue);margin:0 auto 18px;width:56px;height:56px;border-width:5px"></div><strong style="font-size:16px;display:block">'+esc(state.loadingMsg||"AI 正在生成 9:16 分镜多宫格")+'</strong><p style="margin:8px 0 0;color:var(--muted);font-size:11px">Nano Banana Pro 正在渲染，请稍候</p></div></div>':'<div class="empty" style="width:min(100%,360px);margin:18px auto 0;aspect-ratio:9/16"><div><strong>9:16 分镜多宫格</strong><p>所有镜头会排在同一张竖版图片中。</p></div></div>';
   return'<section class="panel storyboard-reference-panel"><div class="result-head"><div><span class="result-label">STORYBOARD / 拍摄参考</span><h2>分镜图</h2></div><span class="pill '+(hasImage?"ready":"")+'">'+(hasImage?"已生成":(sb.length||0)+" 镜头")+'</span></div>'+scriptPreview+preview+'<button class="primary full" data-action="gen-sb-image" style="margin-top:14px;background:var(--blue);border-color:var(--blue)" '+(state.loadingImage?"disabled":"")+'>'+(state.loadingImage?"⏳ 正在生成分镜图…":hasImage?"🔄 重新生成分镜图":"🎨 生成分镜图")+'</button></section>';
 }
 function videoConsolePanel(){
@@ -348,7 +513,7 @@ function videoConsolePanel(){
   var waitingPanel='<div class="video-wait"><div class="video-wait-inner"><div class="video-wait-orbit"><i></i></div><h3>正在生成视频成片</h3><p class="video-wait-copy">'+esc(state.loadingMsg||"系统正在按照分镜、角色与声音配置生成成片")+'</p><span class="video-wait-time">已等待 '+elapsedText+'</span><div class="video-wait-steps">'+waitSteps+'</div><span class="video-return-note">生成通常需要数分钟，请保持页面开启；返回后会自动替换为视频播放器。</span></div></div>';
   var outputCards=outputUrl?'<article class="video-output-card"><div class="video-frame"><video src="'+esc(outputUrl)+'" controls playsinline preload="metadata"></video></div><div class="video-output-meta"><small>成片基础资料</small><div class="video-config-list"><div class="video-config-row"><span>产品</span><strong>'+esc(product)+'</strong></div><div class="video-config-row"><span>核心 Hook</span><strong>'+esc(sh.title||"—")+'</strong></div><div class="video-config-row"><span>时长</span><strong>'+duration+' 秒 · '+totalSegments+' 段生成</strong></div></div></div></article>':working?'<article class="video-output-card">'+waitingPanel+'</article>':'<article class="video-output-card"><div class="video-frame"><div class="video-frame-empty"><div class="video-frame-empty-inner"><span class="video-frame-mark">▶</span><strong>'+(state.videoError?"生成未完成":"成片预览")+'</strong><p>'+esc(state.videoError||"生成后将在这里显示一段视频")+'</p></div></div></div><div class="video-output-meta"><small>成片基础资料</small><div class="video-config-list"><div class="video-config-row"><span>产品</span><strong>'+esc(product)+'</strong></div><div class="video-config-row"><span>核心 Hook</span><strong>'+esc(sh.title||"—")+'</strong></div><div class="video-config-row"><span>时长</span><strong>'+duration+' 秒 · '+totalSegments+' 段生成</strong></div></div></div></article>';
   var allSegmentsReady=segments.length>0&&segments.every(function(segment){return segment.video_url||segment.url;}),primaryAction=allSegmentsReady&&!complete?"concat-video":"gen-video",primaryText=working?(state.generationStep==="submit"?"⏳ 提交中…":"⏳ 渲染中…"):allSegmentsReady&&!complete?"合成完整成片":complete?"🔄 重新生成":"生成视频";
-  return'<section class="panel video-console"><div class="video-console-head"><div><span class="result-label">VIDEO OUTPUT / 成片</span><h2>视频生成台</h2></div><span class="video-status '+statusClass+'"><i class="video-status-dot"></i>'+statusText+'</span></div><div class="video-output-list">'+outputCards+'</div><div class="video-console-actions"><button class="primary" data-action="'+primaryAction+'" '+(working?"disabled":"")+'>'+primaryText+' →</button><button class="secondary" data-action="download" '+(complete?"":"disabled")+'>下载成片</button></div><button class="secondary full video-console-back" data-stage="1">← 返回分镜脚本</button></section>';
+  return'<section class="panel video-console"><div class="video-console-head"><div><span class="result-label">VIDEO OUTPUT / 成片</span><h2>视频生成台</h2></div><span class="video-status '+statusClass+'"><i class="video-status-dot"></i>'+statusText+'</span></div><div class="video-output-list">'+outputCards+'</div><div class="video-console-actions"><button class="primary" data-action="'+primaryAction+'" '+(working?"disabled":"")+'>'+primaryText+' →</button><button class="secondary" data-stage="4" '+(complete?"":"disabled")+'>进入后期剪辑</button><button class="secondary" data-action="download" '+(complete?"":"disabled")+'>下载成片</button></div><button class="secondary full video-console-back" data-stage="1">← 返回分镜脚本</button></section>';
 }
 S3=function(){
   return H("03 / 摄影摄像","影像生成与成片","确认角色形象后，读取分镜与脚本生成可连续回写的视频成片。","摄影摄像")+'<div class="media-reference-row">'+storyboardReferencePanel()+characterSetupPanel()+'</div><div style="margin-top:16px">'+videoConsolePanel()+'</div>';
@@ -387,7 +552,7 @@ function collectVideoObjects(payload,items,depth){
   ["json","body","data","output","result","response"].forEach(function(key){
     if(payload[key]!=null)collectVideoObjects(payload[key],items,depth+1);
   });
-  ["segments","video_segments","videoSegments","items"].forEach(function(key){
+  ["segments","video_segments","videoSegments","items","videos","video_results","videoResults","results","resultUrls","result_urls","fullResultUrls","full_result_urls","urls","media","files"].forEach(function(key){
     if(payload[key]!=null)collectVideoObjects(payload[key],items,depth+1);
   });
   return items;
@@ -406,8 +571,9 @@ function videoUrlFromPayload(payload){
 function videoSegmentsFromPayload(payload){
   var objects=collectVideoObjects(payload,[],0),segments=[];
   for(var i=0;i<objects.length&&!segments.length;i++){
-    segments=objects[i].segments||objects[i].video_segments||objects[i].videoSegments||[];
+    segments=objects[i].segments||objects[i].video_segments||objects[i].videoSegments||objects[i].videos||objects[i].video_results||objects[i].videoResults||[];
   }
+  if(!Array.isArray(segments)||!segments.length){var urls=[];objects.forEach(function(o){["resultUrls","result_urls","fullResultUrls","full_result_urls","urls"].forEach(function(key){if(Array.isArray(o[key]))urls=urls.concat(o[key]);});});segments=urls;}
   return Array.isArray(segments)?segments.map(function(segment,index){
     var item=unwrapVideoPayload(segment),url=videoUrlFromPayload(item);
     return Object.assign({},item,{segment_index:item.segment_index||item.index||index+1,video_url:url||item.video_url||"",url:url||item.url||""});
@@ -426,7 +592,7 @@ document.addEventListener("click",function(event){
   var button=event.target.closest('[data-action="gen-video"]');
   if(!button)return;
   event.preventDefault();
-  event.stopImmediatePropagation();
+  event.stopPropagation();event.__adflowHandled=true;
   if(state.videoLoading)return;
   var flatStoryboard=Array.isArray(state.storyboard)&&state.storyboard.length
     ? state.storyboard
@@ -455,22 +621,28 @@ document.addEventListener("click",function(event){
         product_record_id:state.productRecordId,
         product_brief:state.productBrief,
         hook:state.hooksList[state.selectedHook]||{},
+        creative_plan:(state.creativePlans||[]).find(function(item){return item&&item.plan_id===state.selectedPlanId;})||{},
+        selected_mood_board:(state.moodBoards||[]).find(function(item){var plan=(state.creativePlans||[]).find(function(candidate){return candidate&&candidate.plan_id===state.selectedPlanId;})||{};return item&&item.mood_board_id===plan.mood_board_id;})||{},
+        selected_plan_id:state.selectedPlanId||"",
+        director_instruction:state.directorInstruction||"",
         script_text:state.scriptText,
         script_segments:state.scriptSegments||[],
         language:state.language,
         content_type:state.mode,
         storyboard:flatStoryboard,
         segments:state.storyboardSegments||[],
+        product_image_url:state.productImage||"",
         product_images:(state.productImages||[]).map(function(item){return item.url||item;}),
         character_image:state.characterImage||"",
         character_profile:{type:state.characterType||"",description:state.characterDescription||state.creatorProfile||""},
         storyboard_images:state.storyboardImages||[],
         storyboard_image:state.storyboardImage||"",
         filter_values:state.filterValues||{},
+        resolution:state.resolution||"480p",
         duration:state.duration
       }),signal:state._videoAbortController.signal});
       state.generationStep="polling";
-      state.loadingMsg="Seedance 正在渲染视频…";
+      state.loadingMsg=/^(英文|english|en)$/i.test(String(state.language||""))?"Veo 3.1 正在生成英文视频…":"Seedance 正在渲染中文视频…";
       render();
       var responseText=await response.text(),payload={};
       try{payload=responseText?JSON.parse(responseText):{};}catch(error){throw new Error("后端返回的不是 JSON："+responseText.slice(0,120));}
@@ -503,7 +675,7 @@ document.addEventListener("click",function(event){
   var button=event.target.closest('[data-action="cancel-generation"]');
   if(!button||!state.videoLoading)return;
   event.preventDefault();
-  event.stopImmediatePropagation();
+  event.stopPropagation();event.__adflowHandled=true;
   if(state._videoAbortController)state._videoAbortController.abort();
   state.videoLoading=false;
   state.videoStartedAt=0;
@@ -541,7 +713,7 @@ S0=function(){
   if(!state.stage1Loading)return html;
   var step=Math.max(0,Math.min(2,Number(state.stage1ProgressStep)||0));
   var sourceLabel=state.productSource==="document"?"读取产品资料":"抓取产品页面";
-  var labels=[sourceLabel,"分析产品信息","生成简报与 Hook"];
+  var labels=[sourceLabel,"分析产品信息","生成产品简报 + Mood Board + Hook"];
   var steps=labels.map(function(label,index){
     var className=index<step?"stage-done":index===step?"stage-current":"";
     return'<div class="wait-step '+className+'">0'+(index+1)+' · '+label+'</div>';
@@ -559,14 +731,62 @@ function readAsDataUrl(file){
     reader.readAsDataURL(file);
   });
 }
+function hasVisualValue(value){
+  if(Array.isArray(value))return value.some(function(item){return String(item||"").trim();});
+  if(value&&typeof value==="object")return Object.values(value).some(function(item){return hasVisualValue(item);});
+  return String(value||"").trim().length>0;
+}
+function hasVisualBoardList(list){
+  var keys=["palette","lighting","materials","scene_grammar","character_state","camera_language"];
+  return (Array.isArray(list)?list:[]).some(function(item){return item&&keys.some(function(key){return hasVisualValue(item[key]);});});
+}
+function normalizeStageOnePayload(data){
+  var value=data;
+  if(Array.isArray(value)){
+    var item=value.find(function(entry){return entry&&entry.json;})||value[value.length-1]||{};
+    value=item&&item.json?item.json:item;
+  }
+  if(value&&typeof value.data==="object"&&!value.product_brief&&!value.productBrief)value=value.data;
+  if(value&&typeof value.output==="object"&&!value.product_brief&&!value.productBrief)value=value.output;
+  if(value&&typeof value.result==="object"&&!value.product_brief&&!value.productBrief)value=value.result;
+  return value&&typeof value==="object"?value:{};
+}
 function applyStageOneResult(data){
+  data=normalizeStageOnePayload(data);
+  if(data.ok===false)throw new Error(data.message||data.error||"Stage 1 返回失败");
   state.productRecordId=data.product_record_id||"";
+  state.knowledgeTrace=state.knowledgeTrace||{};
+  state.knowledgeTrace.stage1=data.knowledge_trace||{source:data.knowledge_source||"unknown",role:data.knowledge_role||"广告策划",api_attempted:!!data.knowledge_triggered};
+  state.pipelineTrace=data.pipeline_trace||{};
   state.productBrief=data.product_brief||data.brief||null;
-  state.hooksList=Array.isArray(data.hooks)?data.hooks:Array.isArray(data.hooks_list)?data.hooks_list:[];
+  state.creativePlans=Array.isArray(data.creative_plans)?data.creative_plans:(Array.isArray(data.creativePlans)?data.creativePlans:[]);
+  state.moodBoards=Array.isArray(data.mood_boards)?data.mood_boards:(Array.isArray(data.moodBoards)?data.moodBoards:[]);
+  state.selectedPlanId=data.recommended_plan_id||data.recommendedPlanId||((state.creativePlans[0]||{}).plan_id||"");
+  state.templateGroupId=data.template_group_id||state.templateGroupId||"";
+  state.contentSubtype=data.content_subtype||state.contentSubtype||"";
+  state.productCategory=data.product_category||state.productCategory||"";
+  state.hooksList=Array.isArray(data.hooks)?data.hooks:(Array.isArray(data.hooks_list)?data.hooks_list:[]);
+  if(state.creativePlans.length&&!state.hooksList.length){
+    state.hooksList=state.creativePlans.map(function(plan,index){
+      var emotion=plan.emotion_direction;
+      if(emotion&&typeof emotion==="object")emotion=emotion.primary||emotion.start||"";
+      return {title:plan.title||("创意方案 "+(index+1)),hook:plan.core_hook||plan.hook||plan.slogan||"",hook_zh:plan.core_hook_zh||plan.hook_zh||"",category:plan.category||"完整创意方案",description:plan.director_guidance||plan.mood_board||"",emotion:emotion||"",score:plan.score||0,plan_id:plan.plan_id||("plan-"+(index+1))};
+    });
+    var selectedIndex=state.creativePlans.findIndex(function(plan){return plan&&plan.plan_id===state.selectedPlanId;});
+    state.selectedHook=selectedIndex>=0?selectedIndex:0;
+  }
   state.productImage=data.product_main_image_url||data.product_image||"";
-  if(!state.productBrief||!state.hooksList.length)throw new Error("n8n 未返回有效的产品简报与 Hook");
+  var hasVisualBoard=hasVisualBoardList(state.moodBoards);
+  var missing=[];
+  if(!state.productBrief)missing.push("产品简报");
+  if(!state.creativePlans.length)missing.push("创意方案池");
+  if(!state.moodBoards.length)missing.push("Mood Board");
+  else if(!hasVisualBoard)missing.push("Mood Board 视觉字段");
+  if(missing.length){
+    var returned=Object.keys(data||{}).join(", ")||"无";
+    throw new Error("Stage 1 返回结构不完整，缺少："+missing.join("、")+"；返回字段："+returned+"。请重启 Python 服务后重试");
+  }
   state.productReady=true;
-  state.selectedHook=0;
   state.creativeWorldview={};
 }
 document.addEventListener("click",function(event){
@@ -606,7 +826,7 @@ document.addEventListener("click",function(event){
   var documentButton=event.target.closest('[data-action="fetch-document"]');
   if(documentButton){
     event.preventDefault();
-    event.stopImmediatePropagation();
+    event.stopPropagation();event.__adflowHandled=true;
     if(state.stage1Loading)return;
     if(!state.productDocuments.length){alert("请先上传产品资料");return;}
     (async function(){
@@ -623,7 +843,7 @@ document.addEventListener("click",function(event){
           file.extracted=true;
         }
         state.documentStatus="generating";render();
-        var workflowResponse=await fetch("/api/workflow/stage-1/document",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({source_type:"document",documents:extracted,document_text:extracted.map(function(item){return"【"+item.name+"】\n"+item.text;}).join("\n\n"),document_images:embeddedImages.map(function(image){return image.dataUrl;}),language:state.language,content_type:state.mode,campaign_theme:state.campaignTheme,product_images:(state.productImages||[]).map(function(item){return item.url||item;})})});
+        var workflowResponse=await fetch("/api/fast/stage-1",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({source_type:"document",documents:extracted,document_text:extracted.map(function(item){return"【"+item.name+"】\n"+item.text;}).join("\n\n"),document_images:embeddedImages.map(function(image){return image.dataUrl;}),language:state.language,content_type:state.mode,campaign_theme:state.campaignTheme,product_images:(state.productImages||[]).map(function(item){return item.url||item;}),filter_values:state.filterValues||{},resolution:state.resolution||"480p"})});
         var responseText=await workflowResponse.text(),data={};
         try{data=responseText?JSON.parse(responseText):{};}catch(error){data={message:responseText};}
         if(!workflowResponse.ok)throw new Error(data.message||data.error||("HTTP "+workflowResponse.status));
@@ -636,12 +856,12 @@ document.addEventListener("click",function(event){
   var generateCharacter=event.target.closest('[data-action="generate-character"]');
   if(generateCharacter){
     event.preventDefault();
-    event.stopImmediatePropagation();
+    event.stopPropagation();event.__adflowHandled=true;
     if(state.characterLoading||!state.characterDescription.trim())return;
     (async function(){
       state.characterLoading=true;state.creatorProfile=state.characterDescription;render();
       try{
-        var response=await fetch("/api/workflow/stage-5",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"generate_character_reference",image_task:"character_reference",character_type:state.characterType,character_description:state.characterDescription,character_reference_images:state.characterReferenceImages.map(function(item){return item.dataUrl||item.url||item;}),product_brief:state.productBrief,content_type:state.mode,filter_values:state.filterValues,storyboard:[{time:"reference",visual:state.characterDescription,camera_movement:"正面人物设定图，清晰展示面部、发型、服装与角色气质"}]})});
+        var response=await fetch("/api/workflow/stage-5",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"generate_character_reference",image_task:"character_reference",character_type:state.characterType,character_description:state.characterDescription,character_reference_images:state.characterReferenceImages.map(function(item){return item.dataUrl||item.url||item;}),product_brief:state.productBrief,product_images:(state.productImages||[]).map(function(i){var u=i.url||i;return typeof u==="string"&&u.startsWith("https://")?u:null;}).filter(Boolean),content_type:state.mode,filter_values:state.filterValues,storyboard:[{time:"reference",visual:state.characterDescription,camera_movement:"正面人物设定图，清晰展示面部、发型、服装与角色气质"}]})});
         var text=await response.text(),data={};
         try{data=text?JSON.parse(text):{};}catch(error){throw new Error("图片接口返回格式异常");}
         if(!response.ok)throw new Error(data.message||data.error||("HTTP "+response.status));
@@ -704,9 +924,159 @@ document.addEventListener("keydown",function(event){
   if(preview&&(event.key==="Enter"||event.key===" ")){event.preventDefault();openImageLightbox(preview);}
   if(event.key==="Escape")closeImageLightbox();
 });
+if(!("editingLoading" in state))state.editingLoading=false;
+if(!("editingResultUrl" in state))state.editingResultUrl="";
+if(!("editingDownloadUrl" in state))state.editingDownloadUrl="";
+if(!("editingError" in state))state.editingError="";
+if(!("editingResolution" in state))state.editingResolution="1080p";
+if(!("editingVoiceoverType" in state))state.editingVoiceoverType="script";
+if(!("editingMusicDataUrl" in state))state.editingMusicDataUrl="";
+if(!("editingMusicName" in state))state.editingMusicName="";
+if(!("editingMusicVolume" in state))state.editingMusicVolume=.2;
+if(!("editingSubtitlesEnabled" in state))state.editingSubtitlesEnabled=false;
+if(!("editingSubtitleText" in state))state.editingSubtitleText="";
+if(!("editingEnhance" in state))state.editingEnhance=false;
+
+(function(){
+  var style=document.createElement("style");
+  style.textContent=`
+    .editing-workbench{display:grid;grid-template-columns:minmax(300px,.9fr) minmax(420px,1.1fr);border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+    .editing-preview{padding:30px;background:#f5f6f8;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:18px}
+    .editing-screen{background:#111217;aspect-ratio:9/16;max-height:540px;width:min(100%,304px);margin:auto;border-radius:8px;overflow:hidden;display:grid;place-items:center;color:#fff;box-shadow:0 18px 40px rgba(17,18,23,.12)}
+    .editing-screen video{width:100%;height:100%;object-fit:contain;background:#111217}
+    .editing-empty{text-align:center;padding:24px;color:#b6b8c1}.editing-empty strong{display:block;color:#fff;font-size:18px;margin-bottom:8px}
+    .editing-controls{padding:38px;display:flex;flex-direction:column;min-height:100%}.enhance-intro{padding-bottom:26px;border-bottom:1px solid var(--line)}
+    .enhance-intro .result-label{display:block;margin-bottom:12px}.enhance-intro h2{font-size:28px;margin:0 0 12px}.enhance-intro p{margin:0;color:var(--muted);font-size:13px;line-height:1.8}
+    .enhance-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 0}.enhance-flow div{padding:15px;border:1px solid var(--line);border-radius:8px;background:#fafbfc}.enhance-flow span{display:block;color:var(--blue);font-size:11px;font-weight:800;margin-bottom:7px}.enhance-flow strong{font-size:13px}
+    .editing-status{padding:14px 16px;border-radius:8px;background:var(--blue-soft);color:var(--blue);font-size:12px;margin-bottom:18px}.editing-status.error{background:#fff1f1;color:#b42318}
+    .editing-section{padding:20px 0;border-bottom:1px solid var(--line)}.editing-section-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:12px}.editing-section-head strong{font-size:15px}.editing-section-head span{color:var(--muted);font-size:12px}.voiceover-options{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.voiceover-option{position:relative}.voiceover-option input{position:absolute;opacity:0;pointer-events:none}.voiceover-option span{display:flex;align-items:center;min-height:42px;padding:0 13px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:13px;font-weight:700;cursor:pointer}.voiceover-option input:checked+span{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}.editing-file{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px dashed var(--line);border-radius:8px;padding:12px 14px;font-size:13px}.editing-file label{color:var(--blue);font-weight:750;cursor:pointer}.editing-file input{display:none}.editing-file span{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.editing-check{display:flex;gap:10px;align-items:center;font-size:13px;font-weight:700}.editing-check input{accent-color:var(--blue)}.editing-textarea{width:100%;min-height:64px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:12px;line-height:1.6}.editing-volume{width:100%;accent-color:var(--blue)}
+    .editing-actions-wrap{margin-top:auto;padding-top:28px;border-top:1px solid var(--line)}.resolution-label{display:block;font-size:12px;font-weight:750;margin-bottom:10px}.resolution-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+    .resolution-option{position:relative}.resolution-option input{position:absolute;opacity:0;pointer-events:none}.resolution-option span{display:grid;place-items:center;min-height:48px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:13px;font-weight:750;cursor:pointer;transition:.18s ease}.resolution-option input:checked+span{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+    .editing-actions{display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:10px}.editing-actions .primary,.editing-actions .secondary{min-height:52px}
+    @media(max-width:1000px){.editing-workbench{grid-template-columns:1fr}.editing-preview{border-right:0;border-bottom:1px solid var(--line)}.editing-screen{max-height:480px}.editing-controls{padding:28px}.enhance-flow{grid-template-columns:1fr}}
+  `;
+  document.head.appendChild(style);
+})();
+
+function S4(){
+  var source=state.editingResultUrl||state.videoResultUrl||"";
+  var product=state.productBrief||{},hook=state.hooksList[state.selectedHook]||{};
+  var preview=source?'<video src="'+esc(source)+'" controls playsinline></video>':'<div class="editing-empty"><strong>等待成片</strong><span>先在摄影摄像阶段生成视频，再进入后期处理。</span></div>';
+  var status=state.editingLoading?'<div class="editing-status">正在自动剪辑、处理声音与配乐'+(state.editingEnhance?'，并进行 Topaz 画质增强':'')+'，请保持页面打开。</div>':state.editingError?'<div class="editing-status error">'+esc(state.editingError)+'</div>':state.editingResultUrl?'<div class="editing-status">后期成片已完成，可预览或下载。</div>':"";
+  var resolutionOptions=["1080p","2K","4K"].map(function(value){var key=value.toLowerCase();return'<label class="resolution-option"><input type="radio" name="editing-resolution" value="'+key+'" '+(String(state.editingResolution).toLowerCase()===key?'checked':'')+'><span>'+value+'</span></label>';}).join("");
+  var voiceOptions=[['script','沿用脚本配音'],['music','纯音乐（无口播）']].map(function(item){return'<label class="voiceover-option"><input type="radio" name="editing-voiceover" value="'+item[0]+'" '+(state.editingVoiceoverType===item[0]?'checked':'')+'><span>'+item[1]+'</span></label>';}).join("");
+  var musicLabel=state.editingMusicName?esc(state.editingMusicName):'可选：上传品牌音乐或背景音乐';
+  var subtitle=state.editingSubtitleText||state.scriptText||'';
+  return H("04 / 后期剪辑","后期剪辑","对完整成片进行自动化后期处理，并可使用 Topaz AI 提升画质后交付。","后期剪辑")+
+  '<section class="editing-workbench"><div class="editing-preview"><div class="editing-screen">'+preview+'</div><div class="summary"><div class="summary-row"><span>产品</span><strong>'+esc(product.product_name||product["产品名称"]||"—")+'</strong></div><div class="summary-row"><span>核心 Hook</span><strong>'+esc(hook.title||"—")+'</strong></div><div class="summary-row"><span>源时长</span><strong>'+esc(state.duration||15)+' 秒</strong></div></div></div>'+
+  '<div class="editing-controls"><div class="enhance-intro"><span class="result-label">POST / AUTOMATED EDITING</span><h2>自动化后期工作台</h2><p>自动完成成片整理、配音方案、配乐与字幕处理，不显示手动裁剪时长控件。</p></div><div class="enhance-flow"><div><span>01</span><strong>自动剪辑</strong></div><div><span>02</span><strong>配音与配乐</strong></div><div><span>03</span><strong>高清交付</strong></div></div><div class="editing-section"><div class="editing-section-head"><strong>声音</strong><span>沿用脚本声音方案</span></div><div class="voiceover-options">'+voiceOptions+'</div></div><div class="editing-section"><div class="editing-section-head"><strong>配乐</strong><span>可选</span></div><div class="editing-file"><span>'+musicLabel+'</span><label>上传音乐<input id="editing-music-input" type="file" accept="audio/*"></label></div><div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-top:8px"><input id="editing-music-prompt" type="text" placeholder="AI 配乐：输入风格，如「轻快夏日电子」" style="min-height:36px;border:1px solid var(--line);border-radius:7px;padding:0 10px;font:inherit;font-size:12px"><button class="secondary" data-action="generate-music" style="white-space:nowrap;min-height:36px">🎵 AI 生成</button><button class="secondary" data-action="auto-music" style="white-space:nowrap;min-height:36px" title="根据产品自动推断配乐风格">🤖 智能配乐</button></div><input class="editing-volume" id="editing-music-volume" type="range" min="0" max="1" step="0.05" value="'+String(state.editingMusicVolume||.2)+'" aria-label="配乐音量"></div><div class="editing-section"><div class="editing-section-head"><strong>字幕</strong><span>可选</span></div><label class="editing-check"><input id="editing-subtitles-enabled" type="checkbox" '+(state.editingSubtitlesEnabled?'checked':'')+'>自动生成字幕</label><textarea class="editing-textarea" id="editing-subtitle-text" placeholder="可留空，默认使用视频脚本">'+esc(subtitle)+'</textarea><button class="secondary" data-action="align-subtitles" style="margin-top:8px;width:100%" '+(source?'':'disabled')+'>🎙️ AI 语音转字幕（whisper）</button></div>'+status+'<div class="editing-actions-wrap"><label class="editing-check"><input id="editing-enhance" type="checkbox" '+(state.editingEnhance?'checked':'')+'> 画质增强（lanczos → 1080p/2K/4K，免费）</label><span class="resolution-label">目标分辨率</span><div class="resolution-options">'+resolutionOptions+'</div><div class="editing-actions"><button class="primary" data-action="render-edit" '+(!state.videoResultUrl||state.editingLoading?"disabled":"")+'>'+(state.editingLoading?"处理中…":"生成后期成片 →")+'</button><button class="secondary" data-action="download-edit" '+(!(state.editingResultUrl||state.editingDownloadUrl)?"disabled":"")+'>下载</button></div></div></div></section>';
+}
+
+function syncEditingFields(){
+  var selected=document.querySelector('input[name="editing-resolution"]:checked');
+  if(selected)state.editingResolution=selected.value;
+  var voice=document.querySelector('input[name="editing-voiceover"]:checked');
+  if(voice)state.editingVoiceoverType=voice.value;
+  var volume=document.querySelector('#editing-music-volume');
+  if(volume)state.editingMusicVolume=Number(volume.value||.2);
+  var subtitles=document.querySelector('#editing-subtitles-enabled');
+  if(subtitles)state.editingSubtitlesEnabled=subtitles.checked;
+  var text=document.querySelector('#editing-subtitle-text');
+  if(text)state.editingSubtitleText=text.value;
+  var enhance=document.querySelector('#editing-enhance');
+  if(enhance)state.editingEnhance=enhance.checked;
+}
+document.addEventListener("change",function(event){
+  if(event.target.name==="editing-resolution"||event.target.name==="editing-voiceover"||event.target.id==="editing-music-volume"||event.target.id==="editing-subtitles-enabled"||event.target.id==="editing-enhance")syncEditingFields();
+  if(event.target.id==="editing-music-input"&&event.target.files&&event.target.files[0]){var reader=new FileReader();reader.onload=function(){state.editingMusicDataUrl=reader.result;state.editingMusicName=event.target.files[0].name;render();};reader.readAsDataURL(event.target.files[0]);}
+},true);
+document.addEventListener("input",function(event){if(/^editing-/.test(event.target.id||""))syncEditingFields();},true);
+document.addEventListener("click",function(event){
+  var action=event.target.closest("[data-action]");
+  if(!action)return;
+  if(action.dataset.action==="download-edit"){
+    if(state.editingDownloadUrl||state.editingResultUrl)window.open(state.editingDownloadUrl||state.editingResultUrl,"_blank");
+    return;
+  }
+  if(action.dataset.action==="auto-music"){
+    event.preventDefault();event.stopPropagation();
+    var pb=state.productBrief||{},pn=pb.product_name||pb["产品名称"]||"";
+    var hook=(state.hooksList[state.selectedHook]||{}).title||"";
+    var moodMap={"真人口播带货":"温暖轻快，日常感","好物推荐":"清新简约，科技感","高端TVC":"大气史诗，电影感"};
+    var mood=moodMap[state.mode]||"轻快现代";
+    var autoPrompt=mood+"，"+pn+"，短视频配乐";
+    if(hook)autoPrompt=hook+"，"+autoPrompt;
+    var inp=document.querySelector("#editing-music-prompt");
+    if(inp)inp.value=autoPrompt;
+    render();
+    return;
+  }
+  if(action.dataset.action==="generate-music"){
+    event.preventDefault();event.stopPropagation();
+    var prompt=document.querySelector("#editing-music-prompt")?.value?.trim()||"";
+    if(!prompt){alert("请输入音乐风格描述");return;}
+    state.editingLoading=true;state.editingError="";render();
+    (async function(){
+      try{
+        var r=await fetch("/api/providers/minimax/music",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt,instrumental:true,duration:state.duration||15})});
+        var d=await r.json();
+        if(!d.ok)throw new Error(d.message||d.error||"生成失败");
+        var musicResp=await fetch(d.music_url);
+        var blob=await musicResp.blob();
+        var reader=new FileReader();
+        reader.onload=function(){
+          state.editingMusicDataUrl=reader.result;
+          state.editingMusicName=prompt+" (AI)";
+          state.editingLoading=false;render();
+        };
+        reader.readAsDataURL(blob);
+      }catch(err){alert("AI 配乐失败："+err.message);state.editingLoading=false;render();}
+    })();
+    return;
+  }
+  if(action.dataset.action==="align-subtitles"){
+    event.preventDefault();event.stopPropagation();
+    var src=(state.editingResultUrl||state.videoResultUrl||"").trim();
+    if(!src){alert("请先生成视频，回到摄影摄像阶段先出片。");return;}
+    if(!/^https?:\/\//i.test(src)){src=window.location.origin+((src[0]==='/')?src:('/'+src));}
+    console.log("align-subtitles src:",src);
+    state.editingLoading=true;state.editingError="";render();
+    (async function(){
+      try{
+        var r=await fetch("/api/media/align-subtitles",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({source_video_url:src,script_text:state.editingSubtitleText||state.scriptText||""})});
+        var d=await r.json();
+        if(!d.ok)throw new Error((d.message||d.error||"校准失败")+" (src:"+src.slice(0,60)+")");
+        // Use whisper's own transcription text, not force-aligned to original script
+        state.editingSubtitleText=d.whisper_text||d.subtitles.map(function(s){return s.text.replace(/\\n/g," ");}).join(" ");
+        state.editingSubtitlesEnabled=true;
+        alert("✅ 字幕已校准！共 "+d.subtitle_count+" 条，时间轴与语音对齐。");
+      }catch(err){alert("校准失败："+err.message);}
+      state.editingLoading=false;render();
+    })();
+    return;
+  }
+  if(action.dataset.action!=="render-edit")return;
+  event.preventDefault();event.stopPropagation();event.__adflowHandled=true;
+  if(state.editingLoading||!state.videoResultUrl)return;
+  syncEditingFields();
+  (async function(){
+    state.editingLoading=true;state.editingError="";render();
+    try{
+      var editResponse=await fetch("/api/media/edit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({source_video_url:state.videoResultUrl,music_data_url:state.editingMusicDataUrl||"",music_volume:state.editingMusicVolume,subtitles_enabled:state.editingSubtitlesEnabled,subtitle_text:state.editingSubtitleText||state.scriptText||"",no_voice:state.editingVoiceoverType==="music",output_aspect:"source",enhance:state.editingEnhance?state.editingResolution:null,creative_context:{product:state.productBrief||{},hook:state.hooksList[state.selectedHook]||{},script:state.scriptText||""}})});
+      var editData=await editResponse.json();if(!editResponse.ok||!editData.ok)throw new Error(editData.message||editData.error||("HTTP "+editResponse.status));
+      var sourceUrl=editData.output_url;
+      state.editingDownloadUrl=sourceUrl;state.editingResultUrl=sourceUrl;state.editingError="";saveState();
+    }catch(error){state.editingError=error.message;}
+    state.editingLoading=false;render();
+  })();
+},true);
 function applyRecoveredVideo(payload, openVideoStage) {
-  if (!payload || !payload.video_url) return false;
-  state.videoResultUrl = payload.video_url;
+  if (!payload) return false;
+  var recoveredUrl = payload.video_url || payload.result_url || payload.videoUrl || payload.resultUrl || "";
+  var recoveredSegments = Array.isArray(payload.segments) ? payload.segments : [];
+  if (!recoveredUrl && !recoveredSegments.length) return false;
+  state.videoResultUrl = recoveredUrl || ((recoveredSegments[0] || {}).video_url || (recoveredSegments[0] || {}).url || "");
+  state.videoSegments = recoveredSegments;
   state.videoTaskId = payload.video_task_id || payload.task_id || state.videoTaskId || "";
   state.productRecordId = payload.product_record_id || state.productRecordId || "";
   state.duration = Number(payload.duration || state.duration || 15);
@@ -727,6 +1097,7 @@ function applyRecoveredVideo(payload, openVideoStage) {
   return true;
 }
 async function recoverLatestVideo() {
+  if (new URLSearchParams(window.location.search).get("demo") === "1") return false;
   var params = new URLSearchParams(window.location.search);
   var openLatest = params.get("recover") === "latest";
   var recovered = false;
@@ -735,6 +1106,9 @@ async function recoverLatestVideo() {
   } catch (error) {
     localStorage.removeItem("adflow_video_result");
   }
+  // Also recover automatically when the page is opened normally and the
+  // current browser state has no playable result. This avoids requiring a
+  // special query parameter after a webhook response was persisted.
   if (openLatest) {
     try {
       var response = await fetch("/api/video/latest", { cache: "no-store" });
@@ -745,106 +1119,414 @@ async function recoverLatestVideo() {
   }
   if (recovered) render();
 }
+var knowledgeFilterCache={};
+var knowledgeFilterLoading={};
+function filterIdsForMode(mode){
+  return mode==="真人口播带货"?["creator_vibe","speaking_style","use_scene"]:
+    mode==="好物推荐"?["selling_angle","compare_dim","visual_style"]:
+    ["emotion_tone","visual_lang","narrative"];
+}
+function applyKnowledgeFiltersToDom(){
+  var schema=knowledgeFilterCache[state.mode];
+  if(!schema||!Array.isArray(schema.filters))return;
+  var ids=filterIdsForMode(state.mode);
+  schema.filters.forEach(function(definition,index){
+    var id=definition.id||ids[index],select=document.querySelector("#f-"+id);
+    if(!select||document.activeElement===select)return;
+    var current=(state.filterValues||{})[id]||select.value||"";
+    var field=select.closest(".field"),label=field&&field.querySelector(":scope > span");
+    if(label)label.textContent=definition.label||label.textContent;
+    var options=['<option value="">全部类型</option>'].concat((definition.options||[]).map(function(value){
+      return'<option value="'+esc(value)+'"'+(value===current?' selected':'')+'>'+esc(value)+'</option>';
+    }));
+    var signature=JSON.stringify([definition.label,definition.options,current,schema.source]);
+    if(select.dataset.knowledgeSignature!==signature){
+      select.innerHTML=options.join("");
+      select.dataset.knowledgeSignature=signature;
+    }
+    select.dataset.knowledgeSource=schema.source||"fallback";
+  });
+}
+async function loadKnowledgeFilters(mode){
+  if(knowledgeFilterCache[mode]||knowledgeFilterLoading[mode])return;
+  knowledgeFilterLoading[mode]=true;
+  try{
+    var response=await fetch("/api/knowledge/filters?content_type="+encodeURIComponent(mode),{cache:"no-store"});
+    if(response.ok){
+      var data=await response.json();
+      if(data&&Array.isArray(data.filters))knowledgeFilterCache[mode]=data;
+    }
+  }catch(error){console.warn("飞书知识筛选器暂时不可用，使用本地配置。",error);}
+  knowledgeFilterLoading[mode]=false;
+  cancelAnimationFrame(_filterUpdateRaf);
+  _filterUpdateRaf=requestAnimationFrame(function(){
+    applyKnowledgeFiltersToDom();
+  });
+}
+var _filterUpdateRaf=0;
+var knowledgeObserver=new MutationObserver(function(){
+  try{
+  cancelAnimationFrame(_filterUpdateRaf);
+  _filterUpdateRaf=requestAnimationFrame(function(){
+    applyKnowledgeFiltersToDom();
+  });
+  loadKnowledgeFilters(state.mode);
+  }catch(e){}
+});
+knowledgeObserver.observe(document.querySelector("#app"),{childList:true,subtree:true});
 render();
+loadKnowledgeFilters(state.mode);
 recoverLatestVideo();
 </script>
 
 <script>
-/* Stage 1 的新契约以 creative_plans 为主；旧 Hook UI 继续作为兼容视图。 */
+/* Stage 1 的主数据是创意方案池；旧 Hook 卡片仍保留为兼容投影。 */
 (function(){
   state.moodBoards=Array.isArray(state.moodBoards)?state.moodBoards:[];
   state.creativePlans=Array.isArray(state.creativePlans)?state.creativePlans:[];
   state.selectedPlanId=state.selectedPlanId||"";
 
-  function planToHook(plan,index){
-    var emotion=plan&&plan.emotion_direction;
-    if(emotion&&typeof emotion==="object")emotion=emotion.primary||emotion.start||"";
-    return {
-      title:(plan&&plan.title)||("创意方案 "+(index+1)),
-      hook:(plan&&plan.core_hook)||(plan&&plan.slogan)||"从产品真实差异切入",
-      category:(plan&&plan.category)||"完整创意方案",
-      description:(plan&&plan.director_guidance)||(plan&&plan.mood_board)||"",
-      emotion:emotion||"",
-      score:(plan&&plan.score)||0,
-      plan_id:(plan&&plan.plan_id)||("plan-"+(index+1))
-    };
+  var originalRender=render;
+  render=function(){originalRender();if(state.stage===0)injectPastePanel();};
+  function injectPastePanel(){
+    if(document.querySelector("#bookmarklet-paste-panel"))return;
+    var ws=document.querySelector(".workspace");if(!ws||state.stage!==0)return;
+    var panel=ws.querySelector(".panel");if(!panel)return;
+    var div=document.createElement("div");
+    div.id="bookmarklet-paste-panel";
+    div.innerHTML='<details class="creative-advanced" style="margin-top:14px;border-color:var(--green)"><summary style="color:var(--green)">📋 粘贴商品信息（京东/淘宝/Amazon 全平台通用）</summary><div class="creative-advanced-fields" style="padding-top:12px"><div class="notice" style="background:#eefaf3;border-color:#b9e4ca;margin-bottom:12px"><strong>🔖 一键提取：</strong>复制下方代码 → 新建书签 → 粘贴为 URL → 打开任意电商页点书签 → 回到此处粘贴</div><textarea id="paste-inp" class="url-input" placeholder="点击上方书签提取商品信息后，粘贴到这里..." style="min-height:90px;font-size:11px">'+esc(state.pasteText||'')+'</textarea><div class="form-actions" style="margin-top:10px"><button class="primary" data-action="paste-fetch" style="grid-column:1/-1">📋 用粘贴信息生成简报 →</button></div></div></details>';
+    var fieldStack=panel.querySelector(".field-stack");
+    if(fieldStack)fieldStack.parentNode.insertBefore(div,fieldStack.nextSibling);
   }
-  function selectedPlan(){
-    var plans=state.creativePlans||[];
-    return plans.find(function(item){return item&&item.plan_id===state.selectedPlanId;})||plans[state.selectedHook]||{};
-  }
-  function applyCreativePayload(data){
-    if(!data||typeof data!=="object")return;
-    var plans=Array.isArray(data.creative_plans)?data.creative_plans:(Array.isArray(data.creativePlans)?data.creativePlans:[]);
-    var moods=Array.isArray(data.mood_boards)?data.mood_boards:(Array.isArray(data.moodBoards)?data.moodBoards:[]);
-    if(plans.length)state.creativePlans=plans;
-    if(moods.length)state.moodBoards=moods;
-    if(data.recommended_plan_id)state.selectedPlanId=data.recommended_plan_id;
-    if(!state.selectedPlanId&&state.creativePlans.length)state.selectedPlanId=state.creativePlans[0].plan_id||"";
-    var recommendedIndex=state.creativePlans.findIndex(function(item){return item&&item.plan_id===state.selectedPlanId;});
-    if(recommendedIndex>=0)state.selectedHook=recommendedIndex;
-    if(state.creativePlans.length&&!Array.isArray(data.hooks))state.hooksList=state.creativePlans.map(planToHook);
-    if(typeof saveState==="function")saveState();
-  }
+  /* Creative plan details are passed to Stage 2 and intentionally omitted from Stage 1 UI. */
+})();
+</script>
 
-  function renderPlanSummary(){
-    var old=document.querySelector("#creative-plan-pool-runtime");
-    if(old)old.remove();
-    if(state.stage!==0||!state.productReady||!(state.creativePlans||[]).length)return;
+
+<script>
+/* Stage 1 exposes the reusable knowledge route and carries it through the pipeline. */
+(function(){
+  state.resolution=state.resolution||"480p";
+  function invalidateStageOne(){
+    state.productReady=false;
+    state.productBrief=null;
+    state.hooksList=[];
+    state.creativePlans=[];
+    state.moodBoards=[];
+    state.selectedPlanId="";
+    state.selectedHook=0;
+  }
+  function syncSimpleRoute(){
+    if(state.mode==="高端TVC")return;
+    var route=routeDefaults(state.mode);
+    state.contentSubtype=route.subtype;
+    state.templateGroupId=route.group;
+  }
+  function installStageOneControls(){
+    if(state.stage!==0)return;
+    var mode=document.querySelector("#mode-sel");
+    if(!mode)return;
+    var field=mode.closest(".field");
+    if(!field||!field.parentNode)return;
+    syncSimpleRoute();
+    var cursor=field;
+    if(state.mode==="高端TVC"&&!document.querySelector("#stage1-route")){
+      var routeWrap=document.createElement("div");
+      routeWrap.id="stage1-route";
+      routeWrap.className="route-selector";
+      var options=Object.keys(TVC_ROUTES).map(function(key){var item=TVC_ROUTES[key];return'<button type="button" class="route-option '+(state.contentSubtype===key?'active':'')+'" data-route="'+esc(key)+'">'+esc(item.label)+'</button>';}).join("");
+      routeWrap.innerHTML='<span>高端 TVC 创作路线</span><div class="route-options">'+options+'</div>';
+      field.parentNode.insertBefore(routeWrap,field.nextSibling);
+      cursor=routeWrap;
+    }
+    if(!document.querySelector("#stage1-resolution")){
+      var resolutionWrap=document.createElement("label");
+      resolutionWrap.className="field";
+      resolutionWrap.innerHTML='<span>视频分辨率</span><select id="stage1-resolution"><option value="480p">480p</option><option value="720p">720p</option><option value="1080p">1080p</option></select>';
+      cursor.parentNode.insertBefore(resolutionWrap,cursor.nextSibling);
+      var select=resolutionWrap.querySelector("select");
+      select.value=state.resolution;
+      select.onchange=function(){state.resolution=select.value;state.resolutionTouched=true;saveState();};
+    }
+    if(!document.querySelector("#stage1-route-summary")){
+      var summary=document.createElement("div");
+      summary.id="stage1-route-summary";
+      summary.className="route-summary";
+      summary.innerHTML='<span>知识模板路线</span><strong>'+esc(routePath()||state.mode)+'</strong><small>'+(state.mode==="高端TVC"&&!state.contentSubtype?'系统会结合产品品类、材质和营销主题自动选择最匹配模板。':'该路线会依次传给广告策划、编剧导演和摄影摄像知识库。')+'</small>';
+      var notice=document.querySelector(".workspace .panel .notice");
+      if(notice)notice.parentNode.insertBefore(summary,notice.nextSibling);
+    }
+  }
+  document.addEventListener("click",function(event){
+    var button=event.target.closest("[data-route]");if(!button)return;
+    var subtype=button.dataset.route||"",route=TVC_ROUTES[subtype]||TVC_ROUTES[""];
+    if(state.contentSubtype!==subtype)invalidateStageOne();
+    state.contentSubtype=subtype;
+    state.templateGroupId=route.group;
+    saveState();
+    render();
+  });
+  var baseRender=render;
+  render=function(){baseRender();installStageOneControls();};
+  installStageOneControls();
+})();
+</script>
+<script>
+/* Final Stage 1 surface: always expose a real Mood Board + Hook choice below the product brief. */
+(function(){
+  function text(value){if(Array.isArray(value))return value.filter(Boolean).join(" · ");if(value&&typeof value==="object")return value.primary||value.start||Object.values(value).filter(Boolean).join(" · ");return String(value||"");}
+  function decorateHookCards(){
+    document.querySelectorAll(".result .hook-list.reference-list .hook").forEach(function(card,index){
+      var old=card.querySelector(".hook-mood-inline");if(old)old.remove();
+      var hook=(state.hooksList||[])[index]||{};
+      var mood=hook.mood_board_summary||hook.mood_board_brief||hook.mood_board||{};
+      var plan=(state.creativePlans||[]).find(function(item){return item.plan_id&&item.plan_id===hook.plan_id;})||(state.creativePlans||[])[index]||{};
+      if((!mood||!Object.keys(mood).length)&&plan.mood_board_id)mood=(state.moodBoards||[]).find(function(item){return item.mood_board_id===plan.mood_board_id;})||{};
+      if(typeof mood==="string")mood={name:mood};
+      var name=text(mood.name||mood.title||"");
+      var fields=[
+        ["情绪",text(mood.emotion_direction||plan.emotion_direction||hook.emotion||"")],
+        ["色彩",text(mood.palette||plan.palette||"")],
+        ["光线",text(mood.lighting||plan.lighting||"")],
+        ["材质",text(mood.materials||plan.materials||"")],
+        ["场景",text(mood.scene||mood.scene_grammar||plan.scene_grammar||"")],
+        ["人物",text(mood.character_state||plan.character_state||"")]
+      ].filter(function(item){return item[1];});
+      var box=document.createElement("div");
+      box.className="hook-mood-inline";
+      var group=hook.content_subtype||plan.content_subtype||state.contentSubtype||routeLabel();
+      box.innerHTML="<span>Mood Board</span>"+(name?"<strong>"+esc(name)+"</strong>":"")+(fields.length?'<div class="mood-compact">'+fields.slice(0,6).map(function(item){return'<span><b>'+esc(item[0])+'：</b>'+esc(item[1])+'</span>';}).join("")+"</div>":'<p>该方向的情绪、色彩和场景将由导演模板继续展开。</p>')+(group?'<i class="hook-route">'+esc((TVC_ROUTES[group]||{}).label||group)+'</i>':"");
+      card.appendChild(box);
+    });
+  }
+  function installKnowledgePath(){
+    var old=document.querySelector("#active-knowledge-path");if(old)old.remove();
+    if(!state.productReady&&state.stage===0)return;
+    var anchor=document.querySelector(".page-head");if(!anchor||!anchor.parentNode)return;
+    var label=state.stage===3?"摄影模板":state.stage===1?"导演模板":"知识模板路线";
+    var template=state.stage===3?cameraTemplateLabel():state.stage===1?directorTemplateLabel():routePath();
+    var path=document.createElement("div");path.id="active-knowledge-path";path.className="knowledge-path";
+    path.innerHTML='<span>'+esc(label)+'</span><strong>'+esc(template||routeLabel())+(state.stage!==0?'<small>'+esc(routePath())+'</small>':"")+'</strong>';
+    anchor.parentNode.insertBefore(path,anchor.nextSibling);
+    if(state.stage===1){
+      var actionRow=document.querySelector(".creative-control-panel .creative-action-row");
+      if(actionRow&&state.storyboardReady){
+        actionRow.innerHTML='<button class="secondary full" data-action="regenerate-creative">重新生成脚本</button><button class="primary full" data-action="go-video">进入摄影摄像 →</button>';
+        actionRow.style.gridTemplateColumns="1fr 1fr";
+        var duplicateActions=document.querySelector(".production-output .director-actions");if(duplicateActions)duplicateActions.remove();
+      }else{
+        document.querySelectorAll('[data-action="generate-creative-director"]').forEach(function(button){button.disabled=!((state.hooksList||[])[state.selectedHook]||{}).title;if(!button.disabled)button.textContent="生成分镜脚本 →";});
+      }
+      var filterTitle=document.querySelector(".hook-filter>label");if(filterTitle)filterTitle.textContent="可选微调（不选择也可继续）";
+    }
+  }
+  function installProductImageState(){
+    var input=document.querySelector("#img-inp");if(!input)return;
+    var invalid=[];document.querySelectorAll(".upload-preview img").forEach(function(image,index){image.removeAttribute("onerror");image.dataset.productImageIndex=String(index);image.alt="产品图 "+(index+1);if(image.complete&&image.naturalWidth===0)invalid.push(index);});
+    if(invalid.length){state.productImages=(state.productImages||[]).filter(function(_,index){return !invalid.includes(index);});state.imageUploadError="";setTimeout(render,0);return;}
+    var field=input.closest(".field");if(!field)return;
+    var old=field.querySelector(".image-upload-status");if(old)old.remove();
+  }
+  function refreshMoodBoardHookCards(){
+    if(state.stage===0&&state.productReady)decorateHookCards();
+    installKnowledgePath();
+    installProductImageState();
+  }
+  var base=render;render=function(){base();refreshMoodBoardHookCards();};
+  setTimeout(refreshMoodBoardHookCards,0);
+  document.addEventListener("error",function(event){var image=event.target&&event.target.closest?event.target.closest(".upload-preview img[data-product-image-index]"):null;if(!image)return;var index=Number(image.dataset.productImageIndex);if(!Number.isInteger(index))return;state.productImages.splice(index,1);state.imageUploadError="";render();},true);
+})();
+</script>
+<script>
+/* Stage 1 is Python-only: never fall back to the legacy Hook-only n8n workflow. */
+(function(){
+  /* The old schema persisted Hook-only results under the same version. Drop those stale results once. */
+  var legacyStageOneState=false;
+  if(state.productReady&&(!(Array.isArray(state.creativePlans)&&state.creativePlans.length)||!(Array.isArray(state.moodBoards)&&state.moodBoards.length))){
+    legacyStageOneState=true;
+    state.productReady=false;
+    state.productBrief=null;
+    state.creativePlans=[];
+    state.moodBoards=[];
+    state.hooksList=[];
+    state.selectedPlanId="";
+    state.stage1Error="历史 Hook 结果已失效，请重新生成完整 Stage 1";
+    saveState();
+  }
+  var running=false;
+  function parseResponse(text){
+    try{return normalizeStageOnePayload(text?JSON.parse(text):{});}
+    catch(error){return{message:text||"服务返回了无效数据"};}
+  }
+  function hideLegacyHooks(){
     var result=document.querySelector(".result");
-    if(!result)return;
-    var plans=state.creativePlans||[],moods=state.moodBoards||[];
-    var moodText=moods.map(function(m){return(m.name||m.title||"")+((m.tags||[]).length?" · "+(Array.isArray(m.tags)?m.tags.join(" / "):m.tags):"");}).filter(Boolean).join("；");
-    var html='<section id="creative-plan-pool-runtime" class="notice" style="margin-top:22px;border-left:4px solid var(--blue);background:var(--blue-soft)"><strong>创意方案池 · '+plans.length+' 个方向</strong>'+(moodText?'<p style="margin:7px 0;color:var(--muted)">Mood Board：'+esc(moodText)+'</p>':"")+'<div style="display:grid;gap:8px;margin-top:10px">'+plans.map(function(plan,index){var active=(plan.plan_id||"")===state.selectedPlanId||(!state.selectedPlanId&&index===state.selectedHook);var emotion=plan.emotion_direction; if(emotion&&typeof emotion==="object")emotion=emotion.primary||""; return'<button type="button" data-creative-plan="'+index+'" style="text-align:left;border:1px solid '+(active?'var(--blue)':'#d9dbe3')+';background:'+(active?'#fff':'rgba(255,255,255,.72)')+';border-radius:10px;padding:10px 12px;cursor:pointer"><strong>'+esc(plan.title||("创意方案 "+(index+1)))+'</strong><span style="display:block;margin-top:4px;color:var(--muted);font-size:12px">'+esc(plan.core_hook||plan.slogan||"")+'</span>'+(emotion?'<span style="display:block;margin-top:4px;color:var(--blue);font-size:11px">情绪：'+esc(emotion)+'</span>':"")+'</button>';}).join("")+'</div><small style="display:block;margin-top:9px;color:var(--muted)">已选方案会原样交给 Stage 2 编剧导演，再由 Stage 3 摄影摄像继续执行。</small></section>';
-    result.insertAdjacentHTML("beforeend",html);
+    if(!result||state.stage!==0||!state.productReady)return;
+    var oldLists=result.querySelectorAll(".hook-list.reference-list,.result-footer");
+    oldLists.forEach(function(node){node.style.display="";});
+    result.querySelectorAll(".result-head").forEach(function(head){
+      if(/HOOK/i.test(head.textContent||""))head.style.display="";
+    });
+    var staleNotice=document.querySelector("#stage1-structured-required");
+    if(staleNotice)staleNotice.remove();
+    if((state.creativePlans||[]).length)return;
+    var notice=document.querySelector("#stage1-structured-required");
+    if(!notice){
+      notice=document.createElement("div");
+      notice.id="stage1-structured-required";
+      notice.className="notice";
+      notice.style.cssText="margin-top:22px;border-left:4px solid #c87033;background:#fff8f0;color:#7b4a24";
+      notice.innerHTML="<strong>需要重新生成 Stage 1</strong><p style=\"margin:7px 0 0;line-height:1.6\">当前页面缓存的是旧版 Hook 结果。请重新点击生成，系统会从 Python Stage 1 返回完整的 Mood Board + Hook。</p>";
+      var firstHead=result.querySelector(".result-head");
+      if(firstHead)firstHead.parentNode.insertBefore(notice,firstHead.nextSibling);else result.prepend(notice);
+    }
   }
-
-  var originalFetch=window.fetch;
+  function requestStageOne(event){
+    var button=event.target.closest('[data-action="fetch"]');
+    if(!button||running||window.__adflowStageOneBusy)return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.__adflowHandled=true;
+    var url=(document.querySelector("#url-inp")||{}).value||"";
+    var theme=(document.querySelector("#theme-inp")||{}).value||"";
+    var images=(state.productImages||[]).map(function(item){return item.url||item;}).filter(function(value){return typeof value==="string"&&value;});
+    if(!String(url).trim()&&!String(theme).trim()&&!images.length){alert("请至少填写产品链接、营销主题或上传产品图片");return;}
+    if(running)return;
+    running=true;
+    window.__adflowStageOneBusy=true;
+    state.productUrl=String(url).trim();
+    state.campaignTheme=String(theme).trim();
+    state.stage1Loading=true;
+    state.stage1Error="";
+    state.productReady=false;
+    state.creativePlans=[];
+    state.moodBoards=[];
+    state.hooksList=[];
+    state.selectedPlanId="";
+    render();
+    fetch("/api/fast/stage-1",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({product_url:state.productUrl,language:state.language,content_type:state.mode,content_subtype:state.contentSubtype||"",template_group_id:state.templateGroupId||"",product_category:state.productCategory||"",campaign_theme:state.campaignTheme,product_images:images,document_text:(document.querySelector("#paste-inp")||{}).value||state.pasteText||"",filter_values:state.filterValues||{},resolution:state.resolution||"480p"})})
+      .then(async function(response){var data=parseResponse(await response.text());if(!response.ok)throw new Error(data.message||data.error||("HTTP "+response.status));return data;})
+      .then(function(data){applyStageOneResult(data);saveState();})
+      .catch(function(error){state.productReady=false;state.stage1Error=error.message||"Stage 1 生成失败";alert("Stage 1 生成失败："+state.stage1Error);})
+      .finally(function(){running=false;window.__adflowStageOneBusy=false;state.stage1Loading=false;render();});
+  }
+  function neutralizeLegacyStageOneButton(){
+    var button=document.querySelector('[data-action="fetch"]');
+    if(!button||button.dataset.adflowStageOneButton==="1")return;
+    var replacement=button.cloneNode(true);
+    replacement.dataset.adflowStageOneButton="1";
+    button.replaceWith(replacement);
+  }
+  document.addEventListener("click",requestStageOne,true);
+  /* Paste panel handler */
+  document.addEventListener("click",function(e){
+    var b=e.target.closest('[data-action="paste-fetch"]');if(!b)return;
+    e.preventDefault();
+    var txt=(document.querySelector("#paste-inp")||{}).value||"";
+    if(!txt.trim()){alert("请先粘贴商品信息");return;}
+    state.pasteText=txt;saveState();
+    /* Trigger normal fetch flow */
+    var fetchBtn=document.querySelector('[data-action="fetch"]');
+    if(fetchBtn)fetchBtn.click();
+  });
+  document.addEventListener("click",function(event){
+    var button=event.target.closest("[data-hook]");
+  if(!button)return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.__adflowHandled=true;
+    var index=Number(button.dataset.hook||0),hook=(state.hooksList||[])[index]||{};
+    state.selectedHook=index;
+    if(hook.plan_id)state.selectedPlanId=hook.plan_id;
+    saveState();
+    render();
+  },true);
+  var baseRender=render;
+  render=function(){baseRender();neutralizeLegacyStageOneButton();setTimeout(hideLegacyHooks,0);};
+  if(legacyStageOneState)render();
+  setTimeout(neutralizeLegacyStageOneButton,0);
+  setTimeout(hideLegacyHooks,0);
+})();
+</script>
+<script>
+/* Keep the three Python knowledge-base handoffs observable, and make Stage 4 subtitle-free. */
+(function(){
+  var entryPoints=window.__ADFLOW_ENTRY_POINTS={
+    stage1:"/api/fast/stage-1",
+    stage2:"/api/fast/stage-2",
+    stage3:"/api/fast/stage-3",
+    stage4:"/api/workflow/stage-4"
+  };
+  var disabledLegacyContentPaths={
+    "/api/workflow/stage-1/url":true,
+    "/api/workflow/stage-1/document":true,
+    "/api/workflow/stage-1/tvc":true,
+    "/api/workflow/stage-2":true,
+    "/api/workflow/stage-3":true
+  };
+  var previousFetch=window.fetch;
   window.fetch=function(input,init){
     var url=typeof input==="string"?input:(input&&input.url)||"";
-    var stageUrl=/^\/api\/(?:fast\/stage-[23]|workflow\/stage-[234]|workflow\/stage-1\/(?:url|document|tvc))/.test(url);
-    if(stageUrl&&init&&typeof init.body==="string"){
+    if(/\/api\/(?:fast|workflow)\/stage-[1-5]/.test(url)&&init&&init.body&&typeof init.body==="string"){
+      try{
+        var body=JSON.parse(init.body);
+        var resSel=document.querySelector("#stage1-resolution");if(resSel)state.resolution=resSel.value;
+        body.resolution=state.resolution||"480p";
+        body.filter_values=state.filterValues||body.filter_values||{};
+        if(state.selectedPlanId&&(state.creativePlans||[]).length)body.creative_plan=(state.creativePlans||[]).find(function(plan){return plan.plan_id===state.selectedPlanId;})||body.creative_plan;
+        body.selected_plan_id=state.selectedPlanId||body.selected_plan_id||"";
+        var selectedHook=(state.hooksList||[])[state.selectedHook]||{};
+        body.template_group_id=selectedHook.template_group_id||(body.creative_plan||{}).template_group_id||state.templateGroupId||body.template_group_id||"";
+        body.content_subtype=selectedHook.content_subtype||(body.creative_plan||{}).content_subtype||state.contentSubtype||body.content_subtype||"";
+        body.product_category=state.productCategory||body.product_category||"";
+        if(state.directorInstruction)body.director_instruction=state.directorInstruction;
+        init=Object.assign({},init,{body:JSON.stringify(body)});
+      }catch(error){console.warn("request enrichment:",error.message);}
+    }
+    var pathname="";
+    try{pathname=new URL(url,window.location.href).pathname;}catch(error){}
+    if(disabledLegacyContentPaths[pathname]){
+      return Promise.resolve(new Response(JSON.stringify({
+        ok:false,
+        error:"legacy_content_stage_disabled",
+        message:"内容生成已统一走 Python 唯一入口。"
+      }),{status:410,headers:{"Content-Type":"application/json"}}));
+    }
+    var stage4=/\/api\/(?:fast|workflow)\/stage-4/.test(url);
+    if(stage4&&init&&typeof init.body==="string"){
       try{
         var payload=JSON.parse(init.body);
-        var plan=selectedPlan();
-        if((url.indexOf("stage-2")>=0||url.indexOf("stage-3")>=0||url.indexOf("stage-4")>=0)&&Object.keys(plan).length){
-          payload.creative_plan=plan;
-          payload.selected_plan=plan;
-        }
+        payload.knowledge_trace=state.knowledgeTrace||{};
+        payload.pipeline_trace=state.pipelineTrace||{};
+        payload.no_subtitles=true;
         init=Object.assign({},init,{body:JSON.stringify(payload)});
-      }catch(error){console.warn("creative plan payload:",error);}
+      }catch(error){console.warn("Stage 4 handoff:",error.message);}
     }
-    return originalFetch(input,init).then(function(response){
-      if(url.indexOf("stage-1")>=0){
+    return previousFetch.call(this,input,init).then(function(response){
+      if(/\/api\/(?:fast|workflow)\/stage-[23](?:\/|$)/.test(url)&&response&&response.clone){
         response.clone().json().then(function(data){
-          if(data&&data.ok!==false){applyCreativePayload(data);renderPlanSummary();}
+          if(!data||typeof data!=="object")return;
+          state.knowledgeTrace=state.knowledgeTrace||{};
+          var stage=/stage-2/.test(url)?"stage2":"stage3";
+          state.knowledgeTrace[stage]=data.knowledge_trace||{source:data.knowledge_source||"unknown",role:data.knowledge_role||(/stage-2/.test(url)?"编剧导演":"摄影摄像"),api_attempted:!!data.knowledge_triggered};
+          saveState();
         }).catch(function(){});
       }
       return response;
     });
   };
-
-  var originalRender=render;
-  render=function(){originalRender();renderPlanSummary();};
   document.addEventListener("click",function(event){
-    var button=event.target.closest("[data-creative-plan]");
-    if(button){
-      var index=Number(button.dataset.creativePlan||0),plan=(state.creativePlans||[])[index];
-      if(!plan)return;
-      state.selectedHook=index;
-      state.selectedPlanId=plan.plan_id||"";
-      render();
-      return;
-    }
-    var legacyHook=event.target.closest("[data-hook]");
-    if(legacyHook&&state.creativePlans[Number(legacyHook.dataset.hook||0)]){
-      var selected=state.creativePlans[Number(legacyHook.dataset.hook||0)];
-      state.selectedPlanId=selected.plan_id||"";
-    }
-  });
-  renderPlanSummary();
+    if(event.target.closest('[data-action="reset"]'))state.knowledgeTrace={};
+  },true);
 })();
 </script>
-
-
-</body><div id="codex-browser-sidebar-comments-root" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483647;"></div></html>
+<script>
+document.addEventListener("click",function(event){
+  var blocked=event.target.closest('[data-action="fetch"],[data-action="reset"],[data-action="generate-creative-director"],[data-action="regenerate-creative"],[data-action="generate-character"],[data-action="generate-storyboard-image"],[data-action="generate-video"]');
+  if(!blocked)return;
+  event.preventDefault();event.stopImmediatePropagation();
+  alert("这是 2026-08-09 真实运行结果的只读展示快照。生成接口与凭证不会发布到公开网站。");
+},true);
+</script>
+</body></html>

@@ -14,21 +14,21 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 
-DEFAULT_FILTERS = {
+FILTER_DEFINITIONS = {
     "真人口播带货": [
-        {"id": "creator_vibe", "label": "达人气质", "options": ["邻家亲和", "专业可信", "知性优雅", "活力元气"]},
-        {"id": "speaking_style", "label": "表达方式", "options": ["闺蜜聊天", "专业讲解", "沉稳叙述", "轻松种草"]},
-        {"id": "use_scene", "label": "使用场景", "options": ["早晨护肤", "化妆台前", "日常通勤", "睡前护理"]},
+        {"id": "creator_vibe", "label": "达人气质", "options": []},
+        {"id": "speaking_style", "label": "表达方式", "options": []},
+        {"id": "use_scene", "label": "使用场景", "options": []},
     ],
     "好物推荐": [
-        {"id": "selling_angle", "label": "推荐切入", "options": ["成分科技", "功效实测", "设计美学", "使用体验"]},
-        {"id": "compare_dim", "label": "比较维度", "options": ["竞品对比", "升级前后", "有无对比", "多款横评"]},
-        {"id": "visual_style", "label": "展示方式", "options": ["极简白底", "微距特写", "数据图叠层", "生活场景"]},
+        {"id": "selling_angle", "label": "推荐切入", "options": []},
+        {"id": "compare_dim", "label": "比较维度", "options": []},
+        {"id": "visual_style", "label": "展示方式", "options": []},
     ],
     "高端TVC": [
-        {"id": "emotion_tone", "label": "情绪基调", "options": ["克制诗意", "温暖治愈", "冷峻高级", "复古怀旧"]},
-        {"id": "visual_lang", "label": "视觉语言", "options": ["暖金逆光", "慢镜头", "浅景深", "对称构图"]},
-        {"id": "narrative", "label": "叙事结构", "options": ["时间流转", "意象隐喻", "人物独白", "场景切换"]},
+        {"id": "emotion_tone", "label": "情绪基调", "options": []},
+        {"id": "visual_lang", "label": "视觉语言", "options": []},
+        {"id": "narrative", "label": "叙事结构", "options": []},
     ],
 }
 
@@ -47,63 +47,6 @@ WIKIS = (
     WikiConfig("编剧导演", os.getenv("FEISHU_DIRECTOR_WIKI_TOKEN", ""), "编剧导演知识库"),
     WikiConfig("摄影摄像", os.getenv("FEISHU_CAMERA_WIKI_TOKEN", ""), "摄影摄像知识库"),
 )
-
-
-# 这是 Wiki 暂时不可用时的本地安全契约，不是外部知识源。
-# 正常运行时，三份 Wiki 正文会覆盖这些默认契约并进入阶段提示词。
-DEFAULT_KNOWLEDGE_CARDS = {
-    "广告策划": [
-        {
-            "card_id": "planning-mood-board-v1",
-            "card_type": "mood_board_rule",
-            "name": "产品气质到 Mood Board 的映射",
-            "tags": "夏天；少女；年轻女性；清凉；海边；旅行；度假；高颜值；通透；松弛",
-            "emotion_direction": "先让人感到，再让人理解：视觉降温感 → 出行向往感 → 种草占有欲",
-            "mood_board": "从产品颜色、材质、使用场景和目标人群抽取色彩、光线、材质、人物状态、场景底色与镜头语法；产品是视觉主角，场景只负责放大产品气质。",
-            "slogan_rule": "Slogan 要把产品差异转译成可感知的生活画面，不写参数，不写空泛口号；优先使用‘把某种生活感带在身边’这类占有心智结构。",
-            "creative_plan_rule": "每个创意方案必须完整包含：核心 Hook、Mood Board、情绪方向、Slogan、开篇方式、节奏骨架、视觉密码、导演指导、必备元素、禁止事项。",
-            "negative_rules": "避免硬件参数广告；避免纯风景空镜；避免静止产品展示；避免没有人物关系的素材堆砌；不得凭空补写产品事实。",
-        },
-        {
-            "card_id": "planning-creative-pool-v1",
-            "card_type": "creative_plan_pool",
-            "name": "完整创意方案池输出契约",
-            "tags": "创意方案池；核心Hook；Mood Board；情绪方向；Slogan；开篇方式；节奏骨架；视觉密码；导演指导",
-            "pool_size": "一次生成 3 个可比较方案，分别承担情绪优先、场景优先、产品差异优先；推荐其中 1 个作为默认方案。",
-            "opening_methods": "气泡叙事；水珠叙事；光影叙事；触感叙事；声音叙事；根据产品材质与场景选择，不机械随机。",
-            "rhythm_skeletons": "三拍子；极速跳切；碎片化快剪；渐强；以时长、平台和产品气质为依据。",
-            "visual_codes": "颜色进化；材质贯穿；光影时序；水、玻璃、织物、金属等可复用材质母题。",
-            "director_guidance": "指导 Stage 2 如何把方案转成叙事、人物动作、台词节奏和镜头任务；不直接代替 Stage 2 写完整分镜。",
-        },
-    ],
-    "编剧导演": [
-        {
-            "card_id": "director-storyboard-v1",
-            "card_type": "director_contract",
-            "name": "编剧导演阶段知识卡",
-            "tags": "脚本；导演；叙事动线；人物动作；口播；字幕；段落节奏",
-            "director_role": "把已选创意方案变成可拍摄的完整视频脚本：先确定情绪弧线，再安排人物关系、产品出现节点、口播与字幕，不重写产品事实。",
-            "narrative_flow": "开头建立冲突或好奇 → 中段用人物行为证明产品差异 → 后段完成情绪升华与自然行动引导；每个镜头都要推进叙事或完成信息交付。",
-            "movement_constraints": "严格遵守方案中的开篇方式、节奏骨架、视觉密码和必备元素；场景作为叙事底色，不写没有人物或产品关系的风景空镜。",
-            "output_contract": "返回 script_text 与 script_segments；每段包含时间、画面、运镜意图、对白、字幕、音乐音效和给摄影摄像的 video_prompt。",
-            "safety": "不虚构参数、功效、地点背书或竞品事实；不使用用户明确禁止的词与营销话术；品牌名和产品事实只按输入资料使用。",
-        },
-    ],
-    "摄影摄像": [
-        {
-            "card_id": "camera-generation-v1",
-            "card_type": "camera_contract",
-            "name": "摄影摄像阶段知识卡",
-            "tags": "摄影；运镜；影调；视觉焦点；材质；视频生成；安全策略",
-            "camera_role": "把脚本和 Mood Board 翻译成可执行的镜头参数与视频生成提示词，保证产品身份、人物连续性、色彩和材质统一。",
-            "shot_rules": "明确景别、主体、动作、光线、材质、构图和运镜；镜头时长服从脚本与平台节奏；特写、中近景、全景有意识跳跃。",
-            "visual_focus": "每个镜头只设一个视觉焦点；产品背板、人物动作或关键材质必须写清楚，场景不能抢走产品叙事。",
-            "look": "先锁定 Mood Board 的主色、辅助色、光线方向、对比度、景深、质感和时间段，再写具体镜头；不要用空泛的‘高级、唯美’代替可拍摄描述。",
-            "generation_prompt": "video_prompt 使用英文，包含主体与动作、环境、光线、色彩、材质、镜头、运动、画幅和连续性约束；禁止出现屏幕、系统界面、其他电子产品或品牌 Logo，除非输入明确允许。",
-            "safety": "不生成不真实的产品结构；不拍正面屏幕和 UI；不添加输入中没有的功能与标识；避免手指、文字、Logo、产品颜色在镜头间漂移。",
-        },
-    ],
-}
 
 
 def _text(value) -> str:
@@ -263,7 +206,7 @@ class FeishuKnowledge:
         wiki_configs = self._wiki_configs(roles)
         if self.app_id and self.app_secret and wiki_configs and all(config.node_token for config in wiki_configs):
             return "wiki"
-        return "fallback"
+        return "unavailable"
 
     def _tenant_token(self, client: httpx.Client) -> str:
         response = client.post(
@@ -283,28 +226,48 @@ class FeishuKnowledge:
         return [config for config in WIKIS if config.role in wanted]
 
     def _wiki_document_text(self, client: httpx.Client, token: str, config: WikiConfig) -> list[dict]:
-        node_response = client.get(
-            f"{self.base_url}/wiki/v2/spaces/get_node",
-            headers={"Authorization": f"Bearer {token}"},
-            params={"token": config.node_token},
-        )
-        node_response.raise_for_status()
-        node_payload = node_response.json()
-        if node_payload.get("code", 0) != 0:
-            raise RuntimeError(f"{config.role} Wiki：{node_payload.get('msg') or '节点读取失败'}")
+        # A Feishu knowledge source may be configured with either the token from
+        # a /wiki/ URL or the underlying /docx/ token. The API defaults to
+        # obj_type=wiki, so retry as docx when that lookup rejects the token.
+        node_payload = {}
+        lookup_errors = []
+        for obj_type in ("wiki", "docx"):
+            node_response = client.get(
+                f"{self.base_url}/wiki/v2/spaces/get_node",
+                headers={"Authorization": f"Bearer {token}"},
+                params={"token": config.node_token, "obj_type": obj_type},
+            )
+            try:
+                node_payload = node_response.json()
+            except ValueError:
+                node_payload = {}
+            if node_response.is_success and node_payload.get("code", 0) == 0:
+                break
+            message = node_payload.get("msg") or f"HTTP {node_response.status_code}"
+            lookup_errors.append(f"{obj_type}: {message}")
+        else:
+            detail = "；".join(lookup_errors)
+            raise RuntimeError(
+                f"{config.role} Wiki：节点读取失败（已按 Wiki 节点和 docx 文档两种方式尝试）：{detail}"
+            )
         node = (node_payload.get("data") or {}).get("node") or {}
         obj_token = node.get("obj_token") or ""
         if not obj_token:
             raise RuntimeError(f"{config.role} Wiki：节点没有可读取的文档对象")
+        if node.get("obj_type") != "docx":
+            raise RuntimeError(f"{config.role} Wiki：当前节点类型为 {node.get('obj_type') or '未知'}，仅支持新版飞书文档 docx")
 
         raw_response = client.get(
             f"{self.base_url}/docx/v1/documents/{obj_token}/raw_content",
             headers={"Authorization": f"Bearer {token}"},
         )
-        raw_response.raise_for_status()
-        raw_payload = raw_response.json()
-        if raw_payload.get("code", 0) != 0:
-            raise RuntimeError(f"{config.role} Wiki：正文读取失败：{raw_payload.get('msg') or '未知错误'}")
+        try:
+            raw_payload = raw_response.json()
+        except ValueError:
+            raw_payload = {}
+        if not raw_response.is_success or raw_payload.get("code", 0) != 0:
+            detail = raw_payload.get("msg") or f"HTTP {raw_response.status_code}"
+            raise RuntimeError(f"{config.role} Wiki：正文读取失败：{detail}")
         content = ((raw_payload.get("data") or {}).get("content") or "").strip()
         if not content:
             raise RuntimeError(f"{config.role} Wiki：正文为空，未将空文档当作知识库命中")
@@ -345,7 +308,7 @@ class FeishuKnowledge:
             item = {
                 "configured": configured,
                 "read_ok": False,
-                "source": "fallback",
+                "source": "unavailable",
                 "document_count": 0,
                 "card_ids": [],
                 "names": [],
@@ -360,7 +323,7 @@ class FeishuKnowledge:
                 rows = records.get(role, [])
                 item.update({
                     "read_ok": bool(rows),
-                    "source": "wiki" if rows else "fallback",
+                    "source": "wiki" if rows else "unavailable",
                     "document_count": len(rows),
                     "card_ids": [
                         _text(row.get("card_id")) or _text(row.get("record_id"))
@@ -377,21 +340,16 @@ class FeishuKnowledge:
         read_ok = all(item["read_ok"] for item in role_status.values()) if role_status else False
         return {
             "reader": "wiki-only-v3",
-            "source": "wiki" if read_ok else "partial-or-fallback",
+            "source": "wiki" if read_ok else "partial-or-unavailable",
             "read_ok": read_ok,
             "roles": role_status,
         }
 
-    def _default_rows(self, roles=None) -> dict[str, list[dict]]:
-        wanted = set(roles if isinstance(roles, (list, tuple, set)) else [roles]) if roles else set(DEFAULT_KNOWLEDGE_CARDS)
-        return {
-            role: [dict(card, role=role) for card in cards]
-            for role, cards in DEFAULT_KNOWLEDGE_CARDS.items()
-            if role in wanted
-        }
-
     def filter_schema(self, content_type: str) -> dict:
-        defaults = [dict(item) for item in DEFAULT_FILTERS.get(content_type, DEFAULT_FILTERS["真人口播带货"])]
+        definitions = [
+            {**item, "options": list(item.get("options") or [])}
+            for item in FILTER_DEFINITIONS.get(content_type, FILTER_DEFINITIONS["真人口播带货"])
+        ]
         role_map = {
             "真人口播带货": ("广告策划", "编剧导演"),
             "好物推荐": ("广告策划", "摄影摄像"),
@@ -401,30 +359,28 @@ class FeishuKnowledge:
         try:
             records = self.records_for(selected_roles)
         except Exception as error:
-            source = self.source_for(selected_roles)
             return {
-                "source": "fallback" if source == "fallback" else f"{source}+error",
+                "source": "unavailable",
                 "configured": self.configured_for(selected_roles),
-                "filters": defaults,
+                "filters": definitions,
                 "message": str(error),
             }
         if not records or not any(records.values()):
-            source = self.source_for(selected_roles)
             return {
-                "source": "fallback" if source == "fallback" else f"{source}+empty",
+                "source": "unavailable",
                 "configured": self.configured_for(selected_roles),
-                "filters": defaults,
+                "filters": definitions,
+                "message": "飞书 Wiki 未返回可用正文",
             }
         merged_rows = [row for role_rows in records.values() for row in role_rows]
-        for definition in defaults:
+        for definition in definitions:
             options = _wiki_filter_options(merged_rows, definition["id"])
-            if options:
-                definition["options"] = options[:12]
+            definition["options"] = options[:12]
             definition["knowledge_field"] = "Wiki正文"
         return {
-            "source": self.source_for(selected_roles),
+            "source": "wiki",
             "configured": True,
-            "filters": defaults,
+            "filters": definitions,
         }
 
     def context(
@@ -444,28 +400,41 @@ class FeishuKnowledge:
         api_attempted = configured
         api_read_ok = False
         api_error = ""
+        if not configured:
+            self.last_context_meta = {
+                "api_attempted": False,
+                "api_read_ok": False,
+                "wiki_document_count": 0,
+                "source": "unavailable",
+                "error": "缺少飞书应用凭证或对应角色 Wiki Token",
+                "roles": selected_roles,
+                "card_ids": [],
+            }
+            raise RuntimeError("飞书知识库未配置，已停止生成；Python 不提供本地知识模板")
         try:
             records = self.records_for(selected_roles)
-            api_read_ok = configured
+            api_read_ok = True
         except Exception as error:
             records = {}
             api_error = str(error)
-        # 默认卡是兜底契约；飞书实际记录只会增加产品/团队特定规则。
-        merged = self._default_rows(selected_roles)
-        for role, rows in records.items():
-            merged.setdefault(role, []).extend(rows)
-        if not merged:
+        has_live_records = any(records.get(role) for role in selected_roles)
+        if not api_read_ok or not has_live_records:
+            error_message = api_error or "飞书 Wiki 未返回可用正文"
             self.last_context_meta = {
                 "api_attempted": api_attempted,
                 "api_read_ok": api_read_ok,
                 "wiki_document_count": 0,
-                "source": "empty",
-                "fallback_used": False,
-                "error": api_error,
+                "source": "unavailable",
+                "error": error_message,
                 "roles": selected_roles,
                 "card_ids": [],
             }
-            return ""
+            raise RuntimeError(f"飞书知识库读取失败，已停止生成：{error_message}")
+        merged = {
+            role: list(records.get(role) or [])
+            for role in selected_roles
+            if records.get(role)
+        }
 
         needles = [
             content_type,
@@ -532,9 +501,7 @@ class FeishuKnowledge:
                 for needle in needles:
                     if len(needle) >= 2 and needle in tags:
                         score += 1
-                # Wiki documents are the authoritative role contract. Always keep
-                # the fetched document ahead of built-in cards, even when its prose
-                # does not repeat the selected product/filter keywords.
+                # Wiki documents are the only role contract.
                 if configured_source == "wiki" and is_wiki_row:
                     score += 100
                 # Only include cards that match actual content (product name, content type, etc.)
@@ -548,12 +515,8 @@ class FeishuKnowledge:
         for role in role_names:
             if role in matched_roles or not merged.get(role):
                 continue
-            # 真实 Wiki 文档优先于内置默认卡，避免“读到了文档但实际喂给模型的是默认卡”。
-            fallback_row = (
-                records.get(role, [None])[0]
-                or next((row for row in merged[role] if row.get("card_type")), merged[role][0])
-            )
-            scored.append((0, role, fallback_row))
+            required_row = records[role][0]
+            scored.append((0, role, required_row))
         scored.sort(key=lambda item: (-item[0], item[1], _text(item[2].get("card_id"))))
         blocks = []
         selected_rows = []
@@ -571,13 +534,12 @@ class FeishuKnowledge:
             for row in selected_rows
             if _text(row.get("card_id")) or _text(row.get("record_id"))
         ]
-        source = "wiki" if api_read_ok and wiki_document_count else "fallback"
+        source = "wiki"
         self.last_context_meta = {
             "api_attempted": api_attempted,
             "api_read_ok": api_read_ok,
             "wiki_document_count": wiki_document_count,
             "source": source,
-            "fallback_used": bool(not api_read_ok or not wiki_document_count),
             "error": api_error,
             "roles": selected_roles,
             "card_ids": card_ids,

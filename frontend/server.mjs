@@ -57,19 +57,25 @@ async function persistUploadedImages(payload) {
     const dataUrl = String(image?.dataUrl || '');
     const mimeMatch = dataUrl.match(/^data:(image\/(?:png|jpeg|webp|gif));base64,/i);
     if (!mimeMatch) throw new Error(`${originalName} 不是支持的图片格式`);
-    const extension = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif' }[mimeMatch[1].toLowerCase()];
+    const mimeType = mimeMatch[1].toLowerCase();
+    const extension = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif' }[mimeType];
     const binary = Buffer.from(dataUrl.slice(dataUrl.indexOf(',') + 1), 'base64');
 
     const objectKey = `images/${Date.now()}-${randomUUID()}.${extension}`;
-    const upstream = await fetch(`${n8nBaseUrl}/${webhookPrefix}/${assetUploadWorkflow}?key=${encodeURIComponent(objectKey)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': mimeMatch[1].toLowerCase(), 'Content-Length': String(binary.length) },
+
+    // Upload directly to TOS (public write bucket, no auth needed)
+    const tosUrl = `${tosPublicBaseUrl}/${objectKey}`;
+    const upstream = await fetch(tosUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': mimeType, 'Content-Length': String(binary.length) },
       body: binary,
       signal: AbortSignal.timeout(60000),
     });
-    const responseText = await upstream.text();
-    if (!upstream.ok) throw new Error(`对象存储上传失败 (HTTP ${upstream.status}): ${responseText.slice(0, 160)}`);
-    results.push({ ok: true, name: originalName, url: `${tosPublicBaseUrl}/${objectKey}`, storage: 'tos' });
+    if (!upstream.ok) {
+      const errText = await upstream.text().catch(() => '');
+      throw new Error(`对象存储上传失败 (HTTP ${upstream.status}): ${errText.slice(0, 160)}`);
+    }
+    results.push({ ok: true, name: originalName, url: tosUrl, storage: 'tos' });
   }
   return results;
 }
@@ -394,7 +400,13 @@ async function proxyPython(req, res, pathname) {
         method: 'POST',
         headers: { 'content-type': req.headers['content-type'] || 'application/json' },
         body,
-        signal: AbortSignal.timeout(pathname.startsWith('/api/media/') ? 15 * 60 * 1000 : requestTimeoutMs),
+        signal: AbortSignal.timeout(
+          pathname === '/api/fast/stage-1'
+            ? 10 * 60 * 1000
+            : pathname.startsWith('/api/media/')
+              ? 15 * 60 * 1000
+              : requestTimeoutMs
+        ),
       });
       return {
         status: upstream.status,

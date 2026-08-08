@@ -11,7 +11,7 @@
 | 你想看什么 | 入口 |
 | --- | --- |
 | 先看真实产出 | [中文版成片](frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4) · [英文版成片](frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4) |
-| 看工作台 | [Demo 模式](frontend/showcase/workbench/open-design-demo.html) · [中英文视频目录](frontend/showcase/README.md) |
+| 看工作台 | [真实运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) · [中英文视频目录](frontend/showcase/README.md) |
 | 看系统怎么拆 | [系统架构](docs/ARCHITECTURE.md) |
 | 看一次完整产品决策 | [Case Study](docs/CASE_STUDY.md) |
 | 看质量和安全边界 | [GitHub 发布检查](docs/GITHUB_RELEASE.md) · `npm run check` |
@@ -59,7 +59,7 @@ https://github.com/user-attachments/assets/8b56f676-ef79-4034-8571-fb77ebd9df3a
 ```mermaid
 flowchart LR
   INPUT["产品链接 / 营销主题 / 产品图片"] --> CRAWLER["产品页面抓取"]
-  CRAWLER --> FACTS["DeepSeek · 产品事实整理"]
+  CRAWLER --> FACTS["豆包 Responses · 产品事实整理"]
   FACTS --> KB1["广告策划 Wiki"]
   KB1 --> DOUBAO1["豆包 Responses · Hook 与 Mood Board"]
   DOUBAO1 --> SELECT["用户选择 Hook"]
@@ -73,12 +73,12 @@ flowchart LR
 
 ### 01 广告策划
 
-Stage 1 严格分为两次模型调用：
+Stage 1 有两种运行模式，但两种模式都会读取广告策划飞书 Wiki：
 
-1. DeepSeek 仅整理产品名称、品类、目标人群、卖点、痛点、使用场景和限制，不生成创意。
-2. 系统读取广告策划 Wiki 后，由豆包 Responses 生成 12 条 Hook、简要 Mood Board 和供 Stage 2 使用的隐藏创意板；产品图 URL 会作为多模态输入一并传入。
+1. 默认快速模式用一次豆包 Responses 生成结构化 Stage 1 结果，同时仍读取并注入广告策划 Wiki，减少一次模型等待。
+2. 将 `STAGE1_FAST_MODE=0` 后，豆包先整理产品名称、品类、目标人群、卖点、痛点、使用场景和限制；系统读取广告策划 Wiki 后，再由豆包生成 12 条 Hook、简要 Mood Board 和供 Stage 2 使用的隐藏创意板。
 
-这一分层避免产品事实与广告想象互相污染。
+两种模式都保留“产品资料 → 广告策划 Wiki → 创意生成”的知识约束；完整模式额外把产品事实模型单独拆出，进一步避免产品事实与广告想象互相污染。
 
 ### 02 编剧导演
 
@@ -131,8 +131,8 @@ n8n 处理产品图对象存储、分镜图、角色图、视频任务提交、�
 | 交互层 | HTML、CSS、JavaScript | 产品输入、Hook 选择、阶段确认、媒体预览 |
 | 网关层 | Node.js | 静态服务、同源代理、文件解析、统一入口 |
 | 内容层 | Python | 抓取、知识检索、模型调用、结构化契约、媒体适配 |
-| 策划模型 | DeepSeek | 可验证产品事实与简报 |
-| Stage 1 创意模型 | 豆包 Responses API | 产品图理解、Hook、Mood Board、完整创意方案 |
+| Stage 1 模型 | 豆包 Responses API | 产品图理解、可验证产品事实、Hook、Mood Board、完整创意方案 |
+| 英文 Stage 2 文本模型 | DeepSeek | 英文脚本路径的文本生成 |
 | Stage 2/3 中文文本模型 | Gemini 3.1 Pro via KIE.ai | 导演脚本、摄影分镜 |
 | 编排层 | n8n | TOS 上传、图像/视频任务、等待、轮询、回写 |
 | 知识层 | 飞书 Wiki | 广告策划、编剧导演、摄影摄像模板 |
@@ -200,7 +200,7 @@ npm start
 │   ├── server.py              # Stage 1 / 2 / 3 API
 │   ├── prompts.py             # 结构化提示词契约
 │   ├── feishu_knowledge.py    # Wiki-only 知识读取器
-│   ├── deepseek.py            # 产品事实模型
+│   ├── deepseek.py            # 英文 Stage 2 文本模型
 │   ├── doubao.py              # Stage 1 豆包 Responses 多模态通道
 │   └── gemini_kie.py          # Stage 2/3 Gemini 3.1 Pro 通道
 ├── n8n-workflows/public/      # 脱敏公开工作流

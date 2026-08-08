@@ -13,7 +13,12 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from .playwright_crawler import fetch_product_page
 from .deepseek import chat_json
-from .doubao import chat_json as doubao_json
+from .doubao import (
+    DEFAULT_DOUBAO_FALLBACK_MODEL,
+    DEFAULT_DOUBAO_MODEL,
+    DoubaoTimeoutError,
+    chat_json as doubao_json,
+)
 from .gemini_kie import chat_json as gemini_kie_json
 from .feishu_knowledge import knowledge
 from .kie import create_image_task, create_kling_video_task, create_overseas_video_task, query_task
@@ -28,6 +33,36 @@ def _knowledge_trace(role: str) -> dict:
     meta = dict(getattr(knowledge, "last_context_meta", {}) or {})
     meta["role"] = role
     return meta
+
+
+def _stage_one_doubao_json(prompt: str, system_prompt: str = "", image_urls=None):
+    """Use the requested Pro model first, then a bounded Doubao Lite fallback."""
+    primary_model = os.getenv("DOUBAO_MODEL", DEFAULT_DOUBAO_MODEL).strip()
+    try:
+        return doubao_json(
+            prompt,
+            system_prompt,
+            image_urls=image_urls,
+        ), primary_model, False
+    except DoubaoTimeoutError as primary_error:
+        fallback_model = os.getenv(
+            "DOUBAO_FALLBACK_MODEL",
+            DEFAULT_DOUBAO_FALLBACK_MODEL,
+        ).strip()
+        fallback_budget = float(os.getenv("DOUBAO_FALLBACK_DEADLINE_SECONDS", "120"))
+        fallback_tokens = int(os.getenv("DOUBAO_FALLBACK_MAX_OUTPUT_TOKENS", "5000"))
+        print(
+            f"[stage-1] {primary_error}; retrying with Doubao fallback "
+            f"{fallback_model} ({fallback_budget:g}s budget)..."
+        )
+        return doubao_json(
+            prompt,
+            system_prompt,
+            image_urls=list(image_urls or [])[:1],
+            model_override=fallback_model,
+            deadline_seconds=fallback_budget,
+            max_output_tokens_override=fallback_tokens,
+        ), fallback_model, True
 
 
 class StageOneRequest(BaseModel):
@@ -220,7 +255,7 @@ def _unwrap_stage_one_result(data: dict) -> dict:
     result = data if isinstance(data, dict) else {}
     expected_keys = {
         "product_brief", "productBrief", "creative_plans", "creativePlans",
-        "mood_boards", "moodBoards", "hooks", "hooks_list",
+        "mood_boards", "moodBoards", "hooks", "hooks_list", "creative_directions",
     }
     if expected_keys.intersection(result):
         return result
@@ -229,6 +264,38 @@ def _unwrap_stage_one_result(data: dict) -> dict:
         if isinstance(candidate, dict) and expected_keys.intersection(candidate):
             return candidate
     return result
+
+
+def _expand_creative_directions(result: dict) -> tuple[list[dict], list[dict], list[dict]]:
+    """Flatten the compact model contract into the existing frontend contract."""
+    plans = [item for item in (result.get("creative_plans") or result.get("creativePlans") or []) if isinstance(item, dict)]
+    moods = [item for item in (result.get("mood_boards") or result.get("moodBoards") or []) if isinstance(item, dict)]
+    hooks = _merge_hook_lists(result)
+    directions = [item for item in (result.get("creative_directions") or []) if isinstance(item, dict)]
+    if not directions:
+        return plans, moods, hooks
+
+    plans, moods, hooks = [], [], []
+    for direction_index, direction in enumerate(directions[:3], start=1):
+        plan_id = direction.get("plan_id") or f"plan-{direction_index:02d}"
+        mood_id = direction.get("mood_board_id") or f"mood-{direction_index:02d}"
+        mood = direction.get("mood_board") or {}
+        plan = direction.get("creative_plan") or {}
+        if isinstance(mood, dict):
+            moods.append({**mood, "mood_board_id": mood_id})
+        if isinstance(plan, dict):
+            plans.append({**plan, "plan_id": plan_id, "mood_board_id": mood_id})
+        for hook_index, hook in enumerate(direction.get("hooks") or [], start=1):
+            if not isinstance(hook, dict):
+                continue
+            absolute_index = (direction_index - 1) * 4 + hook_index
+            hooks.append({
+                **hook,
+                "hook_id": hook.get("hook_id") or f"hook-{absolute_index:02d}",
+                "plan_id": plan_id,
+                "mood_board_id": mood_id,
+            })
+    return plans, moods, hooks
 
 
 def _has_visual_value(value) -> bool:
@@ -244,9 +311,7 @@ def _has_visual_value(value) -> bool:
 def _stage_one_missing_fields(data: dict) -> list[str]:
     result = _unwrap_stage_one_result(data)
     product_brief = result.get("product_brief") or result.get("productBrief")
-    plans = [item for item in (result.get("creative_plans") or result.get("creativePlans") or []) if isinstance(item, dict)]
-    moods = [item for item in (result.get("mood_boards") or result.get("moodBoards") or []) if isinstance(item, dict)]
-    hooks = [item for item in (result.get("hooks") or result.get("hooks_list") or []) if isinstance(item, dict)]
+    plans, moods, hooks = _expand_creative_directions(result)
     embedded_plans = [item.get("creative_board") for item in hooks if isinstance(item.get("creative_board"), dict)]
     embedded_moods = [item.get("mood_board") for item in hooks if isinstance(item.get("mood_board"), dict)]
     missing = []
@@ -263,11 +328,41 @@ def _stage_one_missing_fields(data: dict) -> list[str]:
     return missing
 
 
+def _merge_hook_lists(data: dict) -> list[dict]:
+    """Merge hooks + hooks_list without collapsing distinct hooks with similar copy."""
+    hooks1 = [item for item in (data.get("hooks") or []) if isinstance(item, dict)]
+    hooks2 = [item for item in (data.get("hooks_list") or []) if isinstance(item, dict)]
+    if not hooks1:
+        return hooks2
+    if not hooks2:
+        return hooks1
+    # Normalized responses commonly expose the same list under both keys.
+    # Return it once instead of deduplicating by text: two valid Hooks may
+    # intentionally share copy while belonging to different plans/moods.
+    if hooks1 == hooks2:
+        return hooks1
+    ids1 = [item.get("hook_id") for item in hooks1]
+    ids2 = [item.get("hook_id") for item in hooks2]
+    if ids1 and ids1 == ids2:
+        return hooks1
+
+    seen_ids = set()
+    merged = []
+    for hook in hooks1 + hooks2:
+        hook_id = str(hook.get("hook_id") or "").strip()
+        if hook_id:
+            if hook_id in seen_ids:
+                continue
+            seen_ids.add(hook_id)
+            merged.append(hook)
+            continue
+        merged.append(hook)
+    return merged
+
+
 def _normalize_stage_one(data: dict, payload: dict) -> dict:
     result = _unwrap_stage_one_result(data)
-    plans = [item for item in (result.get("creative_plans") or result.get("creativePlans") or []) if isinstance(item, dict)]
-    moods = [item for item in (result.get("mood_boards") or result.get("moodBoards") or []) if isinstance(item, dict)]
-    source_hooks = [item for item in (result.get("hooks") or result.get("hooks_list") or []) if isinstance(item, dict)]
+    plans, moods, source_hooks = _expand_creative_directions(result)
     route_subtype, route_group = _infer_template_route(payload, result.get("product_brief") or {})
 
     if source_hooks and not plans:
@@ -320,105 +415,6 @@ def _normalize_stage_one(data: dict, payload: dict) -> dict:
     return normalized
 
 
-def mock_stage_one(payload: dict) -> dict:
-    theme = payload.get("campaign_theme") or "真实产品体验"
-    product_name = "营销主题产品" if not payload.get("product_url") else "待推广产品"
-    moods = [
-        {"mood_board_id": "mood-01", "name": "情绪降温", "tags": ["清凉", "通透", "真实使用"], "emotion_direction": "先被氛围吸引，再感到产品差异", "palette": ["清透主色", "低饱和辅助色"], "lighting": "柔和自然光，保留产品真实质感", "materials": ["通透", "水润", "细腻"], "scene_grammar": "从产品细节切入，再进入真实使用场景", "character_state": "自然放松，不做展示式摆拍", "camera_language": "细节特写与中近景交替"},
-        {"mood_board_id": "mood-02", "name": "生活向往", "tags": ["夏天", "出行", "松弛"], "emotion_direction": "把产品放进理想生活场景", "palette": ["明亮季节色", "自然环境色"], "lighting": "通透日光，强调空间呼吸感", "materials": ["轻盈", "柔软", "自然纹理"], "scene_grammar": "从日常动作扩展到可向往的生活片段", "character_state": "有目的地行动，保持真实松弛", "camera_language": "跟随动作推进，适度切换远近景"},
-        {"mood_board_id": "mood-03", "name": "差异占有", "tags": ["高颜值", "材质", "记忆点"], "emotion_direction": "让用户产生拥有同款的冲动", "palette": ["产品识别色", "克制背景色"], "lighting": "定向光勾勒轮廓，避免过度反光", "materials": ["质感", "光泽", "细节纹理"], "scene_grammar": "先建立产品记忆点，再用人物反应完成种草", "character_state": "自然发现并产生偏爱", "camera_language": "产品微距、人物反应和记忆性定格"},
-    ]
-    plans = [{
-        "plan_id": f"plan-{index + 1:02d}",
-        "title": f"{theme[:10]} · 方向 {index + 1}",
-        "core_hook": f"{theme}，从第 {index + 1} 个真实使用瞬间开始。",
-        "mood_board_id": mood["mood_board_id"],
-        "mood_board": mood["name"],
-        "emotion_direction": {"primary": mood["emotion_direction"], "secondary": mood["tags"]},
-        "slogan": f"把{theme}带进每一个日常瞬间",
-        "opening_method": ["触感叙事", "场景切入", "声音叙事"][index],
-        "rhythm_skeleton": ["三拍子", "渐强", "碎片化快剪"][index],
-        "visual_codes": ["产品细节", "真实人物", "统一材质"],
-        "director_guidance": "从真实行为开始，让产品在动作中自然出现，不做参数说明。",
-        "must_have_elements": ["产品与人物关系", "可感知材质", "明确情绪落点"],
-        "negative_rules": ["不虚构产品事实", "不做空泛风景空镜"],
-        "score": 86 - index,
-    } for index, mood in enumerate(moods)]
-    hooks = []
-    hook_styles = ["真实反差", "生活场景", "情绪共鸣", "记忆画面"]
-    for index in range(12):
-        plan = plans[index // 4]
-        mood = moods[index // 4]
-        hooks.append({
-            "hook_id": f"hook-{index + 1:02d}",
-            "plan_id": plan["plan_id"],
-            "mood_board_id": mood["mood_board_id"],
-            "title": f"{theme[:8]} · {hook_styles[index % 4]}",
-            "hook": f"{theme}，从一个{hook_styles[index % 4]}的瞬间开始。",
-            "description": "用一个可见的生活瞬间，让用户先感受到产品差异，再理解产品价值。",
-            "category": hook_styles[index % 4],
-            "emotion": mood["emotion_direction"],
-            "score": 86 - index // 4,
-        })
-    return {
-        "product_brief": {
-            "product_name": product_name,
-            "category": "消费品",
-            "summary": theme,
-            "selling_points": ["核心价值清晰", "适配真实使用场景"],
-            "pain_points": ["用户需要快速理解差异"],
-            "target_audience": "目标消费人群",
-            "purchase_motivations": ["解决问题", "获得更好体验"],
-            "visual_cues": ["产品特写", "真实人物场景"],
-            "risks": ["避免虚构功效数据"],
-        },
-        "mood_boards": moods,
-        "creative_plans": plans,
-        "hooks": hooks,
-        "recommended_plan_id": "plan-01",
-    }
-
-
-def mock_stage_two(payload: dict) -> dict:
-    duration = int(payload.get("duration") or 15)
-    hook = payload.get("hook") or {}
-    hook_text = hook.get("hook") if isinstance(hook, dict) else str(hook)
-    segments = []
-    count = max(3, round(duration / 5))
-    for index in range(count):
-        start = round(index * duration / count)
-        end = round((index + 1) * duration / count)
-        segments.append({
-            "time": f"{start}-{end}s",
-            "visual": f"镜头 {index + 1}：产品与使用场景",
-            "camera_movement": "稳定推进" if index == 0 else "细节切换",
-            "dialogue": hook_text if index == 0 else "延续产品价值与使用体验。",
-            "subtitle": hook_text if index == 0 else "真实体验，清晰表达。",
-            "music_sfx": "轻节奏配乐",
-            "video_prompt": "Commercial product video, clean lighting, consistent product identity",
-        })
-    return {"script_text": hook_text or "从真实体验开始讲述产品价值。", "script_segments": segments}
-
-
-def mock_stage_three(payload: dict) -> dict:
-    duration = int(payload.get("duration") or 15)
-    count = max(3, round(duration / 3))
-    storyboard = []
-    for index in range(count):
-        start = round(index * duration / count)
-        end = round((index + 1) * duration / count)
-        storyboard.append({
-            "time": f"{start}-{end}s",
-            "visual": f"镜头 {index + 1}：按 Mood Board 统一产品、人物与场景质感",
-            "camera_movement": "近景推进与中景切换",
-            "dialogue": "",
-            "subtitle": "",
-            "music_sfx": "轻节奏环境声",
-            "video_prompt": "Vertical commercial shot, consistent product identity, controlled lighting, clear material texture, deliberate camera movement",
-        })
-    return {"storyboard": storyboard}
-
-
 class StageThreeRequest(BaseModel):
     product_brief: dict = Field(default_factory=dict)
     hook: dict | str = Field(default_factory=dict)
@@ -465,7 +461,7 @@ def stage_three(payload: dict) -> dict:
 
     prompt = stage_three_prompt(payload, knowledge_context)
     sys_prompt = "You ONLY output in English. All visual descriptions must be English." if (payload.get("language") or "") in ("英文","english","en","English") else ""
-    data = mock_stage_three(payload) if os.getenv("PYTHON_MOCK_MODE") == "1" else gemini_kie_json(prompt, sys_prompt)
+    data = gemini_kie_json(prompt, sys_prompt)
     storyboard = data.get("storyboard") or []
     source_segments = payload.get("script_segments") or []
     normalized_storyboard = []
@@ -502,6 +498,8 @@ def stage_three(payload: dict) -> dict:
 
 
 def stage_one(payload: dict) -> dict:
+    import time as _time
+    _t0 = _time.perf_counter()
     source_parts = []
     import re
 
@@ -536,14 +534,56 @@ def stage_one(payload: dict) -> dict:
         source_parts.append(payload["document_text"])
     source_text = "\n\n".join(part for part in source_parts if part).strip()
 
-    # Stage 1 的第一层模型只做事实整理，禁止提前写创意，避免后续知识库检索和创意生成互相污染。
-    mock_mode = os.getenv("PYTHON_MOCK_MODE") == "1"
-    if mock_mode:
-        product_facts = dict((mock_stage_one(payload).get("product_brief") or {}))
+    submitted_images = list(payload.get("product_images") or [])
+    product_images = []
+    invalid_images = []
+    for item in submitted_images:
+        image_url = (
+            item.get("url") or item.get("image_url") or item.get("public_url")
+            if isinstance(item, dict)
+            else item
+        )
+        if isinstance(image_url, str) and image_url.startswith("https://"):
+            product_images.append(image_url)
+        else:
+            invalid_images.append(image_url)
+    if invalid_images:
+        raise ValueError("产品图片尚未上传为公开 HTTPS URL，已停止生成，避免豆包看不到图片")
+    page_image = page.get("image")
+    if isinstance(page_image, str) and page_image.startswith("https://") and page_image not in product_images:
+        product_images.append(page_image)
+    max_image_inputs = max(1, int(os.getenv("DOUBAO_MAX_IMAGE_INPUTS", "2")))
+    fact_images = product_images[:1]
+    creative_images = product_images[:max_image_inputs]
+
+    # 完整模式的第一层模型只做事实整理；快速模式用输入摘要作为 Wiki 检索线索，
+    # 再由一次豆包调用完成结构化输出。两种模式都必须经过广告策划 Wiki。
+    fast_mode = os.getenv("STAGE1_FAST_MODE", "1").strip() == "1"
+    doubao_models_used = []
+    doubao_fallback_used = False
+    if fast_mode:
+        # These values only help select the relevant Wiki section. Python does
+        # not write creative copy or supplement facts in the fast path.
+        product_facts = {
+            "product_name": page.get("title", ""),
+            "category": payload.get("product_category", ""),
+            "summary": page.get("description", "") or str(payload.get("document_text") or "")[:800],
+            "selling_points": [],
+            "campaign_theme": payload.get("campaign_theme", ""),
+        }
     else:
-        product_facts = chat_json(product_facts_prompt(payload, source_text), payload.get("language", "中文"))
+        print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] crawl done, calling Doubao #1 (product facts)...")
+        product_facts, facts_model, facts_fallback = _stage_one_doubao_json(
+            product_facts_prompt(payload, source_text),
+            payload.get("language", "中文"),
+            image_urls=fact_images,
+        )
+        doubao_models_used.append(facts_model)
+        doubao_fallback_used = doubao_fallback_used or facts_fallback
         if not isinstance(product_facts, dict) or not product_facts:
             raise ValueError("产品事实整理返回为空，已停止 Stage 1，避免用未核实信息生成创意")
+    if fast_mode:
+        print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] fast mode: keeping live Wiki and using one Doubao call...")
 
     # 只有事实整理完成后，才用产品名、品类和核心场景查询广告策划 Wiki。
     selling_points = product_facts.get("selling_points") or product_facts.get("selling_points_zh") or []
@@ -576,35 +616,94 @@ def stage_one(payload: dict) -> dict:
         product_category=product_category,
         template_group_id=template_group_id,
     )
-    # Stage 1 uses Doubao Responses for faster multimodal product understanding.
-    # Stage 2/3 remain on the existing Gemini-KIE path for now.
-    product_images = list(payload.get("product_images") or [])
-    if page.get("image") and page["image"] not in product_images:
-        product_images.append(page["image"])
-    data = mock_stage_one(payload) if mock_mode else doubao_json(
-        stage_one_prompt(payload, source_text, knowledge_context, product_facts),
-        image_urls=product_images,
+    knowledge_meta = _knowledge_trace("广告策划")
+    print(
+        f"[stage-1][{_time.perf_counter() - _t0:.1f}s] "
+        f"knowledge={knowledge_meta.get('source')} "
+        f"wiki_docs={knowledge_meta.get('wiki_document_count', 0)} "
+        f"cards={knowledge_meta.get('card_ids') or []} "
+        f"images={len(creative_images)}/{len(product_images)}"
     )
+    print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] calling Doubao creative model...")
+    # Stage 1 uses Doubao Responses for faster multimodal product understanding.
+    # Both factual extraction and creative planning use the same Doubao channel.
+    # Stage 2/3 remain on the existing Gemini-KIE path for now.
+    creative_prompt = stage_one_prompt(
+        payload,
+        source_text,
+        knowledge_context,
+        {} if fast_mode else product_facts,
+    )
+    data, creative_model, creative_fallback = _stage_one_doubao_json(
+        creative_prompt,
+        image_urls=creative_images,
+    )
+    doubao_models_used.append(creative_model)
+    doubao_fallback_used = doubao_fallback_used or creative_fallback
+    print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] Doubao creative model done, normalizing...")
     data = _normalize_stage_one(data, payload)
+    if fast_mode:
+        # The one-pass response's product brief is the factual contract for
+        # this latency-sensitive path; it is still produced by Doubao and is
+        # never supplemented with invented values in Python.
+        product_facts = dict(data.get("product_brief") or {})
     generated_brief = dict(data.get("product_brief") or {})
     for key, value in product_facts.items():
         if value and not generated_brief.get(key):
             generated_brief[key] = value
     data["product_brief"] = generated_brief
     data["product_facts"] = product_facts
+
+    # Retry: if hooks < 12, ask model to fill in the missing ones
+    hooks_after_merge = _merge_hook_lists(data)
+    if len(hooks_after_merge) < 12 and not fast_mode:
+        existing_hooks_json = json.dumps(hooks_after_merge, ensure_ascii=False, indent=2)
+        fixup_prompt = (
+            f"你上次生成的 hooks 数组只有 {len(hooks_after_merge)} 条，需要恰好 12 条。\n"
+            f"请基于以下已有 Hook，补充到恰好 12 条，保持风格、质量和字段结构一致。\n"
+            f"已有的 {len(hooks_after_merge)} 条 Hook：\n"
+            f"{existing_hooks_json}\n\n"
+            f"要求：\n"
+            f"1. 保留所有已有 Hook，补充缺失的 hook_id（用 hook-09 到 hook-12 等未使用的 ID）\n"
+            f"2. 补充的 Hook 风格和质量必须与已有的一致\n"
+            f"3. 按 Mood Board 对应：每个 mood_board_id 应有 4 条 Hook\n\n"
+            f"只返回 JSON：{{\"hooks\": [...]}}，hooks 数组必须恰好包含 12 条完整的 Hook 对象。"
+        )
+        try:
+            print(f"[stage-1] retrying: need 12 hooks, got {len(hooks_after_merge)}")
+            fixup_data = doubao_json(fixup_prompt)
+            fixup_hooks = [item for item in (_merge_hook_lists(fixup_data)) if isinstance(item, dict)]
+            if len(fixup_hooks) >= len(hooks_after_merge):
+                # Replace hooks in data with fixup result
+                data["hooks"] = fixup_hooks
+                data["hooks_list"] = fixup_hooks
+                data = _normalize_stage_one(data, payload)
+                data["product_brief"] = generated_brief
+                data["product_facts"] = product_facts
+                hooks_after_merge = _merge_hook_lists(data)
+                print(f"[stage-1] retry result: {len(hooks_after_merge)} hooks")
+        except Exception as retry_error:
+            print(f"[stage-1] retry failed: {retry_error}")
+
     missing = _stage_one_missing_fields(data)
     if missing:
         returned_keys = ", ".join(sorted(_unwrap_stage_one_result(data).keys())) or "无"
-        message = (
-            "模型结构化输出不完整，缺少："
-            + "、".join(missing)
-            + "。模型返回字段："
-            + returned_keys
-        )
-        print(f"[stage-1] rejected response: missing={missing}; keys={returned_keys}")
-        raise ValueError(message)
+        # Soft-fail: if only missing hooks and we have >= 8, proceed with warning
+        hooks_only_missing = all(m.startswith("hooks(") for m in missing)
+        if hooks_only_missing and len(hooks_after_merge) >= 8:
+            print(f"[stage-1] WARNING: only {len(hooks_after_merge)}/12 hooks, proceeding anyway; keys={returned_keys}")
+        else:
+            message = (
+                "模型结构化输出不完整，缺少："
+                + "、".join(missing)
+                + "。模型返回字段："
+                + returned_keys
+            )
+            print(f"[stage-1] rejected response: missing={missing}; keys={returned_keys}")
+            raise ValueError(message)
     plans = data.get("creative_plans") or []
     hooks = data.get("hooks") or []
+    print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] done: {len(plans)} plans, {len(hooks)} hooks, {len(data.get('mood_boards') or [])} moods")
     return {
         "ok": True,
         "product_record_id": f"python-{uuid.uuid4().hex[:16]}",
@@ -617,8 +716,13 @@ def stage_one(payload: dict) -> dict:
         "hooks": hooks,
         "hooks_list": hooks,
         "source": "python",
-        "model_provider": "mock" if mock_mode else "doubao-responses",
-        "product_facts_provider": "mock" if mock_mode else "deepseek",
+        "model_provider": "doubao-responses",
+        "product_facts_provider": "doubao-responses",
+        "model_name": doubao_models_used[-1] if doubao_models_used else "",
+        "doubao_fallback_used": doubao_fallback_used,
+        "image_inputs_received": len(product_images),
+        "image_inputs_sent": len(creative_images),
+        "image_vision_used": bool(creative_images),
         "knowledge_source": (_knowledge_trace("广告策划").get("source") or "unknown"),
         "knowledge_role": "广告策划",
         "knowledge_triggered": bool(_knowledge_trace("广告策划").get("api_attempted")),
@@ -628,12 +732,17 @@ def stage_one(payload: dict) -> dict:
         "pipeline_trace": {
             "order": [
                 "crawler",
-                "product_facts_model",
-                "planning_knowledge_wiki",
-                "doubao_responses_creative_model",
+                *(["planning_knowledge_wiki", "doubao_responses_fast_stage1_model"] if fast_mode else [
+                    "doubao_responses_product_facts_model",
+                    "planning_knowledge_wiki",
+                    "doubao_responses_creative_model",
+                ]),
             ],
             "crawler_completed": bool(page or source_text),
             "product_facts_completed": bool(product_facts),
+            "fast_mode": fast_mode,
+            "doubao_models_used": doubao_models_used,
+            "doubao_fallback_used": doubao_fallback_used,
             "knowledge_trace": _knowledge_trace("广告策划"),
         },
         "template_group_id": template_group_id,
@@ -661,19 +770,16 @@ def stage_two(payload: dict) -> dict:
         product_category=product_category,
         template_group_id=template_group_id,
     )
-    provider = "mock" if os.getenv("PYTHON_MOCK_MODE") == "1" else "gemini-kie"
-    if provider == "mock":
-        data = mock_stage_two(payload)
+    is_en = (payload.get("language") or "") in ("英文","english","en","English")
+    if is_en:
+        payload["duration"] = 8  # English always 8s
+    prompt = stage_two_prompt(payload, knowledge_context)
+    if is_en:
+        provider = "deepseek"
+        data = chat_json(prompt, payload.get("language",""))  # DeepSeek for English
     else:
-        is_en = (payload.get("language") or "") in ("英文","english","en","English")
-        if is_en:
-            payload["duration"] = 8  # English always 8s
-        prompt = stage_two_prompt(payload, knowledge_context)
-        if is_en:
-            provider = "deepseek"
-            data = chat_json(prompt, payload.get("language",""))  # DeepSeek for English
-        else:
-            data = gemini_kie_json(prompt)
+        provider = "gemini-kie"
+        data = gemini_kie_json(prompt)
     return {
         "ok": True,
         "script_text": data.get("script_text") or "",
@@ -713,6 +819,13 @@ class Handler(BaseHTTPRequestHandler):
                     "service": "adflow-python",
                     "knowledge_reader": "wiki-only-v3",
                     "knowledge_roles": ["广告策划", "编剧导演", "摄影摄像"],
+                    "stage1_fast_mode": os.getenv("STAGE1_FAST_MODE", "1").strip() == "1",
+                    "doubao_stream": os.getenv("DOUBAO_STREAM", "1").strip() != "0",
+                    "doubao_model": os.getenv("DOUBAO_MODEL", DEFAULT_DOUBAO_MODEL),
+                    "doubao_fallback_model": os.getenv(
+                        "DOUBAO_FALLBACK_MODEL",
+                        DEFAULT_DOUBAO_FALLBACK_MODEL,
+                    ),
                 },
             )
         elif parsed.path == "/knowledge/status":
@@ -796,8 +909,9 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     host = os.getenv("PYTHON_SERVICE_HOST", "127.0.0.1")
     port = int(os.getenv("PYTHON_SERVICE_PORT", "8787"))
+    server = ThreadingHTTPServer((host, port), Handler)
     print(f"Python service ready on http://{host}:{port}")
-    ThreadingHTTPServer((host, port), Handler).serve_forever()
+    server.serve_forever()
 
 
 if __name__ == "__main__":
