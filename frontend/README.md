@@ -11,6 +11,8 @@ cd ..
 npm run dev
 ```
 
+推荐直接在仓库根目录安装 Python 依赖并执行 `npm start`；它会同时启动前端、Python 服务和 Playwright 商品爬虫。n8n 仍需单独启动。
+
 默认打开 `http://localhost:4173/open-design.html`。
 
 前端同源代理默认把请求转到 `http://localhost:5678/webhook`。如果工作流只在 n8n 编辑器里监听测试事件，可以这样启动：

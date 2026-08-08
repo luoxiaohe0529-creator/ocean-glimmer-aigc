@@ -2,7 +2,7 @@
 
 set -e
 
-PROJECT_DIR="/Users/cuc2023/Documents/Codex/2026-06-23/codex-codex"
+PROJECT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
 PORT=4173
 
 PID="$(lsof -tiTCP:${PORT} -sTCP:LISTEN 2>/dev/null || true)"

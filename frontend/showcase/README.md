@@ -2,7 +2,7 @@
 
 本目录只存放作品集使用的脱敏前端、压缩视频和封面图。原始素材、运行数据、API 凭证与 n8n 执行记录不在公开目录中。
 
-`workbench/open-design-demo.html` 是静态展示页，只用于演示历史工作台交互，不是 `localhost:4174` 的生产入口，也不参与正式的 Stage 1 到 Stage 6 请求链路。生产页面统一使用仓库根目录的 `frontend/open-design.html` 与 `frontend/server.mjs`。
+`workbench/open-design-demo.html` 是静态展示页，只用于演示历史工作台交互，不是 `localhost:4173` 的生产入口，也不参与正式的 Stage 1 到 Stage 6 请求链路。生产页面统一使用仓库根目录的 `frontend/open-design.html` 与 `frontend/server.mjs`。
 
 ## 自动化工作流成片
 

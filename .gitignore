@@ -1,0 +1,29 @@
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Node / Python tooling
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# n8n local state and databases
+.n8n/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+
+# Runtime output and temporary media
+frontend/runtime/
+frontend/generated/uploads/
+frontend/generated/edits/
+*.log
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db

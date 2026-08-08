@@ -7,7 +7,11 @@ import Database from 'better-sqlite3';
 const dbPath = process.env.N8N_DB_PATH || path.join(process.env.HOME || '', '.n8n/database.sqlite');
 const workflowName = '系统｜产品图片上传到火山 TOS';
 const webhookPath = process.env.N8N_ASSET_UPLOAD_WORKFLOW || 'ai-ad-asset-upload';
-const bucketName = process.env.TOS_BUCKET || 'steady-store-aigc';
+const bucketName = String(process.env.TOS_BUCKET || '').trim();
+
+if (!bucketName || bucketName.startsWith('YOUR_')) {
+  throw new Error('请先设置 TOS_BUCKET，再安装图片上传工作流。');
+}
 
 if (!existsSync(dbPath)) throw new Error(`找不到 n8n 数据库: ${dbPath}`);
 try {

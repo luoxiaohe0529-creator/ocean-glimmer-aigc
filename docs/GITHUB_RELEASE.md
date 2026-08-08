@@ -23,7 +23,7 @@
 - 飞书 App Token、Table ID 和真实记录
 - 对象存储桶、私有域名与本机绝对路径
 
-这些内容已经写入 `.gitignore`，但发布前仍需人工确认。
+这些内容已经写入 `.gitignore`，并会由 `npm run check` 检查配置模板和已跟踪文件。
 
 ## 发布前检查
 
@@ -39,6 +39,7 @@ git status --short
 1. Node.js 服务端语法。
 2. 公开 n8n JSON 是否可解析并保持未激活。
 3. 公开文件中是否包含已知密钥、Token 或私有标识。
+4. `.env`、n8n 数据库和其他本地运行文件没有进入 Git 跟踪范围。
 
 随后手动确认：
 
@@ -95,3 +96,12 @@ feishu
 3. 使用 Demo 模式验证前端。
 4. 向一个全新的 n8n 实例导入公开工作流。
 5. 确认仓库搜索不到真实邮箱、Token、密钥和业务数据。
+
+## 合并前安全门槛
+
+在把 Draft PR 合并到 `main` 前，先完成[密钥轮换与合并前安全清单](SECRET_ROTATION.md)：
+
+1. 在飞书、模型服务和火山 TOS 后台作废历史凭证并生成新值。
+2. 更新本机 `.env`、n8n Credentials 和部署环境变量，不把新值提交到 Git。
+3. 确认 PR Checks 中的 `Repository checks / check` 全部通过。
+4. 将 Draft 改为 Ready for review，再合并 PR。

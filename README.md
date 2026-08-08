@@ -4,6 +4,34 @@
 
 项目重点不是单次“文生视频”，而是建立可选择、可追踪、可复用的广告生产链路：知识库负责方法，模型负责推理，Python 负责内容契约，n8n 负责异步媒体任务，前端负责人工决策。
 
+> Portfolio-grade AI application prototype：用人机协同把“产品事实 → 创意方案 → 导演脚本 → 摄影分镜 → 异步媒体任务”串成一条可追踪的生产链。
+
+## 60 秒看懂
+
+| 你想看什么 | 入口 |
+| --- | --- |
+| 先看真实产出 | [成片海报](frontend/showcase/posters/huawei-summer.jpg) · [Demo 模式](frontend/showcase/workbench/open-design-demo.html) |
+| 看真实产出 | [Demo 视频 01](frontend/demo/adflow-demo-01.mp4) · [Demo 视频 02](frontend/demo/adflow-demo-02.mp4) |
+| 看系统怎么拆 | [系统架构](docs/ARCHITECTURE.md) |
+| 看一次完整产品决策 | [Case Study](docs/CASE_STUDY.md) |
+| 看质量和安全边界 | [GitHub 发布检查](docs/GITHUB_RELEASE.md) · `npm run check` |
+
+![真实 Demo 产出](frontend/showcase/posters/huawei-summer.jpg)
+
+如果只有一分钟，先看上面的真实产出和 [Case Study](docs/CASE_STUDY.md)，再看 [frontend/server.mjs](frontend/server.mjs)、[python_service/server.py](python_service/server.py) 与 [n8n-workflows/public/04-video-generation.json](n8n-workflows/public/04-video-generation.json)。
+
+## 这个项目解决什么问题
+
+传统的“调用一个模型生成广告”很难稳定复用：产品事实容易被创意污染，用户无法在关键节点做选择，异步媒体任务也很难和上游创意决策重新关联。
+
+这个工作台把流程拆成三个可验证的决策阶段：
+
+1. Stage 1 抽取产品事实，读取广告策划 Wiki，生成 12 个可比较的 Hook、Mood Board 和完整创意方案。
+2. 用户选择 Hook/方案后，Stage 2 生成导演脚本；Stage 3 再把脚本转换为摄影分镜和视频生成提示词。
+3. n8n 只负责图片、视频、轮询、对象存储和结果回写等异步媒体任务。
+
+每一阶段都通过结构化字段、ID、状态和 trace 交接，而不是把上一阶段的自然语言全文直接塞给下一阶段。
+
 ## 核心能力
 
 - 抓取产品页面并区分事实信息与创意推演
@@ -23,8 +51,8 @@ flowchart LR
   INPUT["产品链接 / 营销主题 / 产品图片"] --> CRAWLER["产品页面抓取"]
   CRAWLER --> FACTS["DeepSeek · 产品事实整理"]
   FACTS --> KB1["广告策划 Wiki"]
-  KB1 --> GEMINI1["Gemini 3.1 Pro · Hook 与 Mood Board"]
-  GEMINI1 --> SELECT["用户选择 Hook"]
+  KB1 --> DOUBAO1["豆包 Responses · Hook 与 Mood Board"]
+  DOUBAO1 --> SELECT["用户选择 Hook"]
   SELECT --> KB2["编剧导演 Wiki"]
   KB2 --> GEMINI2["Gemini 3.1 Pro · 导演脚本"]
   GEMINI2 --> KB3["摄影摄像 Wiki"]
@@ -38,7 +66,7 @@ flowchart LR
 Stage 1 严格分为两次模型调用：
 
 1. DeepSeek 仅整理产品名称、品类、目标人群、卖点、痛点、使用场景和限制，不生成创意。
-2. 系统读取广告策划 Wiki 后，由 Gemini 3.1 Pro 生成 12 条 Hook、简要 Mood Board 和供 Stage 2 使用的隐藏创意板。
+2. 系统读取广告策划 Wiki 后，由豆包 Responses 生成 12 条 Hook、简要 Mood Board 和供 Stage 2 使用的隐藏创意板；产品图 URL 会作为多模态输入一并传入。
 
 这一分层避免产品事实与广告想象互相污染。
 
@@ -94,7 +122,8 @@ n8n 处理产品图对象存储、分镜图、角色图、视频任务提交、�
 | 网关层 | Node.js | 静态服务、同源代理、文件解析、统一入口 |
 | 内容层 | Python | 抓取、知识检索、模型调用、结构化契约、媒体适配 |
 | 策划模型 | DeepSeek | 可验证产品事实与简报 |
-| 创意模型 | Gemini 3.1 Pro via KIE.ai | Hook、Mood Board、导演脚本、摄影分镜 |
+| Stage 1 创意模型 | 豆包 Responses API | 产品图理解、Hook、Mood Board、完整创意方案 |
+| Stage 2/3 中文文本模型 | Gemini 3.1 Pro via KIE.ai | 导演脚本、摄影分镜 |
 | 编排层 | n8n | TOS 上传、图像/视频任务、等待、轮询、回写 |
 | 知识层 | 飞书 Wiki | 广告策划、编剧导演、摄影摄像模板 |
 | 媒体层 | 火山 TOS、FFmpeg | 公网素材与本地后期处理 |
@@ -107,11 +136,11 @@ n8n 处理产品图对象存储、分镜图、角色图、视频任务提交、�
 npm start
 ```
 
-该命令统一管理前端、Python 服务和 n8n，避免重复启动造成 `EADDRINUSE`。
+该命令统一管理前端、Python 服务和商品爬虫，避免本地服务重复启动造成 `EADDRINUSE`。n8n 是独立服务，需要单独启动。
 
 默认地址：
 
-- 工作台：<http://localhost:4174>
+- 工作台：<http://localhost:4173>
 - Python 健康检查：<http://127.0.0.1:8787/health>
 - n8n：<http://127.0.0.1:5678>
 
@@ -122,6 +151,7 @@ npm start
 ```bash
 npm install
 python3 -m pip install -r python_service/requirements.txt
+npm exec playwright install chromium
 ```
 
 ### 2. 配置环境
@@ -130,7 +160,9 @@ python3 -m pip install -r python_service/requirements.txt
 cp .env.example .env
 ```
 
-按需填写 DeepSeek、KIE.ai、飞书和媒体服务配置。真实密钥只能存放在 `.env` 或 n8n Credentials 中。
+按需填写 DeepSeek、豆包、KIE.ai、飞书和媒体服务配置。真实密钥只能存放在本机 `.env` 或 n8n Credentials 中，不能写进 Python 源码。
+
+启动 n8n 后，再确认 `.env` 中的 `N8N_BASE_URL`、Webhook 路径和对象存储配置与 n8n 工作流一致。
 
 ### 3. 安装 TOS 上传工作流
 
@@ -159,8 +191,10 @@ npm start
 │   ├── prompts.py             # 结构化提示词契约
 │   ├── feishu_knowledge.py    # Wiki-only 知识读取器
 │   ├── deepseek.py            # 产品事实模型
-│   └── gemini_kie.py          # Gemini 3.1 Pro 通道
+│   ├── doubao.py              # Stage 1 豆包 Responses 多模态通道
+│   └── gemini_kie.py          # Stage 2/3 Gemini 3.1 Pro 通道
 ├── n8n-workflows/public/      # 脱敏公开工作流
+├── scraper-service.mjs        # Playwright 商品爬虫服务
 ├── docs/knowledge/            # 三份知识库整理版
 ├── docs/                      # 架构、配置与接口文档
 ├── scripts/                   # 检查、导出和安装工具
@@ -182,6 +216,8 @@ npm run check
 - 私密 Token、对象存储地址和本机路径泄漏
 - Stage 1 → Stage 2 → Stage 3 数据传递约束
 
+GitHub Actions 会在 push 和 Pull Request 时自动运行同一套检查。
+
 ## 安全与公开边界
 
 公开仓库不包含：
@@ -191,6 +227,8 @@ npm run check
 - 飞书 App Secret、Base Token 和真实业务记录
 - 火山 TOS 私有地址与本机绝对路径
 - 运行日志、缓存、恢复文件和历史备份
+
+合并前请先完成[密钥轮换与合并前安全清单](docs/SECRET_ROTATION.md)。当前文件的清理和 CI 扫描不能让已经进入 Git 历史的旧凭证自动失效。
 
 ## 项目价值
 
@@ -202,4 +240,6 @@ npm run check
 - [安装说明](docs/SETUP.md)
 - [接口契约](docs/WORKFLOW_CONTRACTS.md)
 - [飞书知识库接入](docs/FEISHU_KNOWLEDGE.md)
+- [Case Study：一次完整的产品决策](docs/CASE_STUDY.md)
 - [GitHub 发布检查](docs/GITHUB_RELEASE.md)
+- [密钥轮换与合并前安全清单](docs/SECRET_ROTATION.md)

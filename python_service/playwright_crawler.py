@@ -6,6 +6,7 @@ Product page crawler.
 """
 
 import re
+import os
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
 
@@ -177,10 +178,11 @@ def _curlcffi_fetch(url: str) -> dict:
 
 # ---- Playwright service fetch for stubborn sites ----
 def _playwright_fetch(url: str) -> dict:
-    """Use the standalone Node.js Playwright scraper service (port 9876)."""
+    """Use the standalone Node.js Playwright scraper service."""
     try:
+        scraper_base_url = os.getenv("SCRAPER_SERVICE_URL", "http://127.0.0.1:9876").rstrip("/")
         resp = httpx.post(
-            "http://127.0.0.1:9876/scrape",
+            f"{scraper_base_url}/scrape",
             json={"url": _convert_to_mobile(url)},
             timeout=35,
         )

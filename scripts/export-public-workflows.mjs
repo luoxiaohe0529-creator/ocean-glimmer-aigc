@@ -42,7 +42,7 @@ function sanitizeString(value, key = '') {
     .replace(/\/apps\/[A-Za-z0-9_-]+/g, '/apps/YOUR_FEISHU_APP_TOKEN')
     .replace(/\btbl[A-Za-z0-9_-]{8,}\b/g, 'YOUR_FEISHU_TABLE_ID')
     .replace(/\b[A-Za-z0-9_-]{8,}\.tos-cn-[A-Za-z0-9-]+\.volces\.com\b/g, 'YOUR_BUCKET.tos-cn-region.volces.com')
-    .replace(/\/Users\/cuc2023\/[^\s"'`\\]+/g, '/path/to/local/runtime')
+    .replace(/\/(?:Users|home)\/[^\s"'`\\]+/g, '/path/to/local/runtime')
     .replace(/https:\/\/api\.deepseek\.com\/chat\/completions/g, '={{ $env.DEEPSEEK_API_URL || "https://api.deepseek.com/chat/completions" }}');
 
   // Repair Python-style literals accidentally pasted into n8n JavaScript Code nodes.
