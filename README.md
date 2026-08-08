@@ -226,6 +226,8 @@ GitHub Actions 会在 push 和 Pull Request 时自动运行同一套检查。
 - 火山 TOS 私有地址与本机绝对路径
 - 运行日志、缓存、恢复文件和历史备份
 
+合并前请先完成[密钥轮换与合并前安全清单](docs/SECRET_ROTATION.md)。当前文件的清理和 CI 扫描不能让已经进入 Git 历史的旧凭证自动失效。
+
 ## 项目价值
 
 这个项目展示的不只是模型 API 调用，还包括 AI 产品流程设计、知识库分层、结构化提示词工程、多模型路由、异步任务编排、对象存储、前后端状态管理和可观测的数据交接。它适合作为 AI 产品经理、AI 应用工程师、Agent 工作流工程师或 AIGC 创意技术岗位的作品集项目。
@@ -238,3 +240,4 @@ GitHub Actions 会在 push 和 Pull Request 时自动运行同一套检查。
 - [飞书知识库接入](docs/FEISHU_KNOWLEDGE.md)
 - [Case Study：一次完整的产品决策](docs/CASE_STUDY.md)
 - [GitHub 发布检查](docs/GITHUB_RELEASE.md)
+- [密钥轮换与合并前安全清单](docs/SECRET_ROTATION.md)

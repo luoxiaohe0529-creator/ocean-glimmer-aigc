@@ -96,3 +96,12 @@ feishu
 3. 使用 Demo 模式验证前端。
 4. 向一个全新的 n8n 实例导入公开工作流。
 5. 确认仓库搜索不到真实邮箱、Token、密钥和业务数据。
+
+## 合并前安全门槛
+
+在把 Draft PR 合并到 `main` 前，先完成[密钥轮换与合并前安全清单](SECRET_ROTATION.md)：
+
+1. 在飞书、模型服务和火山 TOS 后台作废历史凭证并生成新值。
+2. 更新本机 `.env`、n8n Credentials 和部署环境变量，不把新值提交到 Git。
+3. 确认 PR Checks 中的 `Repository checks / check` 全部通过。
+4. 将 Draft 改为 Ready for review，再合并 PR。
