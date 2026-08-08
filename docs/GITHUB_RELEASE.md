@@ -105,3 +105,11 @@ feishu
 2. 更新本机 `.env`、n8n Credentials 和部署环境变量，不把新值提交到 Git。
 3. 确认 PR Checks 中的 `Repository checks / check` 全部通过。
 4. 将 Draft 改为 Ready for review，再合并 PR。
+
+## 在线作品集
+
+合并到 `main` 后，`Deploy portfolio to GitHub Pages` 会把 `frontend/portfolio.html` 发布为站点首页。公开访问地址为：
+
+```text
+https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/
+```

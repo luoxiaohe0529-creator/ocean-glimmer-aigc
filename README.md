@@ -10,6 +10,7 @@
 
 | 你想看什么 | 入口 |
 | --- | --- |
+| 在线播放作品集 | [打开 GitHub Pages](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/) |
 | 先看真实产出 | [中文版成片](frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4) · [英文版成片](frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4) |
 | 看工作台 | [Demo 模式](frontend/showcase/workbench/open-design-demo.html) · [中英文视频目录](frontend/showcase/README.md) |
 | 看系统怎么拆 | [系统架构](docs/ARCHITECTURE.md) |
