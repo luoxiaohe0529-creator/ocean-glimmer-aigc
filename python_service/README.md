@@ -17,6 +17,8 @@ Endpoints:
 
 Configuration is read from the project `.env`. Use `PYTHON_MOCK_MODE=1` for local UI tests without calling external models.
 
+The root `npm start` command also starts the Node Playwright scraper on `SCRAPER_SERVICE_URL` (default `http://127.0.0.1:9876`). Install its browser once with `npm exec playwright install chromium`.
+
 The three Feishu role Wiki documents are the stable knowledge/configuration layer:
 
 - 广告策划：受众、卖点转译、核心视觉资产、场景资源、甲方限制

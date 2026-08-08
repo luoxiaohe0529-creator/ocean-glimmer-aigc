@@ -7,6 +7,7 @@
 - n8n 2.x
 - `unzip`（用于解析 DOCX / XLSX / PPTX）
 - FFmpeg（后期剪辑、配乐和字幕需要）
+- Chromium（商品页面 Playwright 抓取服务使用）
 
 公开的 04 成片模板还需要自托管 n8n 允许 Code 节点访问 `child_process` 和 `fs`。托管版 n8n 或受限运行环境应改用独立媒体 Worker。
 
@@ -14,15 +15,18 @@
 
 ```bash
 python3 -m pip install -r python_service/requirements.txt
+npm exec playwright install chromium
 cp .env.example .env
 npm run dev
 ```
 
-在 `.env` 中填写 `DEEPSEEK_API_KEY` 与 `KIE_API_KEY`，并确认 `FFMPEG_PATH` 指向可执行文件。Stage 1 创意生成、Stage 2 中文导演脚本和 Stage 3 摄影分镜统一通过 KIE.ai 的 Gemini 3.1 Pro 通道。要启用动态知识筛选器，还需配置飞书 App 凭证和三个角色 Wiki；详见 [飞书知识库接入](FEISHU_KNOWLEDGE.md)。`npm start` 会从唯一入口统一启动 Python、Node 网关与 n8n。
+在 `.env` 中填写 `DEEPSEEK_API_KEY` 与 `KIE_API_KEY`。`FFMPEG_PATH` 可以留空，服务会从系统 `PATH` 查找 ffmpeg；只有在自定义安装路径时才需要填写。Stage 1 创意生成、Stage 2 中文导演脚本和 Stage 3 摄影分镜统一通过 KIE.ai 的 Gemini 3.1 Pro 通道。要启用动态知识筛选器，还需配置飞书 App 凭证和三个角色 Wiki；详见 [飞书知识库接入](FEISHU_KNOWLEDGE.md)。`npm start` 会从唯一入口统一启动 Python、Node 网关与 Playwright 商品爬虫，n8n 需要单独启动。
 
 默认地址：`http://localhost:4173/open-design.html`
 
 服务端默认连接：`http://127.0.0.1:5678/webhook`
+
+商品爬虫默认监听：`http://127.0.0.1:9876`。
 
 如需使用 n8n 编辑器的测试 Webhook：
 

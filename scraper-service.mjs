@@ -6,21 +6,23 @@
 import { createServer } from 'node:http';
 import { chromium } from 'playwright';
 
-const PORT = 9876;
+const PORT = Number(process.env.SCRAPER_SERVICE_PORT || 9876);
 let _browser = null;
 
 async function getBrowser() {
   if (_browser) return _browser;
-  _browser = await chromium.launch({
+  const launchOptions = {
     headless: true,
-    channel: 'chrome',
     args: [
       '--disable-blink-features=AutomationControlled',
       '--no-sandbox',
       '--disable-dev-shm-usage',
       '--disable-gpu',
     ],
-  });
+  };
+  const browserChannel = String(process.env.PLAYWRIGHT_BROWSER_CHANNEL || '').trim();
+  if (browserChannel) launchOptions.channel = browserChannel;
+  _browser = await chromium.launch(launchOptions);
   console.log('[scraper] Browser started');
   return _browser;
 }

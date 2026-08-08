@@ -342,11 +342,14 @@ async function proxyPost(req, res, pathname) {
       signal: AbortSignal.timeout(timeoutMs),
     });
     let responseBody = Buffer.from(await upstream.arrayBuffer());
-    if (pathname === '/api/workflow/stage-4') {
+    if (pathname === '/api/workflow/stage-4' && upstream.ok) {
       responseBody = normalizeVideoResponse(responseBody);
       await saveLatestVideo(body, responseBody);
     }
-    res.writeHead(pathname === '/api/workflow/stage-4' ? 200 : upstream.status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.writeHead(upstream.status, {
+      'Content-Type': upstream.headers.get('content-type') || 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+    });
     res.end(Buffer.from(responseBody));
   } catch (error) {
     const timedOut = error.name === 'TimeoutError';

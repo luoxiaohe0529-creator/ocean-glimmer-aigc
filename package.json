@@ -9,7 +9,7 @@
     "start": "node --env-file-if-exists=.env scripts/dev.mjs",
     "dev:frontend": "node --env-file-if-exists=.env frontend/server.mjs",
     "dev:python": "python3 -m python_service.server",
-    "check:server": "node --check frontend/server.mjs",
+    "check:server": "node --check frontend/server.mjs && node --check scripts/dev.mjs && node --check scraper-service.mjs && node --check scripts/create-live-feishu-workbench.mjs",
     "check:entrypoints": "node scripts/check-entrypoints.mjs",
     "check:python": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s python_service/tests",
     "check:workflows": "node scripts/check-public-workflows.mjs",

@@ -1,13 +1,14 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const cli = process.env.LARK_CLI || "/Users/cuc2023/.nvm/versions/node/v22.23.1/bin/lark-cli";
-const schemaPath = process.env.FEISHU_SCHEMA ||
-  resolve(here, "../work/ai-video-factory-n8n-updated/config/feishu_base_schema.template.json");
+const cli = process.env.LARK_CLI || "lark-cli";
+const schemaPath = process.env.FEISHU_SCHEMA || "";
 const baseHost = process.env.FEISHU_BASE_HOST || "pcn7bpsihajy.feishu.cn";
+const sourceBaseToken = process.env.SOURCE_FEISHU_BASE_TOKEN || "";
+const sourceTableId = process.env.SOURCE_FEISHU_TABLE_ID || "";
 const args = new Set(process.argv.slice(2));
 const contentTypeArg = process.argv.find((value) => value.startsWith("--content-type="));
 const contentType = contentTypeArg ? contentTypeArg.slice("--content-type=".length) : "";
@@ -15,6 +16,11 @@ const contentType = contentTypeArg ? contentTypeArg.slice("--content-type=".leng
 if (process.env.CREATE_FEISHU_WORKBENCH !== "YES") {
   console.error("This creates a new Feishu Base and does not change the old Bases.");
   console.error("Run again with: CREATE_FEISHU_WORKBENCH=YES node scripts/create-live-feishu-workbench.mjs");
+  process.exit(2);
+}
+
+if (!schemaPath) {
+  console.error("请设置 FEISHU_SCHEMA，指向飞书多维表格 schema JSON 文件。");
   process.exit(2);
 }
 
@@ -312,11 +318,14 @@ async function main() {
   }
 
   if (!args.has("--no-migrate")) {
+    if (!sourceBaseToken || !sourceTableId) {
+      throw new Error("迁移旧数据前请设置 SOURCE_FEISHU_BASE_TOKEN 和 SOURCE_FEISHU_TABLE_ID；不迁移请使用 --no-migrate。");
+    }
     console.log("Migrating populated strategy cases...");
     const sourceResponse = runCli([
       "base", "+record-list",
-      "--base-token", "Ag6DbPVpGad4McsV82qcFaFsnge",
-      "--table-id", "tblPO31EmimZKN9x",
+      "--base-token", sourceBaseToken,
+      "--table-id", sourceTableId,
       "--limit", "200"
     ]);
     const records = sourceRecords(sourceResponse);

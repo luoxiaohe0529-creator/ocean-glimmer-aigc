@@ -207,7 +207,7 @@
           "url": "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal",
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={{ { \"app_id\": \"cli_a97a2387da78dbb3\", \"app_secret\": \"Vd97OBAWLo91MMK7byIeuchgXlaqGDOA\" } }}",
+          "jsonBody": "={{ { \"app_id\": $env.FEISHU_APP_ID, \"app_secret\": $env.FEISHU_APP_SECRET } }}",
           "options": {}
         },
         "id": "73573c34-181f-4345-a735-abdeaaa9c927",
@@ -222,7 +222,7 @@
       {
         "parameters": {
           "method": "PUT",
-          "url": "=https://open.feishu.cn/open-apis/bitable/v1/apps/IFm7bxUGSaWFQ2supuUcS72knWm/tables/tblaA6y2kuVlb6j9/records/{{ $(\"整理Seedance生成参数\").first().json.video_task_id }}",
+          "url": "=https://open.feishu.cn/open-apis/bitable/v1/apps/YOUR_FEISHU_APP_TOKEN/tables/YOUR_FEISHU_TABLE_ID/records/{{ $(\"整理Seedance生成参数\").first().json.video_task_id }}",
           "sendHeaders": true,
           "headerParameters": {
             "parameters": [

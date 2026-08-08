@@ -6,17 +6,31 @@ import tempfile
 import uuid
 import json
 import zipfile
+import shutil
 from pathlib import Path
 
 
 def _ffmpeg_path() -> str:
-    return os.getenv("FFMPEG_PATH", "/Users/cuc2023/.npm-global/bin/ffmpeg")
+    configured = os.getenv("FFMPEG_PATH", "").strip()
+    if configured:
+        path = Path(configured).expanduser()
+        if path.is_file() and os.access(path, os.X_OK):
+            return str(path)
+        raise RuntimeError(f"FFMPEG_PATH 不可执行或不存在：{path}")
+    discovered = shutil.which("ffmpeg")
+    if discovered:
+        return discovered
+    raise RuntimeError("找不到 ffmpeg，请安装 ffmpeg 或设置 FFMPEG_PATH")
 
 
 def _download(url: str, target: Path) -> None:
     if not url.startswith(("http://", "https://")):
         if url.startswith("/"):
-            url = f"http://127.0.0.1:4173{url}"
+            frontend_base_url = os.getenv(
+                "FRONTEND_BASE_URL",
+                f"http://127.0.0.1:{os.getenv('PORT', '4173')}",
+            ).rstrip("/")
+            url = f"{frontend_base_url}{url}"
         else:
             raise ValueError("视频地址必须是 HTTP(S) URL")
     result = subprocess.run(
@@ -475,8 +489,12 @@ def upscale_video(input_path: Path, output_path: Path, target_height: int = 1080
 def upscale_video_ai(input_path: Path, output_path: Path, target_height: int = 1080) -> dict:
     """AI upscale using Real-ESRGAN (local, free).
     Extracts frames → upscales each → reassembles with audio."""
-    binary = os.getenv("REALESRGAN_PATH", "/Users/cuc2023/.npm-global/bin/realesrgan-ncnn-vulkan")
-    models = os.getenv("REALESRGAN_MODELS", "/Users/cuc2023/.npm-global/bin/realesrgan-models")
+    binary = os.getenv("REALESRGAN_PATH", "").strip() or shutil.which("realesrgan-ncnn-vulkan")
+    models = os.getenv("REALESRGAN_MODELS", "").strip()
+    if not binary:
+        raise RuntimeError("找不到 Real-ESRGAN，请设置 REALESRGAN_PATH")
+    if not models or not Path(models).is_dir():
+        raise RuntimeError("找不到 Real-ESRGAN 模型目录，请设置 REALESRGAN_MODELS")
 
     with tempfile.TemporaryDirectory(prefix="adflow-esrgan-") as temp:
         temp_path = Path(temp)
