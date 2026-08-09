@@ -1,6 +1,6 @@
 # Python service
 
-Stage 1, Stage 2 and Stage 3 run here because they are direct HTTP + LLM + JSON tasks. Stage 1 always reads the advertising-planning Wiki. By default, its fast path uses one Doubao Responses call after the Wiki retrieval; setting `STAGE1_FAST_MODE=0` restores the separate Doubao factual-analysis call followed by Wiki retrieval and the creative call. Stage 2 uses the existing Gemini 3.1 Pro channel with the selected Hook, Mood Board and director Wiki; Stage 3 uses the resulting script with the camera Wiki. The English Stage 2 text path can use DeepSeek. The service also exposes KIE.ai task adapters and a local FFmpeg editing endpoint.
+Stage 1, Stage 2 and Stage 3 run here because they are direct HTTP + LLM + JSON tasks. Stage 1 reads the advertising-planning Wiki while the product page is being fetched, then makes one multimodal KIE.ai Gemini 3.1 Pro call for the product brief, 3 Mood Boards, 3 creative plans and 12 Hooks. Stage 2 uses the same Gemini 3.1 Pro channel with the selected Hook, Mood Board and director Wiki; Stage 3 uses the resulting script with the camera Wiki. The English Stage 2 text path can use DeepSeek. The service also exposes KIE.ai task adapters and a local FFmpeg editing endpoint.
 
 Endpoints:
 

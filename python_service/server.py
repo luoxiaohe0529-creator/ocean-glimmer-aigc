@@ -514,10 +514,19 @@ def stage_one(payload: dict) -> dict:
             url = "https://" + url
         return fetch_product_page(url) if url.startswith("http") else {}
 
-    # 产品页面先抓取，再用标题找相关知识
-    with ThreadPoolExecutor(max_workers=1) as executor:
+    # 产品页抓取与飞书 Wiki 预读取互不依赖，同时启动。Wiki 内容进入
+    # FeishuKnowledge 的原有缓存；拿到产品信息后仍用同一套 context()
+    # 路由和排序逻辑选择知识卡，因此传给模型的内容与串行版本一致。
+    with ThreadPoolExecutor(max_workers=2) as executor:
         page_future = executor.submit(fetch_source)
+        wiki_future = executor.submit(knowledge.records_for, ("广告策划",))
         page = page_future.result()
+        try:
+            wiki_future.result()
+        except Exception:
+            # context() below owns the public error contract and trace metadata.
+            # Let it report a strict Wiki failure in exactly the same way as before.
+            pass
 
     source_parts += [page.get("title", ""), page.get("description", ""), page.get("text", "")]
     # When crawler is blocked, tell LLM to rely on campaign theme + knowledge base
@@ -558,7 +567,10 @@ def stage_one(payload: dict) -> dict:
 
     # 完整模式的第一层模型只做事实整理；快速模式用输入摘要作为 Wiki 检索线索，
     # 再由一次豆包调用完成结构化输出。两种模式都必须经过广告策划 Wiki。
-    fast_mode = os.getenv("STAGE1_FAST_MODE", "1").strip() == "1"
+    # Stage 1 always uses one multimodal Doubao call. Product facts, three
+    # creative directions, three Mood Boards and twelve Hooks share one
+    # response contract; the live Feishu Wiki remains mandatory.
+    fast_mode = True
     doubao_models_used = []
     doubao_fallback_used = False
     if fast_mode:
@@ -583,7 +595,7 @@ def stage_one(payload: dict) -> dict:
         if not isinstance(product_facts, dict) or not product_facts:
             raise ValueError("产品事实整理返回为空，已停止 Stage 1，避免用未核实信息生成创意")
     if fast_mode:
-        print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] fast mode: keeping live Wiki and using one Doubao call...")
+        print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] single-call mode: keeping live Wiki and using KIE Gemini 3.1 Pro...")
 
     # 只有事实整理完成后，才用产品名、品类和核心场景查询广告策划 Wiki。
     selling_points = product_facts.get("selling_points") or product_facts.get("selling_points_zh") or []
@@ -624,23 +636,23 @@ def stage_one(payload: dict) -> dict:
         f"cards={knowledge_meta.get('card_ids') or []} "
         f"images={len(creative_images)}/{len(product_images)}"
     )
-    print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] calling Doubao creative model...")
-    # Stage 1 uses Doubao Responses for faster multimodal product understanding.
-    # Both factual extraction and creative planning use the same Doubao channel.
-    # Stage 2/3 remain on the existing Gemini-KIE path for now.
+    stage1_model = "gemini-3.1-pro"
+    print(
+        f"[stage-1][{_time.perf_counter() - _t0:.1f}s] "
+        f"calling KIE Gemini 3.1 Pro (prompt=social-hook-v2)..."
+    )
     creative_prompt = stage_one_prompt(
         payload,
         source_text,
         knowledge_context,
         {} if fast_mode else product_facts,
     )
-    data, creative_model, creative_fallback = _stage_one_doubao_json(
+    data = gemini_kie_json(
         creative_prompt,
+        "",
         image_urls=creative_images,
     )
-    doubao_models_used.append(creative_model)
-    doubao_fallback_used = doubao_fallback_used or creative_fallback
-    print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] Doubao creative model done, normalizing...")
+    print(f"[stage-1][{_time.perf_counter() - _t0:.1f}s] KIE Gemini 3.1 Pro done, normalizing...")
     data = _normalize_stage_one(data, payload)
     if fast_mode:
         # The one-pass response's product brief is the factual contract for
@@ -716,9 +728,10 @@ def stage_one(payload: dict) -> dict:
         "hooks": hooks,
         "hooks_list": hooks,
         "source": "python",
-        "model_provider": "doubao-responses",
-        "product_facts_provider": "doubao-responses",
-        "model_name": doubao_models_used[-1] if doubao_models_used else "",
+        "model_provider": "gemini-kie",
+        "product_facts_provider": "gemini-kie",
+        "model_name": stage1_model,
+        "prompt_version": "social-hook-v2",
         "doubao_fallback_used": doubao_fallback_used,
         "image_inputs_received": len(product_images),
         "image_inputs_sent": len(creative_images),
@@ -732,7 +745,7 @@ def stage_one(payload: dict) -> dict:
         "pipeline_trace": {
             "order": [
                 "crawler",
-                *(["planning_knowledge_wiki", "doubao_responses_fast_stage1_model"] if fast_mode else [
+                *(["planning_knowledge_wiki", "gemini_kie_3_1_pro_stage1_model"] if fast_mode else [
                     "doubao_responses_product_facts_model",
                     "planning_knowledge_wiki",
                     "doubao_responses_creative_model",

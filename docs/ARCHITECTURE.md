@@ -37,7 +37,7 @@ flowchart TB
 
 | 前端角色 | n8n 工作流 | 原因 |
 | --- | --- | --- |
-| 广告策划 | Python Stage 1 + Doubao Responses | 页面抓取 → 豆包产品事实 → 广告策划 Wiki → 豆包读取产品图并生成 Mood Board、12 个 Hook 与结构化 JSON |
+| 广告策划 | Python Stage 1 + KIE Gemini 3.1 Pro | 页面抓取与广告策划 Wiki 并发读取 → Gemini 读取产品图并一次生成产品简报、3 个 Mood Board、3 个方案、12 个 Hook 与结构化 JSON |
 | 编剧导演 | Python Stage 2 + Gemini 3.1 Pro | 读取编剧导演知识，生成脚本与导演分镜 |
 | 摄影摄像 | Python Stage 3 + Gemini-KIE；n8n 04 / 05 | 读取摄影摄像知识，生成精细分镜；n8n 负责后续图片、视频任务与轮询 |
 | 后期剪辑 | Python FFmpeg Worker | 截取、画幅转换、配乐混音和字幕烧录 |

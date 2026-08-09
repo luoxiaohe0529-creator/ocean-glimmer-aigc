@@ -18,6 +18,7 @@ from python_service.server import (
 from python_service.doubao import DoubaoTimeoutError, _stream_response_text
 from python_service.feishu_knowledge import FILTER_DEFINITIONS, FeishuKnowledge, WikiConfig, _parse_wiki_cards
 from python_service.kie import create_image_task, create_kling_video_task, query_task
+from python_service.prompts import stage_one_prompt
 
 
 def stage_one_fixture():
@@ -80,6 +81,15 @@ def stage_three_fixture():
 
 
 class ServiceTests(unittest.TestCase):
+    def test_stage_one_prompt_requires_social_native_hook_mechanics(self):
+        prompt = stage_one_prompt({"content_type": "高端TVC"}, "产品资料", "飞书知识")
+        self.assertIn("首个 0-1 秒的视觉打断点", prompt)
+        self.assertIn("不得写成分镜动作清单", prompt)
+        self.assertIn("12 条之间不得只是替换", prompt)
+        self.assertIn('"scroll_stop_frame"', prompt)
+        self.assertIn("至少 24 个候选 Hook", prompt)
+        self.assertIn("两拍结构", prompt)
+
     def test_doubao_stream_parser_collects_responses_api_deltas(self):
         lines = [
             'event: response.output_text.delta',
@@ -108,20 +118,22 @@ class ServiceTests(unittest.TestCase):
         payload = StageOneRequest(campaign_theme="夏日樱花晚霞").model_dump()
         with patch.dict(os.environ, {"STAGE1_FAST_MODE": "1"}):
             with patch("python_service.server.fetch_product_page", return_value={}):
-                with patch("python_service.server.knowledge.context", return_value="真实飞书策划知识"):
-                    with patch(
-                        "python_service.server._stage_one_doubao_json",
-                        return_value=(stage_one_fixture(), "doubao-test", False),
-                    ):
-                        result = stage_one(payload)
+                with patch("python_service.server.knowledge.records_for", return_value={"广告策划": []}) as wiki_prefetch:
+                    with patch("python_service.server.knowledge.context", return_value="真实飞书策划知识"):
+                        with patch(
+                            "python_service.server.gemini_kie_json",
+                            return_value=stage_one_fixture(),
+                        ):
+                            result = stage_one(payload)
+        wiki_prefetch.assert_called_once_with(("广告策划",))
         self.assertTrue(result["ok"])
         self.assertEqual(len(result["creative_plans"]), 3)
         self.assertEqual(len(result["mood_boards"]), 3)
         self.assertEqual(len(result["hooks"]), 12)
         self.assertEqual(result["recommended_plan_id"], "plan-01")
-        self.assertEqual(result["model_provider"], "doubao-responses")
-        self.assertEqual(result["product_facts_provider"], "doubao-responses")
-        self.assertIn("doubao_responses_fast_stage1_model", result["pipeline_trace"]["order"])
+        self.assertEqual(result["model_provider"], "gemini-kie")
+        self.assertEqual(result["product_facts_provider"], "gemini-kie")
+        self.assertIn("gemini_kie_3_1_pro_stage1_model", result["pipeline_trace"]["order"])
 
     def test_fused_creative_directions_expand_to_frontend_contract(self):
         directions = []
@@ -153,26 +165,23 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(result["hooks"][8]["mood_board_id"], "mood-03")
         self.assertEqual(_stage_one_missing_fields(result), [])
 
-    def test_stage_one_uses_doubao_channel_for_creative_output(self):
+    def test_stage_one_uses_one_kie_gemini_call_even_if_legacy_fast_flag_is_zero(self):
         payload = StageOneRequest(campaign_theme="夏日樱花晚霞").model_dump()
         creative_output = stage_one_fixture()
         with patch.dict(os.environ, {"STAGE1_FAST_MODE": "0"}):
             with patch("python_service.server.fetch_product_page", return_value={}):
                 with patch("python_service.server.knowledge.context", return_value="广告策划知识"):
                     with patch(
-                        "python_service.server.doubao_json",
-                        side_effect=[
-                            {"product_name": "测试产品", "category": "手机"},
-                            creative_output,
-                        ],
-                    ) as doubao_model:
+                        "python_service.server.gemini_kie_json",
+                        return_value=creative_output,
+                    ) as stage1_model:
                         result = stage_one(payload)
-        self.assertEqual(doubao_model.call_count, 2)
-        self.assertEqual(result["model_provider"], "doubao-responses")
-        self.assertEqual(result["product_facts_provider"], "doubao-responses")
-        self.assertEqual(result["pipeline_trace"]["order"][1], "doubao_responses_product_facts_model")
+        self.assertEqual(stage1_model.call_count, 1)
+        self.assertEqual(result["model_provider"], "gemini-kie")
+        self.assertEqual(result["product_facts_provider"], "gemini-kie")
+        self.assertIn("gemini_kie_3_1_pro_stage1_model", result["pipeline_trace"]["order"])
 
-    def test_stage_one_fast_mode_sends_uploaded_https_image_to_doubao(self):
+    def test_stage_one_sends_uploaded_https_image_to_kie_gemini(self):
         payload = StageOneRequest(
             campaign_theme="夏日樱花晚霞",
             product_images=["https://assets.example.com/product.jpg"],
@@ -181,12 +190,14 @@ class ServiceTests(unittest.TestCase):
             with patch("python_service.server.fetch_product_page", return_value={}):
                 with patch("python_service.server.knowledge.context", return_value="飞书广告策划知识"):
                     with patch(
-                        "python_service.server._stage_one_doubao_json",
-                        return_value=(stage_one_fixture(), "doubao-test", False),
+                        "python_service.server.gemini_kie_json",
+                        return_value=stage_one_fixture(),
                     ) as model:
                         result = stage_one(payload)
         self.assertEqual(model.call_count, 1)
         self.assertEqual(model.call_args.kwargs["image_urls"], ["https://assets.example.com/product.jpg"])
+        self.assertNotIn("endpoint_override", model.call_args.kwargs)
+        self.assertNotIn("model_override", model.call_args.kwargs)
         self.assertIn("飞书广告策划知识", model.call_args.args[0])
         self.assertEqual(result["image_inputs_received"], 1)
         self.assertEqual(result["image_inputs_sent"], 1)

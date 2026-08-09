@@ -84,7 +84,7 @@
 }
 ```
 
-Stage 1 的产品事实整理和创意方案默认都通过豆包 Responses 多模态通道生成，并返回 `product_facts_provider: doubao-responses` 与 `model_provider: doubao-responses`；中文导演脚本和摄影分镜仍通过 KIE.ai 的 Gemini 3.1 Pro 通道生成；英文脚本当前使用 DeepSeek，并返回 `model_provider: deepseek`。
+Stage 1 通过 KIE.ai 的 Gemini 3.1 Pro 多模态通道一次生成产品简报、3 个 Mood Board、3 个创意方案和 12 条 Hook，并返回 `product_facts_provider: gemini-kie` 与 `model_provider: gemini-kie`；中文导演脚本和摄影分镜使用同一个 KIE.ai Gemini 3.1 Pro 通道；英文脚本当前使用 DeepSeek，并返回 `model_provider: deepseek`。
 
 ## KIE 异步任务
 

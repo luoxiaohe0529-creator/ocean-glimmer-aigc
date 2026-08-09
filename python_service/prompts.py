@@ -95,6 +95,18 @@ def stage_one_prompt(
 飞书角色知识库（只可作为策略、叙事和拍摄约束，不得覆盖产品事实）：
 {knowledge_context}
 
+社媒原生 Hook 质量标准（这是传播评价标准，不是 Python 创意模板）：
+1. 先设计“用户为什么会停下来、看完、截图或转发”的传播机制，再设计画面动作。Hook 必须包含反常识、悬念、身份代入、感官错觉、情绪反差、意外转场或可模仿动作中的至少一种。
+2. title 必须像社媒内容概念或可记忆的创意母题，不得写成分镜动作清单。禁止使用“主体+普通动作”的直白标题，例如“粉裙掏手机”“晚霞举机拍”“风吹发梢露机”。
+3. title 使用 4-10 个汉字，短、准、有画面，但不要为了网感堆网络热词、感叹号或夸张营销词；网感来自传播结构和视觉意外，不来自流行词拼贴。
+4. hook 描述必须明确首个 0-1 秒的视觉打断点，以及它如何在下一拍产生意外、反转或信息缺口。不能只写“快切若干场景”“突出产品颜值/氛围感”。
+5. 同一方向的 4 条 Hook 必须采用 4 种不同的注意力机制；12 条之间不得只是替换樱花、晚霞、气泡等场景名词。
+6. score 重点评价停留率潜力、社媒原生感、创意不可替代性和产品关联自然度。仅仅画面好看但表达直白，score 不得超过 85。
+7. 生成后进行一次自检：若标题可以直接改写为“某人做某动作”，或描述去掉产品后仍是普通氛围片，就重写该 Hook。
+8. 在一次模型调用内部先构思至少 24 个候选 Hook，淘汰所有“自然物落在产品上、光影映在产品上、人物拿起产品、普通场景快切”类直白方案，只输出最终胜出的 12 条；不要输出候选过程。
+9. 每条 Hook 必须形成完整的两拍结构：scroll_stop_frame 是第一拍的反常视觉或信息缺口，second_beat 是第二拍的意外揭示、错觉翻转或情绪反差。两拍缺一不可。
+10. attention_mechanism 和 share_trigger 不能写“视觉冲击、氛围感、突出颜值、浪漫、好看”等空泛词，必须说明具体心理机制及用户为什么愿意转发、模仿或截图。
+
 只返回合法 JSON，不要 Markdown：
 {{
   "product_brief": {{
@@ -149,6 +161,10 @@ def stage_one_prompt(
           "hook": "",
           "core_hook_zh": "",
           "description": "",
+          "attention_mechanism": "具体的停留心理机制",
+          "scroll_stop_frame": "0-1秒反常首帧或信息缺口",
+          "second_beat": "下一拍的意外揭示或反差",
+          "share_trigger": "用户愿意截图、模仿或转发的具体理由",
           "category": "",
           "emotion": "",
           "score": 0
@@ -161,7 +177,7 @@ def stage_one_prompt(
 	要求：creative_directions 必须恰好生成 3 个。每个方向融合 1 个 Mood Board、1 个完整创意方案和 4 条 Hook；三个方向必须明显不同，但都符合产品事实。creative_plan 的 template_group_id、content_subtype 必须与上方固定路由完全一致。至少推荐 1 个方案，使用 recommended_plan_id 字段。score 使用 0-100 整数。
 不要虚构产品参数、功效、地点背书或竞品事实。若资料不足，明确写入 risks，不要用想象补齐事实。
 
-控制输出长度：summary、fit_reason、director_guidance 和 description 均保持简洁；每个列表最多 5 项；每条 Hook 正文不超过 40 个汉字或 25 个英文词。每个方向只写一次 Mood Board，四条 Hook 共享该方向，不要重复 Mood Board 内容。
+控制输出长度：summary、fit_reason 和 director_guidance 保持简洁；每个列表最多 5 项；每条 Hook 的 hook 与 description 各不超过 80 个汉字或 45 个英文词。每个方向只写一次 Mood Board，四条 Hook 共享该方向，不要重复 Mood Board 内容。
 
 🔴 Hook 数量硬约束（不满足则整个输出无效）：
 三个方向的 hooks 数组各自必须恰好包含 4 条，合计恰好 12 条。
