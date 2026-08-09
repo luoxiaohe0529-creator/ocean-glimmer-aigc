@@ -37,6 +37,16 @@ if (!credential) {
   throw new Error('n8n 中找不到现有的火山 TOS 凭据');
 }
 
+const project = db.prepare(`
+  SELECT id FROM project
+  ORDER BY CASE type WHEN 'personal' THEN 0 ELSE 1 END, createdAt
+  LIMIT 1
+`).get();
+if (!project) {
+  db.close();
+  throw new Error('n8n 中找不到可关联的项目');
+}
+
 const workflowId = db.prepare('SELECT id FROM workflow_entity WHERE name = ?').get(workflowName)?.id || randomUUID();
 const versionId = randomUUID();
 const webhookNodeId = randomUUID();
@@ -95,15 +105,17 @@ const install = db.transaction(() => {
   db.prepare('DELETE FROM webhook_entity WHERE webhookPath = ? AND method = ?').run(webhookPath, 'POST');
   const existing = db.prepare('SELECT id FROM workflow_entity WHERE id = ?').get(workflowId);
   if (existing) {
-    db.prepare(`UPDATE workflow_entity SET name=?, active=1, nodes=?, connections=?, settings=?, versionId=?, updatedAt=CURRENT_TIMESTAMP, isArchived=0 WHERE id=?`)
-      .run(workflowName, nodesJson, connectionsJson, JSON.stringify({ executionOrder: 'v1', binaryMode: 'separate' }), versionId, workflowId);
+    db.prepare(`UPDATE workflow_entity SET name=?, active=1, nodes=?, connections=?, settings=?, versionId=?, activeVersionId=?, updatedAt=CURRENT_TIMESTAMP, isArchived=0 WHERE id=?`)
+      .run(workflowName, nodesJson, connectionsJson, JSON.stringify({ executionOrder: 'v1', binaryMode: 'separate' }), versionId, versionId, workflowId);
     db.prepare('DELETE FROM workflow_history WHERE workflowId = ?').run(workflowId);
   } else {
-    db.prepare(`INSERT INTO workflow_entity (id,name,active,nodes,connections,settings,versionId,isArchived,versionCounter) VALUES (?,?,?,?,?,?,?,0,1)`)
-      .run(workflowId, workflowName, 1, nodesJson, connectionsJson, JSON.stringify({ executionOrder: 'v1', binaryMode: 'separate' }), versionId);
+    db.prepare(`INSERT INTO workflow_entity (id,name,active,nodes,connections,settings,versionId,activeVersionId,isArchived,versionCounter) VALUES (?,?,?,?,?,?,?,?,0,1)`)
+      .run(workflowId, workflowName, 1, nodesJson, connectionsJson, JSON.stringify({ executionOrder: 'v1', binaryMode: 'separate' }), versionId, versionId);
   }
   db.prepare(`INSERT INTO workflow_history (versionId,workflowId,authors,nodes,connections,name,autosaved) VALUES (?,?,?,?,?,?,0)`)
     .run(versionId, workflowId, '晓荷 罗', nodesJson, connectionsJson, workflowName);
+  db.prepare(`INSERT OR IGNORE INTO shared_workflow (workflowId,projectId,role) VALUES (?,?,?)`)
+    .run(workflowId, project.id, 'workflow:owner');
   db.prepare(`INSERT INTO webhook_entity (workflowId,webhookPath,method,node,webhookId,pathLength) VALUES (?,?,?,?,?,?)`)
     .run(workflowId, webhookPath, 'POST', '接收产品图片', nodes[0].webhookId, webhookPath.length);
 });

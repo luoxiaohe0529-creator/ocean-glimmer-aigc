@@ -88,8 +88,22 @@ function buildStage4() {
   const nodes = keep.map((name) => clone(getNode(workflow, name)));
   const prep = nodes.find((node) => node.name === '整理Seedance生成参数');
   prep.name = '整理视频生成参数与语言路由';
+  for (const node of nodes) {
+    node.parameters = JSON.parse(
+      JSON.stringify(node.parameters).replaceAll(
+        '整理Seedance生成参数',
+        '整理视频生成参数与语言路由',
+      ),
+    );
+  }
   prep.parameters.jsCode = stage4PrepCode();
   const loop = nodes.find((node) => node.name === '逐段生成视频');
+  const respond = nodes.find((node) => node.name === '响应前端');
+  respond.name = '立即返回视频任务 ID';
+  respond.position = [448, 992];
+  respond.parameters.respondWith = 'json';
+  respond.parameters.responseBody = '={{ { ok: true, status: "queued", video_task_id: $json.video_task_id, poll_after_ms: 5000 } }}';
+  respond.parameters.options = { responseCode: 202, responseHeaders: { entries: [{ name: 'Content-Type', value: 'application/json; charset=utf-8' }] } };
   const seedCreate = nodes.find((node) => node.name === 'Seedance 2.0｜创建15秒视频');
   const seedQuery = nodes.find((node) => node.name === 'Seedance 2.0｜查询生成状态');
   seedCreate.parameters.jsonBody = String(seedCreate.parameters.jsonBody || '').replace('resolution: "480p"', 'resolution: $json.resolution || "480p"');
@@ -125,7 +139,7 @@ return[{json:{...context,seedance_result:result,status,is_completed:["completed"
   const veoQuery = httpNode('KIE 适配器｜查询 Veo 3.1 状态', [1680, 560], 'http://127.0.0.1:8787/providers/kie/status', '={{ { task_id: $json.kie_task_id, kind: "overseas_video" } }}');
   const veoStatus = codeNode('检查 Veo 3.1 状态', [1940, 560], `const result=$input.first().json;const context=$("等待 Veo 3.1 生成").item.json;const status=String(result.status||"unknown").toLowerCase();if(["failed","error"].includes(status))throw new Error("Veo 3.1 生成失败");const count=Number(context._poll_count||0)+1;if(count>60)throw new Error("Veo 3.1 生成超时");const url=(result.urls||[])[0]||"";return[{json:{...context,status,is_completed:status==="succeeded"&&Boolean(url),video_url:url,result_url:url,_poll_count:count}}];`);
   const veoDone = ifNode('Veo 3.1 生成完成？', [2200, 560], '={{ $json.is_completed }}');
-  const seedCreateError = codeNode('识别 Seedance 创建拦截', [900, 300], `const error=$input.first().json;const source=$("英文视频？走 Veo 3.1").item.json;const raw=JSON.stringify(error).toLowerCase();const blocked=/(face|facial|portrait|identity|celebrity|human|safety|moderation|content.?policy|blocked|intercept|人脸|真人|肖像|人物|安全|审核|拦截)/.test(raw);if(!blocked)throw new Error("Seedance 创建失败："+JSON.stringify(error));return[{json:{...source,fallback_required:true,fallback_reason:"seedance_face_or_safety_block",seedance_error:error}}];`);
+  const seedCreateError = codeNode('识别 Seedance 创建拦截', [900, 300], `const error=$input.first().json;const source=$("英文视频？走 Veo 3.1").item.json;const providerError=error.error||error.response?.body?.error||error.response?.error||error.message||error.description||"";const raw=JSON.stringify(providerError).toLowerCase();const blocked=/(face|facial|portrait|identity|celebrity|safety|moderation|content.?policy|blocked|intercept|人脸|真人|肖像|安全|审核|拦截)/.test(raw);if(!blocked)throw new Error("Seedance 创建失败："+(typeof providerError==="string"?providerError:JSON.stringify(providerError)));return[{json:{...source,fallback_required:true,fallback_reason:"seedance_face_or_safety_block",seedance_error:error}}];`);
   const seedFallback = ifNode('Seedance 需要切换可灵？', [2200, 280], '={{ $json.fallback_required === true }}');
   const klingPrep = codeNode('准备可灵 3.0 回退', [2460, 300], `const data=$input.first().json;return[{json:{...data,_kling_context:JSON.stringify(data)}}];`);
   const klingCreate = httpNode('KIE 适配器｜创建可灵 3.0 视频', [2720, 300], 'http://127.0.0.1:8787/providers/kie/kling-video', '={{ { prompt: $json.video_prompt, image_urls: $json.ref_images, duration: $json.duration || 15, aspect_ratio: "9:16", mode: "pro", sound: true } }}');
@@ -134,12 +148,14 @@ return[{json:{...context,seedance_result:result,status,is_completed:["completed"
   const klingQuery = httpNode('KIE 适配器｜查询可灵 3.0 状态', [3500, 300], 'http://127.0.0.1:8787/providers/kie/status', '={{ { task_id: $json.kie_task_id, kind: "kling_video" } }}');
   const klingStatus = codeNode('检查可灵 3.0 状态', [3760, 300], `const result=$input.first().json;const context=$("等待可灵 3.0 生成").item.json;const status=String(result.status||"unknown").toLowerCase();if(["failed","error"].includes(status))throw new Error("可灵 3.0 生成失败");const count=Number(context._poll_count||0)+1;if(count>60)throw new Error("可灵 3.0 生成超时");const url=(result.urls||[])[0]||"";return[{json:{...context,status,is_completed:status==="succeeded"&&Boolean(url),video_url:url,result_url:url,_poll_count:count}}];`);
   const klingDone = ifNode('可灵 3.0 生成完成？', [4020, 300], '={{ $json.is_completed }}');
+  const callback = httpNode('回调前端｜写入视频结果', [1340, 912], '={{ $("整理视频生成参数与语言路由").first().json.callback_url }}', '={{ { ...$json, video_task_id: $("整理视频生成参数与语言路由").first().json.video_task_id } }}');
   const nodeMap = Object.fromEntries(nodes.map((node) => [node.name, node]));
   workflow.name = '摄影摄像｜中英文视频生成与成片';
-  workflow.nodes = [...nodes, route, veoCreate, veoSave, veoWait, veoQuery, veoStatus, veoDone, seedCreateError, seedFallback, klingPrep, klingCreate, klingSave, klingWait, klingQuery, klingStatus, klingDone];
+  workflow.nodes = [...nodes, route, veoCreate, veoSave, veoWait, veoQuery, veoStatus, veoDone, seedCreateError, seedFallback, klingPrep, klingCreate, klingSave, klingWait, klingQuery, klingStatus, klingDone, callback];
   workflow.connections = {
     '前端｜提交视频生成': { main: [[edge(prep.name)]] },
-    [prep.name]: { main: [[edge(loop.name)]] },
+    [prep.name]: { main: [[edge(respond.name)]] },
+    [respond.name]: { main: [[edge(loop.name)]] },
     [loop.name]: { main: [[edge(summary.name)], [edge(route.name)]] },
     [route.name]: { main: [[edge(veoCreate.name)], [edge('Seedance 2.0｜创建15秒视频')]] },
     'Seedance 2.0｜创建15秒视频': { main: [[edge('保存视频任务上下文')], [edge(seedCreateError.name)]] },
@@ -166,7 +182,7 @@ return[{json:{...context,seedance_result:result,status,is_completed:["completed"
     [summary.name]: { main: [[edge('飞书｜获取应用令牌')]] },
     '飞书｜获取应用令牌': { main: [[edge('飞书｜回写成片链接与成功状态')]] },
     '飞书｜回写成片链接与成功状态': { main: [[edge('返回前端｜可发布成片')]] },
-    '返回前端｜可发布成片': { main: [[edge('响应前端')]] },
+    '返回前端｜可发布成片': { main: [[edge(callback.name)]] },
   };
   void nodeMap;
   return workflow;

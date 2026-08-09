@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const execFileAsync = promisify(execFile);
 const root = fileURLToPath(new URL('.', import.meta.url)).replace(/[\\/]$/, '');
-const port = Number(process.env.PORT || 4173);
+const port = Number(process.env.PORT || 4174);
 const n8nBaseUrl = String(process.env.N8N_BASE_URL || 'http://localhost:5678').replace(/\/+$/, '');
 const pythonBaseUrl = String(process.env.PYTHON_SERVICE_URL || 'http://127.0.0.1:8787').replace(/\/+$/, '');
 const webhookPrefix = String(process.env.N8N_WEBHOOK_PREFIX || 'webhook').replace(/^\/+|\/+$/g, '');
@@ -18,9 +18,8 @@ const requestTimeoutMs = Number(process.env.N8N_REQUEST_TIMEOUT_MS || 180000);
 const videoRequestTimeoutMs = Number(process.env.N8N_VIDEO_REQUEST_TIMEOUT_MS || 600000);
 const runtimeDirectory = join(root, 'runtime');
 const latestVideoPath = join(runtimeDirectory, 'latest-video.json');
+const videoTasksDirectory = join(runtimeDirectory, 'video-tasks');
 const pythonInflight = new Map();
-const assetUploadWorkflow = process.env.N8N_ASSET_UPLOAD_WORKFLOW || 'ai-ad-asset-upload';
-const tosPublicBaseUrl = String(process.env.TOS_PUBLIC_BASE_URL || '').replace(/\/+$/, '');
 
 const workflowRoutes = {
   '/api/workflow/stage-2/optimize': process.env.N8N_STAGE2_OPTIMIZE_WORKFLOW || 'ai-ad-hook-optimize',
@@ -50,34 +49,20 @@ const pythonRoutes = {
 
 async function persistUploadedImages(payload) {
   if (!Array.isArray(payload) || !payload.length) throw new Error('图片请求格式无效');
-  if (!/^https:\/\//i.test(tosPublicBaseUrl)) throw new Error('缺少 TOS_PUBLIC_BASE_URL 配置');
-  const results = [];
-  for (const image of payload.slice(0, 9)) {
-    const originalName = String(image?.name || 'product-image');
-    const dataUrl = String(image?.dataUrl || '');
-    const mimeMatch = dataUrl.match(/^data:(image\/(?:png|jpeg|webp|gif));base64,/i);
-    if (!mimeMatch) throw new Error(`${originalName} 不是支持的图片格式`);
-    const mimeType = mimeMatch[1].toLowerCase();
-    const extension = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif' }[mimeType];
-    const binary = Buffer.from(dataUrl.slice(dataUrl.indexOf(',') + 1), 'base64');
-
-    const objectKey = `images/${Date.now()}-${randomUUID()}.${extension}`;
-
-    // Upload directly to TOS (public write bucket, no auth needed)
-    const tosUrl = `${tosPublicBaseUrl}/${objectKey}`;
-    const upstream = await fetch(tosUrl, {
-      method: 'PUT',
-      headers: { 'Content-Type': mimeType, 'Content-Length': String(binary.length) },
-      body: binary,
+  const upstream = await fetch(`${pythonBaseUrl}/upload-images`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload.slice(0, 9)),
       signal: AbortSignal.timeout(60000),
-    });
-    if (!upstream.ok) {
-      const errText = await upstream.text().catch(() => '');
-      throw new Error(`对象存储上传失败 (HTTP ${upstream.status}): ${errText.slice(0, 160)}`);
-    }
-    results.push({ ok: true, name: originalName, url: tosUrl, storage: 'tos' });
+  });
+  const responseText = await upstream.text();
+  if (!upstream.ok) {
+    let message = responseText;
+    try { message = JSON.parse(responseText).message || JSON.parse(responseText).error || responseText; } catch {}
+    throw new Error(`Python 图片上传失败 (HTTP ${upstream.status}): ${String(message).slice(0, 200)}`);
   }
-  return results;
+  const result = JSON.parse(responseText || '{}');
+  return Array.isArray(result.images) ? result.images : [];
 }
 
 const disabledLegacyContentRoutes = new Set([
@@ -199,6 +184,29 @@ async function saveLatestVideo(requestBody, responseBody) {
   } catch (error) {
     console.warn(`无法保存最近成片：${error.message}`);
   }
+}
+
+function safeTaskId(value) {
+  return String(value || '').trim().replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 160);
+}
+
+function videoTaskPath(taskId) {
+  const safe = safeTaskId(taskId);
+  if (!safe) throw new Error('缺少 video_task_id');
+  return join(videoTasksDirectory, `${safe}.json`);
+}
+
+async function readVideoTask(taskId) {
+  return JSON.parse(await readFile(videoTaskPath(taskId), 'utf8'));
+}
+
+async function writeVideoTask(taskId, patch) {
+  await mkdir(videoTasksDirectory, { recursive: true });
+  let current = {};
+  try { current = await readVideoTask(taskId); } catch {}
+  const next = { ...current, ...patch, video_task_id: safeTaskId(taskId), updated_at: new Date().toISOString() };
+  await writeFile(videoTaskPath(taskId), JSON.stringify(next, null, 2));
+  return next;
 }
 
 async function readRequestBody(req, maxBytes = 30 * 1024 * 1024) {
@@ -328,6 +336,7 @@ async function proxyPost(req, res, pathname) {
         const value = typeof item === 'string' ? item : item?.url || item?.image_url;
         return isRemote(value);
       });
+      parsed.callback_url = `http://127.0.0.1:${port}/api/video/callback`;
       body = JSON.stringify(parsed);
     } catch {
       // Let n8n return its normal validation error for malformed payloads.
@@ -349,8 +358,20 @@ async function proxyPost(req, res, pathname) {
     });
     let responseBody = Buffer.from(await upstream.arrayBuffer());
     if (pathname === '/api/workflow/stage-4' && upstream.ok) {
-      responseBody = normalizeVideoResponse(responseBody);
-      await saveLatestVideo(body, responseBody);
+      const responsePayload = JSON.parse(responseBody.toString('utf8') || '{}');
+      const requestPayload = JSON.parse(body.toString('utf8') || '{}');
+      const taskId = responsePayload.video_task_id || requestPayload.video_task_id;
+      if (responsePayload.status === 'queued' && taskId) {
+        await writeVideoTask(taskId, {
+          ok: true,
+          status: 'queued',
+          submitted_at: new Date().toISOString(),
+          request: requestPayload,
+        });
+      } else {
+        responseBody = normalizeVideoResponse(responseBody);
+        await saveLatestVideo(body, responseBody);
+      }
     }
     res.writeHead(upstream.status, {
       'Content-Type': upstream.headers.get('content-type') || 'application/json; charset=utf-8',
@@ -548,6 +569,26 @@ createServer(async (req, res) => {
     }
     return;
   }
+  if (req.method === 'POST' && url.pathname === '/api/video/callback') {
+    try {
+      const body = await readRequestBody(req);
+      const payload = JSON.parse(body.toString('utf8') || '{}');
+      const taskId = safeTaskId(payload.video_task_id || payload.task_id);
+      const current = await readVideoTask(taskId);
+      const normalizedBody = normalizeVideoResponse(body);
+      const normalized = JSON.parse(Buffer.from(normalizedBody).toString('utf8') || '{}');
+      const videoUrl = findVideoUrl(normalized);
+      const status = videoUrl ? 'completed' : (normalized.status || 'error');
+      await writeVideoTask(taskId, { ...normalized, status, ok: status === 'completed' });
+      if (videoUrl) {
+        await saveLatestVideo(Buffer.from(JSON.stringify(current.request || {})), normalizedBody);
+      }
+      send(res, 200, JSON.stringify({ ok: true, video_task_id: taskId, status }));
+    } catch (error) {
+      send(res, 400, JSON.stringify({ ok: false, error: 'invalid_video_callback', message: error.message }));
+    }
+    return;
+  }
   if (req.method === 'POST' && pythonRoutes[url.pathname]) {
     await proxyPython(req, res, url.pathname);
     return;
@@ -586,6 +627,15 @@ createServer(async (req, res) => {
       send(res, 200, latest);
     } catch {
       send(res, 404, JSON.stringify({ ok: false, error: 'no_video_result' }));
+    }
+    return;
+  }
+  if (req.method === 'GET' && url.pathname === '/api/video/status') {
+    try {
+      const task = await readVideoTask(url.searchParams.get('task_id'));
+      send(res, 200, JSON.stringify(task));
+    } catch {
+      send(res, 404, JSON.stringify({ ok: false, status: 'not_found', error: 'video_task_not_found' }));
     }
     return;
   }

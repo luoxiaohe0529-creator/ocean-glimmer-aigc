@@ -4,7 +4,7 @@
     "createdAt": "2026-07-24T13:19:09.934Z",
     "id": "h7JrqtKU40HqnYXE",
     "name": "摄影摄像｜中英文视频生成与成片",
-    "description": "调用 Seedance 2.0 生成 9:16、15 秒有声短视频并轮询完成，随后将成片链接和状态写回飞书并返回前端。",
+    "description": "立即返回任务 ID；中文视频沿用 Seedance 主线路。成功和失败都会回调前端，避免任务永久停留在 queued。",
     "active": false,
     "isArchived": false,
     "nodes": [
@@ -142,7 +142,8 @@
         ],
         "retryOnFail": true,
         "maxTries": 4,
-        "waitBetweenTries": 10000
+        "waitBetweenTries": 10000,
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -155,7 +156,8 @@
         "position": [
           1568,
           144
-        ]
+        ],
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -190,7 +192,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const segments=$input.all()\n  .map(({json})=>({\n    segment_index:Number(json.segment_index)||1,\n    total_segments:Number(json.total_segments)||1,\n    video_url:json.video_url||json.result_url||\"\",\n    url:json.video_url||json.result_url||\"\",\n    duration:15,\n    status:(json.video_url||json.result_url)?\"completed\":\"error\",\n    provider:json.provider||\"seedance-official\",\n  }))\n  .sort((a,b)=>a.segment_index-b.segment_index);\nconst input=$(\"整理Seedance生成参数\").first().json;\nconst ok=segments.length>0&&segments.every((segment)=>Boolean(segment.video_url));\nreturn [{json:{\n  ok,\n  status:ok?\"completed\":\"error\",\n  segments,\n  count:segments.length,\n  video_url:segments[0]?.video_url||\"\",\n  duration_seconds:Number(input.duration)||15,\n  video_task_id:input.video_task_id,\n  product_record_id:input.product_record_id,\n  provider:segments[0]?.provider||input.provider||\"seedance-official\",\n}}];"
+          "jsCode": "const segments=$input.all()\n  .map(({json})=>({\n    segment_index:Number(json.segment_index)||1,\n    total_segments:Number(json.total_segments)||1,\n    video_url:json.video_url||json.result_url||\"\",\n    url:json.video_url||json.result_url||\"\",\n    duration:15,\n    status:(json.video_url||json.result_url)?\"completed\":\"error\",\n    provider:json.provider||\"seedance-official\",\n  }))\n  .sort((a,b)=>a.segment_index-b.segment_index);\nconst input=$(\"整理视频生成参数与语言路由\").first().json;\nconst ok=segments.length>0&&segments.every((segment)=>Boolean(segment.video_url));\nreturn [{json:{\n  ok,\n  status:ok?\"completed\":\"error\",\n  segments,\n  count:segments.length,\n  video_url:segments[0]?.video_url||\"\",\n  duration_seconds:Number(input.duration)||15,\n  video_task_id:input.video_task_id,\n  product_record_id:input.product_record_id,\n  provider:segments[0]?.provider||input.provider||\"seedance-official\",\n}}];"
         },
         "id": "897ceefa-e67f-41b6-a17c-761959d5b8f1",
         "name": "汇总视频结果",
@@ -222,7 +224,7 @@
       {
         "parameters": {
           "method": "PUT",
-          "url": "=https://open.feishu.cn/open-apis/bitable/v1/apps/YOUR_FEISHU_APP_TOKEN/tables/YOUR_FEISHU_TABLE_ID/records/{{ $(\"整理Seedance生成参数\").first().json.video_task_id }}",
+          "url": "=https://open.feishu.cn/open-apis/bitable/v1/apps/YOUR_FEISHU_APP_TOKEN/tables/YOUR_FEISHU_TABLE_ID/records/{{ $(\"整理视频生成参数与语言路由\").first().json.video_task_id }}",
           "sendHeaders": true,
           "headerParameters": {
             "parameters": [
@@ -266,7 +268,7 @@
       {
         "parameters": {
           "options": {
-            "responseCode": 200,
+            "responseCode": 202,
             "responseHeaders": {
               "entries": [
                 {
@@ -275,15 +277,17 @@
                 }
               ]
             }
-          }
+          },
+          "respondWith": "json",
+          "responseBody": "={{ { ok: true, status: \"queued\", video_task_id: $json.video_task_id, poll_after_ms: 5000 } }}"
         },
         "id": "ac5bfb07-9aa8-4607-b5b3-f879bbe176c8",
-        "name": "响应前端",
+        "name": "立即返回视频任务 ID",
         "type": "n8n-nodes-base.respondToWebhook",
         "typeVersion": 1.5,
         "position": [
-          1568,
-          456
+          448,
+          992
         ]
       },
       {
@@ -343,7 +347,8 @@
               }
             }
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "id": "bd21478b-f8ae-4fba-9c09-3953d84066f8",
@@ -401,7 +406,8 @@
               }
             }
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "id": "c2b6b603-20d4-43a7-9b92-91d23e426f5c",
@@ -415,7 +421,8 @@
         "parameters": {
           "mode": "runOnceForAllItems",
           "jsCode": "const result=$input.first().json;const context=$(\"等待 Veo 3.1 生成\").item.json;const status=String(result.status||\"unknown\").toLowerCase();if([\"failed\",\"error\"].includes(status))throw new Error(\"Veo 3.1 生成失败\");const count=Number(context._poll_count||0)+1;if(count>60)throw new Error(\"Veo 3.1 生成超时\");const url=(result.urls||[])[0]||\"\";return[{json:{...context,status,is_completed:status===\"succeeded\"&&Boolean(url),video_url:url,result_url:url,_poll_count:count}}];"
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "id": "4e817a0b-8b9b-440d-be9f-ba021ce68670",
@@ -459,8 +466,9 @@
         ],
         "parameters": {
           "mode": "runOnceForAllItems",
-          "jsCode": "const error=$input.first().json;const source=$(\"英文视频？走 Veo 3.1\").item.json;const raw=JSON.stringify(error).toLowerCase();const blocked=/(face|facial|portrait|identity|celebrity|human|safety|moderation|content.?policy|blocked|intercept|人脸|真人|肖像|人物|安全|审核|拦截)/.test(raw);if(!blocked)throw new Error(\"Seedance 创建失败：\"+JSON.stringify(error));return[{json:{...source,fallback_required:true,fallback_reason:\"seedance_face_or_safety_block\",seedance_error:error}}];"
-        }
+          "jsCode": "const error=$input.first().json;const source=$(\"英文视频？走 Veo 3.1\").item.json;const providerError=error.error||error.response?.body?.error||error.response?.error||error.message||error.description||\"\";const raw=JSON.stringify(providerError).toLowerCase();const blocked=/(face|facial|portrait|identity|celebrity|safety|moderation|content.?policy|blocked|intercept|人脸|真人|肖像|安全|审核|拦截)/.test(raw);if(!blocked)throw new Error(\"Seedance 创建失败：\"+(typeof providerError===\"string\"?providerError:JSON.stringify(providerError)));return[{json:{...source,fallback_required:true,fallback_reason:\"seedance_face_or_safety_block\",seedance_error:error}}];"
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "id": "f9cad466-53b5-4588-8fc9-bd081910be32",
@@ -533,7 +541,8 @@
               }
             }
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "id": "c2e8f827-5b4f-48ea-bdef-eaeec2ab4196",
@@ -591,7 +600,8 @@
               }
             }
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "id": "52018963-fb60-4d70-b06f-2ceb9137be09",
@@ -605,7 +615,8 @@
         "parameters": {
           "mode": "runOnceForAllItems",
           "jsCode": "const result=$input.first().json;const context=$(\"等待可灵 3.0 生成\").item.json;const status=String(result.status||\"unknown\").toLowerCase();if([\"failed\",\"error\"].includes(status))throw new Error(\"可灵 3.0 生成失败\");const count=Number(context._poll_count||0)+1;if(count>60)throw new Error(\"可灵 3.0 生成超时\");const url=(result.urls||[])[0]||\"\";return[{json:{...context,status,is_completed:status===\"succeeded\"&&Boolean(url),video_url:url,result_url:url,_poll_count:count}}];"
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "id": "80ca3e00-b71d-4d5a-8d7f-16d6fb5537a1",
@@ -637,6 +648,76 @@
           },
           "options": {}
         }
+      },
+      {
+        "id": "d0ff0d56-02ad-4b74-9751-9889bf39114f",
+        "name": "回调前端｜写入视频结果",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1340,
+          912
+        ],
+        "retryOnFail": true,
+        "maxTries": 3,
+        "waitBetweenTries": 5000,
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $(\"整理视频生成参数与语言路由\").first().json.callback_url }}",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ { ...$json, video_task_id: $(\"整理视频生成参数与语言路由\").first().json.video_task_id } }}",
+          "options": {
+            "timeout": 30000,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "134916fc-7fdf-4625-b4af-39934022b3c5",
+        "name": "整理视频失败结果",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4300,
+          720
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "jsCode": "const failed=$input.first().json;const source=$(\"整理视频生成参数与语言路由\").first().json;const detail=failed.error?.message||failed.error||failed.message||failed.description||failed.response?.body?.message||failed.response?.body||\"视频生成服务执行失败\";return [{json:{ok:false,status:\"error\",error:\"video_generation_failed\",message:typeof detail===\"string\"?detail:JSON.stringify(detail),video_task_id:source.video_task_id,provider:source.provider||\"seedance-official\"}}];"
+        }
+      },
+      {
+        "id": "f6e056f4-a955-4d37-a9f7-2381dedcfcbf",
+        "name": "回调前端｜写入视频失败",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          4560,
+          720
+        ],
+        "retryOnFail": true,
+        "maxTries": 3,
+        "waitBetweenTries": 5000,
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $(\"整理视频生成参数与语言路由\").first().json.callback_url }}",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 30000,
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        }
       }
     ],
     "connections": {
@@ -655,7 +736,7 @@
         "main": [
           [
             {
-              "node": "逐段生成视频",
+              "node": "立即返回视频任务 ID",
               "type": "main",
               "index": 0
             }
@@ -746,6 +827,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -754,6 +842,13 @@
           [
             {
               "node": "Seedance 需要切换可灵？",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
               "type": "main",
               "index": 0
             }
@@ -786,6 +881,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -812,6 +914,13 @@
           [
             {
               "node": "保存 Veo 3.1 任务上下文",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
               "type": "main",
               "index": 0
             }
@@ -848,6 +957,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -856,6 +972,13 @@
           [
             {
               "node": "Veo 3.1 生成完成？",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
               "type": "main",
               "index": 0
             }
@@ -899,6 +1022,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -932,6 +1062,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -940,6 +1077,13 @@
           [
             {
               "node": "可灵 3.0 生成完成？",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "整理视频失败结果",
               "type": "main",
               "index": 0
             }
@@ -1001,7 +1145,29 @@
         "main": [
           [
             {
-              "node": "响应前端",
+              "node": "回调前端｜写入视频结果",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "立即返回视频任务 ID": {
+        "main": [
+          [
+            {
+              "node": "逐段生成视频",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "整理视频失败结果": {
+        "main": [
+          [
+            {
+              "node": "回调前端｜写入视频失败",
               "type": "main",
               "index": 0
             }

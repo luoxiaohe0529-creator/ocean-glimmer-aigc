@@ -150,7 +150,7 @@ npm start
 
 默认地址：
 
-- 工作台：<http://localhost:4173>
+- 工作台：<http://localhost:4174>
 - Python 健康检查：<http://127.0.0.1:8787/health>
 - n8n：<http://127.0.0.1:5678>
 
@@ -172,15 +172,17 @@ cp .env.example .env
 
 按需填写 DeepSeek、豆包、KIE.ai、飞书和媒体服务配置。真实密钥只能存放在本机 `.env` 或 n8n Credentials 中，不能写进 Python 源码。
 
-启动 n8n 后，再确认 `.env` 中的 `N8N_BASE_URL`、Webhook 路径和对象存储配置与 n8n 工作流一致。
+启动 n8n 后，再确认 `.env` 中的 `N8N_BASE_URL`、Webhook 路径和媒体工作流配置一致。
 
-### 3. 安装 TOS 上传工作流
+### 3. 配置 Python 图片上传
 
-首次运行前，在 n8n 中准备兼容 S3 的火山 TOS Credential，然后执行：
+图片由 Python 使用 TOS SDK 直接上传。如果凭据已保存在本机 n8n 中，可执行一次安全迁移：
 
 ```bash
-npm run install:asset-upload
+npm run migrate:tos-credential
 ```
+
+迁移只写入本机 `.env`，不会显示密钥，也不会写入 Git。
 
 ### 4. 启动
 

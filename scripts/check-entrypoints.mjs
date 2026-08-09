@@ -60,8 +60,8 @@ if (mainHtml.includes('未写入对象存储，请重新上传')) {
 if (!server.includes('async function persistUploadedImages(payload)')) {
   failures.push('图片上传缺少统一 TOS 持久化入口');
 }
-if (!server.includes('N8N_ASSET_UPLOAD_WORKFLOW')) {
-  failures.push('图片上传没有接入唯一的 n8n TOS 上传工作流');
+if (!server.includes('`${pythonBaseUrl}/upload-images`')) {
+  failures.push('图片上传没有接入 Python TOS 上传入口');
 }
 if (server.includes("storage: 'local'") || mainHtml.includes('/generated/uploads/')) {
   failures.push('图片上传仍包含本地路径兜底，无法保证公网 URL');

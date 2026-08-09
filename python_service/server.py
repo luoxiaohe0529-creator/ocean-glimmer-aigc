@@ -22,7 +22,7 @@ from .doubao import (
 from .gemini_kie import chat_json as gemini_kie_json
 from .feishu_knowledge import knowledge
 from .kie import create_image_task, create_kling_video_task, create_overseas_video_task, query_task
-from .tos_upload import mirror_video_to_tos
+from .tos_upload import mirror_video_to_tos, upload_images
 from .topaz import create_enhancement_task, query_enhancement_task
 from .media import render_edit, export_editing_handoff, align_subtitles
 from .minimax import generate_music
@@ -557,7 +557,7 @@ def stage_one(payload: dict) -> dict:
         else:
             invalid_images.append(image_url)
     if invalid_images:
-        raise ValueError("产品图片尚未上传为公开 HTTPS URL，已停止生成，避免豆包看不到图片")
+        raise ValueError("产品图片尚未上传为公开 HTTPS URL，已停止生成，避免当前多模态模型读取不到图片")
     page_image = page.get("image")
     if isinstance(page_image, str) and page_image.startswith("https://") and page_image not in product_images:
         product_images.append(page_image)
@@ -870,6 +870,8 @@ class Handler(BaseHTTPRequestHandler):
                     payload.get("video_url", ""),
                     payload.get("filename", ""),
                 )
+            elif self.path == "/upload-images":
+                result = upload_images(payload if isinstance(payload, list) else payload.get("images", []))
             elif self.path == "/media/align-subtitles":
                 output_dir = Path(os.getenv(
                     "MEDIA_OUTPUT_DIR",
