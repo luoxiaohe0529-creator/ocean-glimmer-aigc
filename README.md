@@ -29,16 +29,17 @@
 
 #### 中文信息流广告
 
-<table>
+<table width="100%">
+<colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup>
 <tr>
-<td><strong>01｜华为品牌信息流 · 广告 1</strong><br><video src="https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97" controls preload="metadata" width="280"></video></td>
-<td><strong>02｜华为品牌信息流 · 广告 2</strong><br><video src="https://github.com/user-attachments/assets/9aa5d543-ece7-41b3-b7d7-f721f921ed45" controls preload="metadata" width="280"></video></td>
-<td><strong>03｜华为品牌信息流 · 广告 3</strong><br><video src="https://github.com/user-attachments/assets/b500b609-b2a1-4217-a32d-d1d02b5e4fdc" controls preload="metadata" width="280"></video></td>
+<td width="33%" valign="top"><strong>01｜华为品牌信息流 · 广告 1</strong><br><video src="https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97" controls preload="metadata" width="100%"></video></td>
+<td width="33%" valign="top"><strong>02｜华为品牌信息流 · 广告 2</strong><br><video src="https://github.com/user-attachments/assets/9aa5d543-ece7-41b3-b7d7-f721f921ed45" controls preload="metadata" width="100%"></video></td>
+<td width="33%" valign="top"><strong>03｜华为品牌信息流 · 广告 3</strong><br><video src="https://github.com/user-attachments/assets/b500b609-b2a1-4217-a32d-d1d02b5e4fdc" controls preload="metadata" width="100%"></video></td>
 </tr>
 <tr>
-<td><strong>04｜华为品牌信息流 · 广告 4</strong><br><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" controls preload="metadata" width="280"></video></td>
-<td><strong>05｜华为品牌信息流 · 广告 5</strong><br><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" controls preload="metadata" width="280"></video></td>
-<td></td>
+<td width="33%" valign="top"><strong>04｜华为品牌信息流 · 广告 4</strong><br><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" controls preload="metadata" width="100%"></video></td>
+<td width="33%" valign="top"><strong>05｜华为品牌信息流 · 广告 5</strong><br><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" controls preload="metadata" width="100%"></video></td>
+<td width="33%" valign="top"></td>
 </tr>
 </table>
 
