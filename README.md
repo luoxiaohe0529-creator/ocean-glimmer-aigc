@@ -18,7 +18,7 @@
 
 | 先看什么 | 入口 |
 | --- | --- |
-| 真实中英文成片 | [中文成片](frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4) · [English cut](frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4) |
+| 真实中英文成片 | [中文成片](frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4) · [English cut](frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4) · [16 个完整视频目录](frontend/showcase/README.md) |
 | 工作台实际效果 | [真实运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) · [作品目录](frontend/showcase/README.md) |
 | 一次完整产品决策 | [Case Study](docs/CASE_STUDY.md) |
 | 系统如何拆分 | [架构说明](docs/ARCHITECTURE.md) |
