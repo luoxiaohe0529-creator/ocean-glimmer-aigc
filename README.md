@@ -1,8 +1,16 @@
-# 大海浮光 AIGC 广告视频工作台
+# 大海浮光｜跨境电商短视频智能生产系统
 
-一套面向广告与跨境内容生产的 AI 应用原型：输入产品链接、营销主题和参考图片，系统会生成产品简报、3 套创意方向、12 条 Hook、导演脚本、摄影分镜及中英文广告成片。
+**Ocean Glimmer — AI Design & AIGC Advertising Workbench**
 
-它不是单次 Prompt Demo。项目重点是把**产品事实、专业知识、人的创意选择和异步媒体生成**组织成一条可运行、可追踪的生产链。
+[中文介绍](#60-秒看懂) · [English Summary](#english-summary)
+
+输入商品链接、营销要求和产品图片，系统自动完成商品分析、广告创意、导演脚本、拍摄分镜和短视频生成。
+
+传统广告短视频制作需要分别整理商品资料、构思创意、编写脚本、设计分镜并操作多个生成工具，流程分散且依赖个人经验。大海浮光把这些环节整合进一个网页工作台，让用户在同一系统内完成从商品资料到广告成片的完整流程。
+
+系统结合飞书广告知识库，一次生成 **3 套完整创意方案和 12 个 Hook** 供用户比较。用户选定方向后，系统继续生成导演脚本、摄影分镜并提交视频任务，同时显示进度、保留失败信息并将成片自动回写到工作台。
+
+它不是单次 Prompt Demo。项目重点是把**产品事实、专业知识、人的创意选择和异步媒体生成**组织成一条可选择、可追踪、可恢复的生产链。
 
 > 求职方向：AIGC 应用 · AI 产品 · Agent 工作流 · Creative Technologist · 跨境内容自动化
 
@@ -22,6 +30,23 @@ https://github.com/user-attachments/assets/74734f72-d492-4dd3-a5c0-b4d841303856
 ### English cut
 
 https://github.com/user-attachments/assets/8b56f676-ef79-4034-8571-fb77ebd9df3a
+
+## English Summary
+
+Ocean Glimmer is an AI advertising production system that turns product links, marketing requirements, and reference images into structured advertising concepts, director scripts, shot lists, and short-form videos.
+
+It was created to reduce repeated product-information collection, disconnected creative tools, one-direction model outputs, and long-running video tasks with no visible status. The workbench brings these steps into one browser-based workflow:
+
+1. analyse the product and organise its selling points, audience, usage scenarios, and communication priorities;
+2. read role-specific advertising knowledge from Feishu Wiki;
+3. generate three complete creative directions and twelve Hooks for comparison;
+4. let the user select the preferred Hook and visual direction;
+5. convert the selected concept into a director script and cinematography plan;
+6. submit image and video generation tasks, display progress, preserve failures, and write the completed video back to the workbench.
+
+The system separates advertising planning, directing, cinematography, and media execution instead of asking one model to complete everything in a single prompt. Human review remains at the key creative decision, while structured state and task polling keep the workflow selectable, traceable, and recoverable.
+
+**Recruiter takeaway:** this project demonstrates both advertising and visual-design judgment, and the ability to turn that creative capability into a working, repeatable AI production system.
 
 ## 我解决的问题
 
