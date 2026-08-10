@@ -11,9 +11,8 @@ flowchart TB
   UI["大海浮光 AIGC 前端"] --> SERVER["Node.js 本地服务"]
   SERVER --> PYTHON["Python 内容与媒体服务"]
   SERVER --> N8N["n8n Webhook API"]
-  PYTHON --> DOUBAO["豆包 Responses · Stage 1 事实与创意"]
-  PYTHON --> DEEPSEEK["DeepSeek · 英文 Stage 2 文本（可选）"]
-  PYTHON --> GEMINI["Gemini 3.1 Pro · 编剧导演"]
+  PYTHON --> GEMINI["KIE Gemini 3.1 Pro · Stage 1 / 2 / 3 内容生成"]
+  PYTHON --> DEEPSEEK["DeepSeek · 英文 Stage 2 文本"]
   PYTHON --> KNOWLEDGE["飞书三个角色知识库"]
   PYTHON --> FFMPEG["FFmpeg 剪辑、配乐与字幕"]
   N8N --> KIE["KIE.ai · GPT Image 2 / Nano Banana 2 / Veo 3.1"]
@@ -38,8 +37,8 @@ flowchart TB
 | 前端角色 | n8n 工作流 | 原因 |
 | --- | --- | --- |
 | 广告策划 | Python Stage 1 + KIE Gemini 3.1 Pro | 页面抓取与广告策划 Wiki 并发读取 → Gemini 读取产品图并一次生成产品简报、3 个 Mood Board、3 个方案、12 个 Hook 与结构化 JSON |
-| 编剧导演 | Python Stage 2 + Gemini 3.1 Pro | 读取编剧导演知识，生成脚本与导演分镜 |
-| 摄影摄像 | Python Stage 3 + Gemini-KIE；n8n 04 / 05 | 读取摄影摄像知识，生成精细分镜；n8n 负责后续图片、视频任务与轮询 |
+| 编剧导演 | Python Stage 2 + KIE Gemini 3.1 Pro / DeepSeek | 读取编剧导演知识；中文走 Gemini，英文走 DeepSeek |
+| 摄影摄像 | Python Stage 3 + KIE Gemini 3.1 Pro；n8n 04 / 05 | 读取摄影摄像知识，生成精细分镜；n8n 负责后续图片、视频任务与轮询 |
 | 后期剪辑 | Python FFmpeg Worker | 截取、画幅转换、配乐混音和字幕烧录 |
 
 公开 n8n 只保留 03 / 04 / 05。正式入口的 Stage 3 先走 Python 摄影知识；03 仅作为需要 n8n 建档的兼容模板。已迁移的 01 / 02 历史模板不再进入公开仓库，也不作为正式运行依赖。
@@ -48,9 +47,10 @@ flowchart TB
 
 | 能力 | 默认供应商 | 运行边界 | 失败策略 |
 | --- | --- | --- | --- |
-| 产品事实与产品简报 | 豆包 Responses | Python | 读取页面资料和产品图，只整理可验证事实，不提前创作 Hook |
-| Mood Board 与创意方案池 | 豆包 Responses | Python | 读取广告策划 Wiki 和产品图后生成 12 个 Hook 与结构化结果 |
-| 编剧与导演分镜 | Gemini 3.1 Pro | Python | 可配置回退 DeepSeek |
+| 产品事实、Mood Board、创意方案与 Hook | KIE Gemini 3.1 Pro | Python Stage 1 | 读取页面资料、营销要求、广告策划 Wiki 和产品图，一次生成结构化 Stage 1 结果 |
+| 中文导演脚本与分镜 | KIE Gemini 3.1 Pro | Python Stage 2 | 读取编剧导演 Wiki，生成选定 Hook 对应的脚本与导演分镜 |
+| 英文导演脚本与分镜 | DeepSeek | Python Stage 2 | 按英文内容路径生成对应文本结果 |
+| 摄影执行方案与视频提示词 | KIE Gemini 3.1 Pro | Python Stage 3 | 读取摄影摄像 Wiki，将脚本转成逐镜摄影任务与模型提示词 |
 | 主人公形象 | KIE.ai GPT Image 2 | n8n 05 提交、等待、轮询与回写 | 保留任务 ID，可重新生成 |
 | 9:16 多宫格分镜图 | KIE.ai Nano Banana 2 | n8n 05 提交、等待、轮询与回写 | 保留任务 ID，可重新生成 |
 | 中文视频 | Seedance 官网直调 | n8n | 沿用现有等待、轮询、回写链路 |
@@ -58,7 +58,7 @@ flowchart TB
 
 所有供应商结果都归一为 `task_id / status / urls / provider / model`，前端不直接依赖供应商原始字段。
 
-Python 同时提供 KIE 适配接口，便于本地测试或未来将任务提交移出 n8n；正式前端默认仍由 n8n 05 承担图片异步编排，避免出现两个轮询器争抢同一任务。
+Python 同时提供 KIE 适配接口，便于本地测试或未来将任务提交移出 n8n；正式前端默认仍由 n8n 05 承担图片异步编排，避免出现两个轮询器争抢同一任务。仓库中的豆包适配器保留为可切换实验通道，但不是当前默认 Stage 1 运行路径。
 
 ## 状态模型
 

@@ -12,11 +12,11 @@
 
 ```mermaid
 flowchart LR
-  A[产品链接 / 主题 / 图片] --> B[豆包 Responses：产品事实]
-  B --> C[广告策划 Wiki]
-  C --> D[豆包 Responses：12 个 Hook + Mood Board]
+  A[产品链接 / 主题 / 图片] --> B[网页抓取 + 广告策划 Wiki]
+  B --> C[KIE Gemini 3.1 Pro：产品简报与创意]
+  C --> D[3 套方案 + 3 个 Mood Board + 12 个 Hook]
   D --> E{用户选择 Hook / 创意方案}
-  E --> F[Gemini：导演脚本]
+  E --> F[Gemini / DeepSeek：导演脚本]
   F --> G[摄影分镜与视频提示词]
   G --> H[n8n：图片 / 视频 / 轮询 / 回写]
   H --> I[无字幕广告成片]
@@ -24,7 +24,7 @@ flowchart LR
 
 这样做有三个好处：
 
-- 产品事实和创意推演分离，减少模型凭空补写参数、功效和竞品信息。
+- 产品资料、广告策划知识和创意输出被组织在同一个结构化 Stage 1 契约中，减少模型凭空补写参数、功效和竞品信息。
 - 用户在方向真正确定之前拥有选择权，不必接受模型单一路线。
 - 后续脚本、分镜和媒体任务都能关联回 `plan_id`、`hook_id`、`mood_board_id` 和 `video_task_id`。
 
@@ -52,7 +52,7 @@ flowchart LR
 
 ## 如何在面试中讲清楚
 
-> 我做的不是一个 Prompt Demo，而是一条带 human-in-the-loop 的 AI 广告生产链。系统先把产品事实和创意推演分开，再让用户选择 Hook 和 Mood Board，之后通过结构化 contract 把方案交给导演、摄影和媒体编排阶段。Python 保证内容边界，模型负责推理，n8n 负责异步媒体任务，Node 网关负责同源代理和状态恢复。
+> 我做的不是一个 Prompt Demo，而是一条带 human-in-the-loop 的 AI 广告生产链。系统先读取产品资料和广告知识，再由模型一次生成可比较的方案、Mood Board 和 Hook；用户选择方向后，系统通过结构化 contract 把方案交给导演、摄影和媒体编排阶段。Python 保证内容边界，模型负责推理，n8n 负责异步媒体任务，Node 网关负责同源代理和状态恢复。
 
 ## 当前边界
 
