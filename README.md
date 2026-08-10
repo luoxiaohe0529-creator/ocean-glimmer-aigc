@@ -29,33 +29,31 @@
 
 #### 中文信息流广告
 
-<table width="100%" style="table-layout:fixed; width:100%;">
-<colgroup><col style="width:33.333%;"><col style="width:33.333%;"><col style="width:33.333%;"></colgroup>
+<table>
 <tr>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>01｜华为品牌信息流 · 广告 1</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>02｜华为品牌信息流 · 广告 2</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/9aa5d543-ece7-41b3-b7d7-f721f921ed45" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>03｜华为品牌信息流 · 广告 3</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/b500b609-b2a1-4217-a32d-d1d02b5e4fdc" controls preload="metadata" width="280"></video></div></td>
+<td><strong>01｜华为品牌信息流 · 广告 1</strong><br><video src="frontend/showcase/videos/中文视频-国内电商/华为品牌信息流广告1.mp4" controls preload="metadata" width="280"></video></td>
+<td><strong>02｜华为品牌信息流 · 广告 2</strong><br><video src="frontend/showcase/videos/中文视频-国内电商/华为品牌信息流广告2.mp4" controls preload="metadata" width="280"></video></td>
+<td><strong>03｜华为品牌信息流 · 广告 3</strong><br><video src="frontend/showcase/videos/中文视频-国内电商/华为品牌信息流广告3.mp4" controls preload="metadata" width="280"></video></td>
 </tr>
 <tr>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>04｜华为品牌信息流 · 广告 4</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>05｜华为品牌信息流 · 广告 5</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"></td>
+<td><strong>04｜华为品牌信息流 · 广告 4</strong><br><video src="frontend/showcase/videos/中文视频-国内电商/华为品牌信息流广告4.mp4" controls preload="metadata" width="280"></video></td>
+<td><strong>05｜华为品牌信息流 · 广告 5</strong><br><video src="frontend/showcase/videos/中文视频-国内电商/华为品牌信息流广告5.mp4" controls preload="metadata" width="280"></video></td>
+<td></td>
 </tr>
 </table>
 
 #### 英文信息流广告
 
-<table width="100%" style="table-layout:fixed; width:100%;">
-<colgroup><col style="width:33.333%;"><col style="width:33.333%;"><col style="width:33.333%;"></colgroup>
+<table>
 <tr>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>01｜英文跨境美妆广告 · Veo 2</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/f037c40c-4688-4c84-902f-a2a79bdd1379" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>02｜英文跨境美妆广告 · 成片 01</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/cf11b849-4f57-4f31-8947-159efe9aba8c" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>03｜英文跨境美妆广告 · 成片 02</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/e23a1052-db38-46f1-8c1d-67a40fba8665" controls preload="metadata" width="280"></video></div></td>
+<td><strong>01｜英文跨境美妆广告 · Veo 2</strong><br><video src="frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4" controls preload="metadata" width="280"></video></td>
+<td><strong>02｜英文跨境美妆广告 · 成片 01</strong><br><video src="frontend/showcase/videos/英文视频-跨境电商/b6bb615118b60b4ea232edb0ca7e7393_raw_字幕.mp4" controls preload="metadata" width="280"></video></td>
+<td><strong>03｜英文跨境美妆广告 · 成片 02</strong><br><video src="frontend/showcase/videos/英文视频-跨境电商/8b6c2682770d9ec3622d16c08564e6eb_raw_字幕.mp4" controls preload="metadata" width="280"></video></td>
 </tr>
 <tr>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>04｜英文跨境美妆广告 · 成片 03</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/144f9be2-1267-4236-a59b-9c1a7afd4fc7" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"><strong>05｜英文跨境美妆广告 · 成片 04</strong><br><div style="width:100%; max-width:100%; overflow:hidden;"><video src="https://github.com/user-attachments/assets/8271892f-2035-4129-a70d-30b7529d80a9" controls preload="metadata" width="280"></video></div></td>
-<td width="33%" style="width:33.333%; max-width:33.333%; overflow:hidden; vertical-align:top;"></td>
+<td><strong>04｜英文跨境美妆广告 · 成片 03</strong><br><video src="frontend/showcase/videos/英文视频-跨境电商/5c3c9621da7f3cf98a9d555c069f9334_raw_字幕.mp4" controls preload="metadata" width="280"></video></td>
+<td><strong>05｜英文跨境美妆广告 · 成片 04</strong><br><video src="frontend/showcase/videos/英文视频-跨境电商/6a61109d96363f55ec04264cd57a6950_raw.mp4" controls preload="metadata" width="280"></video></td>
+<td></td>
 </tr>
 </table>
 
