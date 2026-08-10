@@ -1,27 +1,41 @@
 # 大海浮光｜跨境电商短视频智能生产系统
 
 **Ocean Glimmer — AI Design & AIGC Advertising Workbench**
+## 项目介绍
 
-[中文介绍](#60-秒看懂) · [English Summary](#english-summary)
+### 01｜产品定位
 
-输入商品链接、营销要求和产品图片，系统自动完成商品分析、广告创意、导演脚本、拍摄分镜和短视频生成。
+大海浮光 AIGC 工作台是一套面向跨境电商与品牌内容团队的短视频智能生产系统。用户输入商品链接、营销要求和产品图片后，系统依次完成商品分析、创意方案生成、导演脚本、摄影分镜和短视频生成。
 
-传统广告短视频制作需要分别整理商品资料、构思创意、编写脚本、设计分镜并操作多个生成工具，流程分散且依赖个人经验。大海浮光把这些环节整合进一个网页工作台，让用户在同一系统内完成从商品资料到广告成片的完整流程。
+### 02｜用户问题
 
-系统结合飞书广告知识库，一次生成 **3 套完整创意方案和 12 个 Hook** 供用户比较。用户选定方向后，系统继续生成导演脚本、摄影分镜并提交视频任务，同时显示进度、保留失败信息并将成片自动回写到工作台。
+传统广告制作需要在商品资料整理、创意策划、脚本撰写、分镜设计和多个生成工具之间反复切换。整个流程高度依赖个人经验，产品信息、用户选择和创意方向也容易在跨阶段传递中丢失。
 
-它不是单次 Prompt Demo。项目重点是把**产品事实、专业知识、人的创意选择和异步媒体生成**组织成一条可选择、可追踪、可恢复的生产链。
+### 03｜解决方案
 
+大海浮光 AIGC 工作台将广告生产拆分为商品理解、创意决策、脚本分镜和媒体执行四个阶段。
+
+系统结合飞书广告知识库，一次生成3套创意方案、3组 Mood Board 和12条 Hook。用户比较并确认方向后，系统再继续生成导演脚本、摄影分镜并提交视频任务，同时显示任务状态、保留失败信息并将成片回写到工作台。
+
+### 04｜项目价值
+
+项目关注的不只是生成一条视频，更关注如何让产品事实、专业知识、人的创意判断和异步媒体任务稳定衔接，形成一条可选择、可追踪、可恢复的广告生产链。
+
+60 秒看懂
+用时	查看内容	可以了解什么	入口
+0–15 秒	中英文广告成片	AI视频生成、广告创意与视觉执行能力	[中文成片](frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4) · [English Cut](frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4) · [完整视频目录](frontend/showcase/README.md)
+15–30 秒	工作台运行效果	从商品输入、方案选择到成片回写的实际产品流程	[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)
+30–45 秒	完整决策案例	用户如何比较 Hook、Mood Board 和创意方案，并将选择传递到后续阶段	[Case Study](docs/CASE_STUDY.md)
+45–60 秒	系统架构	Python、模型、飞书知识库与 n8n 如何协同工作	[系统架构](docs/ARCHITECTURE.md)
+
+
+**一句话总结：**这是一个将广告创意能力转化为可运行 AI 产品的作品集项目，覆盖商品分析、创意决策、导演脚本、摄影分镜、异步视频生成和结果回写。
+
+根据岗位快速查看
+**AI 产品 / AIGC 产品：**查看[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
+**AI 应用 / Agent 工作流：**查看[系统架构](docs/ARCHITECTURE.md)和[接口契约](docs/WORKFLOW_CONTRACTS.md)
+**AI 视频 / 创意技术：**查看[中英文视频目录](frontend/showcase/README.md)和[摄影分镜流程](docs/ARCHITECTURE.md)
 > 求职方向：AIGC 应用 · AI 产品 · Agent 工作流 · Creative Technologist · 跨境内容自动化
-
-## 60 秒看懂
-
-| 先看什么 | 入口 |
-| --- | --- |
-| 真实中英文成片 | [中文成片](frontend/showcase/videos/中文视频-国内电商/美白奶罐_高端TVC_0729_0434.mp4) · [English cut](frontend/showcase/videos/英文视频-跨境电商/veo-2_字幕.mp4) · [16 个完整视频目录](frontend/showcase/README.md) |
-| 工作台实际效果 | [真实运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) · [作品目录](frontend/showcase/README.md) |
-| 一次完整产品决策 | [Case Study](docs/CASE_STUDY.md) |
-| 系统如何拆分 | [架构说明](docs/ARCHITECTURE.md) |
 
 ### 视频作品｜直接播放
 
@@ -59,20 +73,17 @@
 
 ## English Summary
 
-Ocean Glimmer is an AI advertising production system that turns product links, marketing requirements, and reference images into structured advertising concepts, director scripts, shot lists, and short-form videos.
+Ocean Glimmer AIGC Workbench is an AI-powered advertising production system that transforms product links, marketing requirements, and reference images into structured creative concepts, directing scripts, shot-by-shot cinematography plans, and short-form advertising videos.
+The project addresses four recurring problems in AI-assisted advertising production: repeated product research, fragmented creative tools, single-option AI outputs, and long-running media tasks with limited status visibility. It brings the complete workflow into one browser-based workbench:
+1. Analyse the product and structure its selling points, target audience, usage scenarios, and communication priorities.
+2. Retrieve role-specific advertising knowledge from Feishu Wiki.
+3. Generate three creative directions, three mood boards, and twelve hooks for comparison.
+4. Let the user select the preferred hook and visual direction.
+5. Turn the selected concept into a directing script and shot-by-shot cinematography plan.
+6. Submit image and video generation tasks, display progress, retain error details, and return the completed video to the workbench.
 
-It was created to reduce repeated product-information collection, disconnected creative tools, one-direction model outputs, and long-running video tasks with no visible status. The workbench brings these steps into one browser-based workflow:
-
-1. analyse the product and organise its selling points, audience, usage scenarios, and communication priorities;
-2. read role-specific advertising knowledge from Feishu Wiki;
-3. generate three complete creative directions and twelve Hooks for comparison;
-4. let the user select the preferred Hook and visual direction;
-5. convert the selected concept into a director script and cinematography plan;
-6. submit image and video generation tasks, display progress, preserve failures, and write the completed video back to the workbench.
-
-The system separates advertising planning, directing, cinematography, and media execution instead of asking one model to complete everything in a single prompt. Human review remains at the key creative decision, while structured state and task polling keep the workflow selectable, traceable, and recoverable.
-
-**Recruiter takeaway:** this project demonstrates both advertising and visual-design judgment, and the ability to turn that creative capability into a working, repeatable AI production system.
+Rather than asking a single model to complete the entire process in one prompt, the system separates product analysis, advertising planning, directing, cinematography, and media execution into distinct stages. Human judgment is built into the key creative decision point, while structured state management and asynchronous task polling keep the workflow selectable, traceable, and recoverable.
+Recruiter takeaway: This project demonstrates advertising and visual-design judgment, AI product thinking, and the ability to turn creative expertise into a working, repeatable content-production system.
 
 ## 我解决的问题
 
@@ -98,24 +109,22 @@ flowchart LR
 
 ## 关键产品设计
 
-### 1. 人不是流程末端的审核员
+1｜先帮助用户做决策，再由系统继续执行
+广告创意没有唯一答案，因此大海浮光 AIGC 工作台不会直接从商品信息生成一条固定成片。系统先提供3套创意方案、3组 Mood Board 和12条 Hook，让用户比较并确认方向，再进入导演脚本、摄影分镜和视频生成阶段。被选中的方向通过 plan_id、hook_id 和 mood_board_id 贯穿后续流程，确保脚本、分镜和最终成片始终延续用户确认过的创意判断。
 
-Stage 1 先提供可比较的 Hook、Mood Board 和创意方案，由用户确定方向后再进入导演与摄影阶段。用户选择会以 `plan_id`、`hook_id` 和 `mood_board_id` 继续传递，而不是被下一次模型调用覆盖。
+2｜把专业经验沉淀为可复用的方法
+系统将广告策划、编剧导演和摄影摄像的方法分别沉淀到飞书 Wiki。每个阶段只读取当前角色所需的专业知识，再由模型结合具体商品完成分析与内容生成。
+系统通过 knowledge_trace 记录实际读取的知识来源，使生成过程可以追踪，同时避免把历史运行数据误当成专业方法重复调用。
 
-### 2. 知识库负责方法，模型负责推理
+3｜按照产品职责拆分系统能力
+Python负责商品分析、知识读取、模型调用、模板路由和结构化校验；n8n负责素材上传、图片与视频生成、任务轮询、对象存储和结果回写。
+内容决策与媒体执行相互独立。后续替换文本模型、图像模型或视频供应商时，可以保留原有的业务流程和数据结构，降低系统调整成本。
 
-飞书 Wiki 被划分为广告策划、编剧导演和摄影摄像三个知识域。每个阶段只读取与当前角色有关的知识，并通过 `knowledge_trace` 记录实际读取状态，避免把历史生成记录误当成方法论。
-
-### 3. 内容生成与媒体任务分开
-
-Python 负责知识读取、模型调用、模板路由和结构化契约；n8n 负责图片、视频、轮询、对象存储和结果回写。这样可以独立替换模型或媒体供应商，而不必重写整条业务流程。
-
-### 4. 长任务不会阻塞前端
-
-视频生成会立即返回任务 ID，前端随后轮询状态。最终视频与上游产品简报、创意方案、分辨率和 pipeline trace 一起保存，页面刷新后仍可恢复结果。
+4｜为长时间生成设计完整反馈
+视频生成属于高延迟任务。系统提交任务后立即返回任务ID，前端持续展示生成中、成功或失败状态，避免用户在等待过程中失去反馈。
+任务结果会与产品简报、创意方案、用户选择、分辨率和流程记录共同保存。即使页面刷新，用户也能恢复任务状态并继续查看最终成片。
 
 ## 本项目展示的能力
-
 | 能力 | 项目中的落地 |
 | --- | --- |
 | AI 产品设计 | 将广告生产拆成可验证阶段，并设置人工创意决策点 |
