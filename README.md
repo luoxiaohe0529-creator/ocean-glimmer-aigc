@@ -25,54 +25,29 @@
 
 ### 视频作品｜直接播放
 
-以下视频均来自“大海浮光AIGC GitHub最终版”文件夹。GitHub 页面会直接显示播放控件。
+中文视频区仅保留华为品牌信息流作品。GitHub 页面会直接显示原生播放控件。
 
 #### 中文视频｜国内电商
 
-**01｜美白奶罐 · Seedance**
-
-https://github.com/user-attachments/assets/da33ad21-2ff7-4e22-a284-4c406d1dc3e5
-
-**02｜美妆信息流 · Seedance 输出**
-
-https://github.com/user-attachments/assets/ded51a8e-fa64-47b2-a9f5-4a0459dc7567
-
-**03｜美妆信息流 · 高端 TVC**
-
-https://github.com/user-attachments/assets/3498e10c-f631-473d-a00f-cff0e54d2057
-
-**04｜美妆信息流 · Seedance 480p**
-
-https://github.com/user-attachments/assets/e46be7f8-9a71-4ed0-ae73-2f61c8082ad5
-
-**05｜美妆信息流 · 成片 01**
-
-https://github.com/user-attachments/assets/f3cf86b5-7bb3-4955-9736-a6486063ecc3
-
-**06｜美妆信息流 · 成片 02**
-
-https://github.com/user-attachments/assets/5a3e66b1-cab2-4ede-ad74-a89d062c00e5
-
-**07｜华为品牌信息流 · 广告 1**
+**01｜华为品牌信息流 · 广告 1**
 
 https://github.com/user-attachments/assets/4668d848-2e41-480a-81bf-d18911ef729c
 
-**08｜华为品牌信息流 · 广告 2**
+**02｜华为品牌信息流 · 广告 2**
 
 https://github.com/user-attachments/assets/513d23b5-a69d-4154-ad57-f6d7921b5bea
 
-**09｜华为品牌信息流 · 广告 3**
+**03｜华为品牌信息流 · 广告 3**
 
 https://github.com/user-attachments/assets/58c44e78-2af8-466a-886d-e3d1b5e414d0
 
-**10｜华为品牌信息流 · 广告 4**
+**04｜华为品牌信息流 · 广告 4**
 
 https://github.com/user-attachments/assets/b4f7a12c-03ed-430c-8a55-589463a0878a
 
-**11｜华为品牌信息流 · 广告 5**
+**05｜华为品牌信息流 · 广告 5**
 
 https://github.com/user-attachments/assets/4deaac89-8241-44d6-a15b-68d3eb4d95e4
-
 #### 英文视频｜跨境电商
 
 **01｜Veo 2**
@@ -94,6 +69,7 @@ https://github.com/user-attachments/assets/144f9be2-1267-4236-a59b-9c1a7afd4fc7
 **05｜English E-commerce · Video 04**
 
 https://github.com/user-attachments/assets/8271892f-2035-4129-a70d-30b7529d80a9
+
 
 ## English Summary
 
