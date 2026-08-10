@@ -23,13 +23,77 @@
 | 一次完整产品决策 | [Case Study](docs/CASE_STUDY.md) |
 | 系统如何拆分 | [架构说明](docs/ARCHITECTURE.md) |
 
-### 中文成片
+### 视频作品｜直接播放
 
-https://github.com/user-attachments/assets/74734f72-d492-4dd3-a5c0-b4d841303856
+以下视频均来自“大海浮光AIGC GitHub最终版”文件夹。GitHub 页面会直接显示播放控件。
 
-### English cut
+#### 中文视频｜国内电商
 
-https://github.com/user-attachments/assets/8b56f676-ef79-4034-8571-fb77ebd9df3a
+**01｜美白奶罐 · Seedance**
+
+https://github.com/user-attachments/assets/da33ad21-2ff7-4e22-a284-4c406d1dc3e5
+
+**02｜美妆信息流 · Seedance 输出**
+
+https://github.com/user-attachments/assets/ded51a8e-fa64-47b2-a9f5-4a0459dc7567
+
+**03｜美妆信息流 · 高端 TVC**
+
+https://github.com/user-attachments/assets/3498e10c-f631-473d-a00f-cff0e54d2057
+
+**04｜美妆信息流 · Seedance 480p**
+
+https://github.com/user-attachments/assets/e46be7f8-9a71-4ed0-ae73-2f61c8082ad5
+
+**05｜美妆信息流 · 成片 01**
+
+https://github.com/user-attachments/assets/f3cf86b5-7bb3-4955-9736-a6486063ecc3
+
+**06｜美妆信息流 · 成片 02**
+
+https://github.com/user-attachments/assets/5a3e66b1-cab2-4ede-ad74-a89d062c00e5
+
+**07｜华为品牌信息流 · 广告 1**
+
+https://github.com/user-attachments/assets/4668d848-2e41-480a-81bf-d18911ef729c
+
+**08｜华为品牌信息流 · 广告 2**
+
+https://github.com/user-attachments/assets/513d23b5-a69d-4154-ad57-f6d7921b5bea
+
+**09｜华为品牌信息流 · 广告 3**
+
+https://github.com/user-attachments/assets/58c44e78-2af8-466a-886d-e3d1b5e414d0
+
+**10｜华为品牌信息流 · 广告 4**
+
+https://github.com/user-attachments/assets/b4f7a12c-03ed-430c-8a55-589463a0878a
+
+**11｜华为品牌信息流 · 广告 5**
+
+https://github.com/user-attachments/assets/4deaac89-8241-44d6-a15b-68d3eb4d95e4
+
+#### 英文视频｜跨境电商
+
+**01｜Veo 2**
+
+https://github.com/user-attachments/assets/f037c40c-4688-4c84-902f-a2a79bdd1379
+
+**02｜English E-commerce · Video 01**
+
+https://github.com/user-attachments/assets/cf11b849-4f57-4f31-8947-159efe9aba8c
+
+**03｜English E-commerce · Video 02**
+
+https://github.com/user-attachments/assets/e23a1052-db38-46f1-8c1d-67a40fba8665
+
+**04｜English E-commerce · Video 03**
+
+https://github.com/user-attachments/assets/144f9be2-1267-4236-a59b-9c1a7afd4fc7
+
+**05｜English E-commerce · Video 04**
+
+https://github.com/user-attachments/assets/8271892f-2035-4129-a70d-30b7529d80a9
 
 ## English Summary
 
