@@ -1,6 +1,8 @@
-# 大海浮光｜跨境电商短视频智能生产系统
+# 大海浮光 AIGC 工作台
 
 **Ocean Glimmer — AI Design & AIGC Advertising Workbench**
+
+> 面向跨境电商与品牌内容团队的短视频智能生产系统
 
 [中文介绍](#60-秒看懂) · [English Summary](#english-summary)
 
@@ -39,22 +41,79 @@ https://github.com/user-attachments/assets/74734f72-d492-4dd3-a5c0-b4d841303856
 
 https://github.com/user-attachments/assets/8b56f676-ef79-4034-8571-fb77ebd9df3a
 
+### 视频作品｜直接播放
+
+#### 中文信息流广告
+
+<table>
+<tr>
+<td><strong>01｜华为品牌信息流 · 广告 1</strong><br><video src="https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97" controls preload="metadata" width="280"></video></td>
+<td><strong>02｜华为品牌信息流 · 广告 2</strong><br><video src="https://github.com/user-attachments/assets/9aa5d543-ece7-41b3-b7d7-f721f921ed45" controls preload="metadata" width="280"></video></td>
+<td><strong>03｜华为品牌信息流 · 广告 3 · 重新上传</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/中文视频-国内电商/华为品牌信息流广告3-重新上传.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/华为品牌信息流广告3-封面.png" controls preload="metadata" width="280"></video></td>
+</tr>
+<tr>
+<td><strong>04｜华为品牌信息流 · 广告 4</strong><br><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/华为品牌信息流广告4-封面.png" controls preload="metadata" width="280"></video></td>
+<td><strong>05｜华为品牌信息流 · 广告 5</strong><br><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/华为品牌信息流广告5-封面.png" controls preload="metadata" width="280"></video></td>
+<td></td>
+</tr>
+</table>
+
+#### 英文信息流广告
+
+<table>
+<tr>
+<td><strong>01｜英文跨境美妆广告 · Veo 2</strong><br><video src="https://github.com/user-attachments/assets/b82b5d82-b9d3-47dd-bb2e-9ba677fc7e44" controls preload="metadata" width="280"></video></td>
+<td><strong>02｜英文跨境美妆广告 · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/ed88cbeb-ea46-4af5-a6c6-eecf10247824" controls preload="metadata" width="280"></video></td>
+<td><strong>03｜英文跨境美妆广告 · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/ffd38ee5-c3b0-430b-895e-4f399d730536" controls preload="metadata" width="280"></video></td>
+</tr>
+<tr>
+<td><strong>04｜英文跨境美妆广告 · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/33156b11-8f0d-4dae-bc9c-39503998fd3b" controls preload="metadata" width="280"></video></td>
+<td><strong>05｜英文跨境美妆广告 · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/7ffb2da2-f0a5-404e-8984-9c5b28f3ef45" controls preload="metadata" width="280"></video></td>
+<td></td>
+</tr>
+</table>
+
+#### 新增信息流广告
+
+<table>
+<tr>
+<td><strong>01｜中文信息流 · 6月17日</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/中文视频-国内电商/新增中文信息流-6月17日.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/新增信息流-6月17日-封面.jpg" controls preload="metadata" width="280"></video></td>
+<td><strong>02｜中文信息流 · nova16打开河北</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/中文视频-国内电商/新增中文信息流-nova16打开河北.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/新增信息流-nova16打开河北-封面.jpg" controls preload="metadata" width="280"></video></td>
+<td><strong>03｜英文信息流 · Veo 最新字幕版</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/英文视频-跨境电商/新增英文信息流-veo最新字幕.mp4" controls preload="metadata" width="280"></video></td>
+</tr>
+</table>
+
+#### 新增品牌 TVC｜16:9 原比例展示
+
+下列三条视频保留 16:9 画面比例，不裁切、不拉伸；原始高分辨率素材仍保留在本地桌面文件夹，仓库内为网页展示版。
+
+<table>
+<tr>
+<td><strong>品牌tvc AIGC视频｜汽水</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/品牌TVC-AIGC-16x9/brand-tvc-aigc-sparkling-water-16x9.mp4" controls preload="metadata" width="560"></video></td>
+<td><strong>品牌tvc AIGC视频｜羽绒服</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/品牌TVC-AIGC-16x9/brand-tvc-aigc-down-jacket-16x9.mp4" controls preload="metadata" width="560"></video></td>
+</tr>
+<tr>
+<td><strong>品牌tvc AIGC视频｜小棕瓶</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/品牌TVC-AIGC-16x9/brand-tvc-aigc-estee-lauder-16x9.mp4" controls preload="metadata" width="560"></video></td>
+<td></td>
+</tr>
+</table>
+
 ## English Summary
 
 Ocean Glimmer is an AI advertising production system that turns product links, marketing requirements, and reference images into structured advertising concepts, director scripts, shot lists, and short-form videos.
 
-It was created to reduce repeated product-information collection, disconnected creative tools, one-direction model outputs, and long-running video tasks with no visible status. The workbench brings these steps into one browser-based workflow:
+It was created to reduce repeated product-information collection, disconnected creative tools, single-option AI outputs, and long-running video tasks with no visible status. The workbench brings these steps into one browser-based workflow:
 
 1. analyse the product and organise its selling points, audience, usage scenarios, and communication priorities;
 2. read role-specific advertising knowledge from Feishu Wiki;
 3. generate three complete creative directions and twelve Hooks for comparison;
 4. let the user select the preferred Hook and visual direction;
 5. convert the selected concept into a director script and cinematography plan;
-6. submit image and video generation tasks, display progress, preserve failures, and write the completed video back to the workbench.
+6. submit image and video generation tasks, display progress, retain error details, and write the completed video back to the workbench.
 
-The system separates advertising planning, directing, cinematography, and media execution instead of asking one model to complete everything in a single prompt. Human review remains at the key creative decision, while structured state and task polling keep the workflow selectable, traceable, and recoverable.
+The system separates advertising planning, directing, cinematography, and media execution instead of asking one model to complete everything in a single prompt. Human judgment is built into the key creative decisions, while structured state and task polling keep the workflow selectable, traceable, and recoverable.
 
-**Recruiter takeaway:** this project demonstrates both advertising and visual-design judgment, and the ability to turn that creative capability into a working, repeatable AI production system.
+**Recruiter takeaway:** This project demonstrates advertising and visual-design judgment, AI product thinking, and the ability to turn creative capability into a working, repeatable content-production system.
 
 ## 我解决的问题
 
@@ -153,7 +212,8 @@ Python 负责知识读取、模型调用、模板路由和结构化契约；n8n 
 │   ├── server.py              # Stage 1 / 2 / 3 API
 │   ├── prompts.py             # 结构化提示词契约
 │   ├── feishu_knowledge.py    # Wiki 知识读取
-│   └── gemini_kie.py          # KIE Gemini 3.1 Pro 通道
+│   ├── gemini_kie.py          # KIE Gemini 3.1 Pro 通道
+│   └── deepseek.py            # 英文导演脚本生成通道
 ├── n8n-workflows/public/      # 脱敏公开工作流
 ├── docs/knowledge/            # 三类知识库整理版
 ├── docs/                      # 架构、Case Study 与接口文档
