@@ -31,7 +31,7 @@
 
 **01｜华为品牌信息流 · 广告 1**
 
-https://github.com/user-attachments/assets/4668d848-2e41-480a-81bf-d18911ef729c
+https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97
 
 **02｜华为品牌信息流 · 广告 2**
 
