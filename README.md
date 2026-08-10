@@ -25,29 +25,25 @@
 
 ### 视频作品｜直接播放
 
-中文视频区仅保留华为品牌信息流作品。GitHub 页面会直接显示原生播放控件。
+中文视频区仅保留华为品牌信息流作品。每条成片的第 1 秒都是产品封面，GitHub 页面可直接播放。
 
 #### 中文视频｜国内电商
 
-**01｜华为品牌信息流 · 广告 1**
+<table>
+<tr>
+<td><strong>01｜华为品牌信息流 · 广告 1</strong><br><video src="https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97" controls preload="metadata" width="280"></video></td>
+<td><strong>02｜华为品牌信息流 · 广告 2</strong><br><video src="https://github.com/user-attachments/assets/9aa5d543-ece7-41b3-b7d7-f721f921ed45" controls preload="metadata" width="280"></video></td>
+</tr>
+<tr>
+<td><strong>03｜华为品牌信息流 · 广告 3</strong><br><video src="https://github.com/user-attachments/assets/b500b609-b2a1-4217-a32d-d1d02b5e4fdc" controls preload="metadata" width="280"></video></td>
+<td><strong>04｜华为品牌信息流 · 广告 4</strong><br><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" controls preload="metadata" width="280"></video></td>
+</tr>
+<tr>
+<td><strong>05｜华为品牌信息流 · 广告 5</strong><br><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" controls preload="metadata" width="280"></video></td>
+<td></td>
+</tr>
+</table>
 
-https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97
-
-**02｜华为品牌信息流 · 广告 2**
-
-https://github.com/user-attachments/assets/513d23b5-a69d-4154-ad57-f6d7921b5bea
-
-**03｜华为品牌信息流 · 广告 3**
-
-https://github.com/user-attachments/assets/58c44e78-2af8-466a-886d-e3d1b5e414d0
-
-**04｜华为品牌信息流 · 广告 4**
-
-https://github.com/user-attachments/assets/b4f7a12c-03ed-430c-8a55-589463a0878a
-
-**05｜华为品牌信息流 · 广告 5**
-
-https://github.com/user-attachments/assets/4deaac89-8241-44d6-a15b-68d3eb4d95e4
 #### 英文视频｜跨境电商
 
 **01｜Veo 2**
