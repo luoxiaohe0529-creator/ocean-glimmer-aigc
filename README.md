@@ -17,7 +17,7 @@
 | 用时 | 查看内容 | 可以了解什么 | 入口 |
 | --- | --- | --- | --- |
 | 0–15 秒 | 中英文广告成片 | AI 视频生成、广告创意与视觉执行能力 | [中文成片](frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频作品](#视频作品直接播放) |
-| 15–30 秒 | 工作台运行效果 | 从商品输入、方案选择到成片回写的实际产品流程 | [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
+| 15–30 秒 | 工作台运行效果 | 从商品输入、方案选择到成片回写的实际产品流程 | [只读 Mock Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/) · [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
 | 30–45 秒 | 完整决策案例 | 用户如何比较 Hook、Mood Board 和创意方案，并将选择传递到后续阶段 | [Case Study](docs/CASE_STUDY.md) |
 | 45–60 秒 | 系统架构 | Python、模型、飞书知识库与 n8n 如何协同工作 | [系统架构](docs/ARCHITECTURE.md) |
 
@@ -25,9 +25,9 @@
 
 ### 根据岗位快速查看
 
-- **AI 产品 / AIGC 产品：**查看[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
+- **AI 产品 / AIGC 产品：**查看[只读 Mock Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
 - **AI 应用 / Agent 工作流：**查看[系统架构](docs/ARCHITECTURE.md)和[接口契约](docs/WORKFLOW_CONTRACTS.md)
-- **AI 视频 / 创意技术：**查看[中英文视频目录](frontend/showcase/README.md)和[摄影分镜流程](docs/ARCHITECTURE.md)
+- **AI 视频 / 创意技术：**查看[中英文视频目录](frontend/showcase/README.md)、[摄影分镜流程](docs/ARCHITECTURE.md)和[知识库证据](docs/knowledge/README.md)
 
 ## 视频作品｜直接播放
 
@@ -191,6 +191,7 @@ flowchart LR
 │   └── deepseek.py            # 英文导演脚本生成通道
 ├── n8n-workflows/public/      # 脱敏公开工作流
 ├── docs/knowledge/            # 三类知识库整理版
+├── docs/demo/                 # 无需密钥的只读 Mock Demo
 ├── docs/                      # 架构、Case Study 与接口文档
 ├── scripts/                   # 检查、导出和安装工具
 ├── .env.example
@@ -237,4 +238,6 @@ npm run check
 - [系统架构](docs/ARCHITECTURE.md)
 - [接口契约](docs/WORKFLOW_CONTRACTS.md)
 - [飞书知识库接入](docs/FEISHU_KNOWLEDGE.md)
+- [知识库公开索引](docs/knowledge/README.md)
+- [只读 Mock Demo](docs/demo/index.html)
 - [GitHub 发布检查](docs/GITHUB_RELEASE.md)

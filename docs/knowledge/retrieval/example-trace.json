@@ -1,0 +1,40 @@
+{
+  "trace_id": "mock-demo-2026-08-11",
+  "mode": "read_only_mock",
+  "product": {
+    "category": "consumer electronics",
+    "content_type": "information feed ad",
+    "language": "zh-CN"
+  },
+  "stages": [
+    {
+      "stage": "stage-1",
+      "role": "planning",
+      "source_wiki_url": "https://pcn7bpsihajy.feishu.cn/wiki/XLdRwFy4RiDNvykEXXtcc39UnIe",
+      "chunks": ["planning-001", "planning-002", "planning-003"],
+      "used_for": ["product_brief", "mood_boards", "creative_plans", "hooks"],
+      "status": "mocked"
+    },
+    {
+      "stage": "stage-2",
+      "role": "directing",
+      "source_wiki_url": "https://pcn7bpsihajy.feishu.cn/wiki/KikywYv7iiJ0zSkY8HdcLoCEnwf",
+      "chunks": ["directing-001", "directing-003"],
+      "used_for": ["script_text", "script_segments", "director_notes"],
+      "status": "mocked"
+    },
+    {
+      "stage": "stage-3",
+      "role": "cinematography",
+      "source_wiki_url": "https://pcn7bpsihajy.feishu.cn/wiki/DhlgwqOcbiH073kfmpzcc0O0nsW",
+      "chunks": ["cinematography-001", "cinematography-003"],
+      "used_for": ["storyboard", "video_prompt", "visual_constraints"],
+      "status": "mocked"
+    }
+  ],
+  "security": {
+    "contains_credentials": false,
+    "uses_real_vendor_api": false,
+    "safe_for_public_demo": true
+  }
+}

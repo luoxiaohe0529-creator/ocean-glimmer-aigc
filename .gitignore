@@ -24,6 +24,13 @@ frontend/generated/edits/
 *.log
 *.tmp
 
+# Local drafts and private backups kept outside the public release
+2026-08-08 最新版GitHub/
+ai-ad-video-factory-n8n-workflows.json
+ai-ad-video-factory-reference-comparison.md
+ai-video-factory-feishu-redesign.patch
+中文视频-国内电商/华为品牌信息流（消费电子）/6月17日-封面.jpg
+
 # OS files
 .DS_Store
 Thumbs.db

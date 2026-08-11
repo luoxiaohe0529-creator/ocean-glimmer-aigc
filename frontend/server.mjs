@@ -47,6 +47,11 @@ const pythonRoutes = {
   '/api/providers/kie/status': '/providers/kie/status',
 };
 
+const demoMode = /^(1|true|mock)$/i.test(String(process.env.OCEAN_GLIMMER_DEMO_MODE || process.env.DEMO_MODE || ''));
+const demoVideoUrl = 'https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a';
+const demoCoverUrl = 'https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg';
+const demoTraceId = 'mock-demo-2026-08-11';
+
 async function persistUploadedImages(payload) {
   if (!Array.isArray(payload) || !payload.length) throw new Error('图片请求格式无效');
   const upstream = await fetch(`${pythonBaseUrl}/upload-images`, {
@@ -91,6 +96,442 @@ const contentTypes = {
 function send(res, status, body, type = 'application/json; charset=utf-8') {
   res.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store' });
   res.end(body);
+}
+
+function demoKnowledgeTrace(stage, role, wikiUrl, chunks) {
+  return {
+    source: 'mock',
+    mode: 'read_only_demo',
+    trace_id: demoTraceId,
+    stage,
+    role,
+    wiki_url: wikiUrl,
+    chunks,
+    api_attempted: false,
+    contains_credentials: false,
+  };
+}
+
+function buildDemoStageOnePayload(request = {}) {
+  const contentType = request.content_type || '真人口播带货';
+  const language = request.language || '中文';
+  const productBrief = {
+    product_name: '华为 nova 轻旗舰手机',
+    category: '消费电子 / 智能手机',
+    target_audience: language === '英文' ? 'Young creators and mobile-first shoppers' : '年轻内容创作者、学生和注重外观与影像体验的手机用户',
+    selling_points: ['轻薄机身', '高辨识度渐变外观', '人像与日常影像能力', '适合通勤、旅行和内容分享'],
+    pain_points: '想要手机既好看又能稳定拍出清晰、有氛围感的日常内容。',
+    use_scenario: '通勤自拍、泳池旅行、夜间街拍和社交平台内容发布。',
+  };
+  const moodBoards = [
+    {
+      mood_board_id: 'mb-01',
+      title: '夏日清透科技感',
+      palette: ['pool blue', 'shell white', 'soft silver'],
+      lighting: '明亮自然光，产品边缘保留干净高光。',
+      materials: ['玻璃机身', '水波纹反光', '白色墨镜', '海边道具'],
+      scene_grammar: '水面、阳光、手持产品和近景细节交替出现。',
+      character_state: '轻松、自信、主动展示产品。',
+      camera_language: '竖版近景开场，中景展示人物，再切产品细节。',
+    },
+    {
+      mood_board_id: 'mb-02',
+      title: '霓虹人像舞台',
+      palette: ['deep black', 'neon pink', 'ice blue'],
+      lighting: '粉蓝撞色灯，脸部和手机 Logo 保持可见。',
+      materials: ['金属外套', '镜面反射', '夜景灯管'],
+      scene_grammar: '人物视线直面镜头，手机占据前景形成记忆点。',
+      character_state: '冷静、坚定、时尚。',
+      camera_language: '推近眼神，再切手机背板和镜头模组。',
+    },
+    {
+      mood_board_id: 'mb-03',
+      title: '开箱即拍的生活感',
+      palette: ['warm white', 'sand beige', 'sky blue'],
+      lighting: '柔和窗光，减少重阴影。',
+      materials: ['桌面', '手账', '包装盒', '咖啡杯'],
+      scene_grammar: '从开箱到拍摄样张，强调真实使用路径。',
+      character_state: '亲近、自然、可信。',
+      camera_language: '俯拍开箱、手部操作、屏幕回看三段式。',
+    },
+  ];
+  const creativePlans = [
+    {
+      plan_id: 'plan-01',
+      mood_board_id: 'mb-01',
+      title: '一眼清透，出门就能拍',
+      category: '夏日信息流',
+      core_hook: '出门前只带这一台，也能把夏天拍得很干净。',
+      director_guidance: '先用产品近景建立质感，再给人物使用场景，最后回到手机外观和拍摄结果。',
+      template_group_id: 'feed-product-demo-v1',
+      content_subtype: 'product-first',
+      score: 93,
+    },
+    {
+      plan_id: 'plan-02',
+      mood_board_id: 'mb-02',
+      title: '夜色人像，手机就是焦点',
+      category: '时尚人像',
+      core_hook: '夜景里最亮的不是灯，是你手里的这台手机。',
+      director_guidance: '强调人像、灯光和手机背板，形成社交平台首帧冲击力。',
+      template_group_id: 'feed-fashion-v1',
+      content_subtype: 'portrait-first',
+      score: 90,
+    },
+    {
+      plan_id: 'plan-03',
+      mood_board_id: 'mb-03',
+      title: '开箱三分钟，开始记录生活',
+      category: '好物推荐',
+      core_hook: '新手机到手，我最先看的不是参数，是它能不能马上拍好看。',
+      director_guidance: '用真实开箱路径承接卖点，语气更像朋友推荐。',
+      template_group_id: 'feed-review-v1',
+      content_subtype: 'review-first',
+      score: 88,
+    },
+  ];
+  const hooks = Array.from({ length: 12 }, (_, index) => {
+    const plan = creativePlans[index % creativePlans.length];
+    const titles = [
+      '出门前只带这一台',
+      '把夏天拍得更清透',
+      '夜景人像也能稳住',
+      '手机背板就是穿搭单品',
+      '开箱第一眼就很上镜',
+      '通勤路上随手拍',
+      '旅行不用多带设备',
+      '社交平台首帧更抓人',
+      '产品近景也有高级感',
+      '给日常加一点光泽',
+      '轻薄但不牺牲质感',
+      '从人像到产品都能接住',
+    ];
+    return {
+      title: titles[index],
+      hook: `${titles[index]}，用 15 秒展示产品外观、拍摄场景和使用理由。`,
+      description: `围绕「${plan.title}」展开，首帧直接出现人物和手机，三秒内给出继续观看的理由。`,
+      category: plan.category,
+      awareness_stage: index < 4 ? '种草' : index < 8 ? '比较' : '转化',
+      emotion: index % 2 ? '时尚' : '清爽',
+      score: 92 - index,
+      plan_id: plan.plan_id,
+      template_group_id: plan.template_group_id,
+      content_subtype: plan.content_subtype,
+    };
+  });
+  return {
+    ok: true,
+    mode: 'read_only_mock',
+    product_record_id: 'mock-product-nova-001',
+    product_brief: productBrief,
+    mood_boards: moodBoards,
+    creative_plans: creativePlans,
+    recommended_plan_id: 'plan-01',
+    hooks,
+    template_group_id: 'feed-product-demo-v1',
+    content_subtype: 'product-first',
+    product_category: 'consumer-electronics',
+    knowledge_trace: demoKnowledgeTrace(
+      'stage-1',
+      '广告策划',
+      'https://pcn7bpsihajy.feishu.cn/wiki/XLdRwFy4RiDNvykEXXtcc39UnIe',
+      ['planning-001', 'planning-002', 'planning-003'],
+    ),
+    pipeline_trace: {
+      input: request.source_type || 'mock',
+      vendor_calls: 0,
+      safe_for_public_demo: true,
+    },
+  };
+}
+
+function buildDemoScriptPayload(request = {}) {
+  const hook = request.selected_hook || request.hook || { title: '出门前只带这一台' };
+  const scriptText = [
+    `0-3s：镜头贴近手机背板和人物眼神，旁白：“${hook.title}。”`,
+    '3-7s：人物在泳池边举起手机，水面反光扫过机身，强调轻薄和外观辨识度。',
+    '7-12s：切换到自拍、风景和产品近景，字幕点出“清透人像”“随手记录”“出门好搭”。',
+    '12-15s：手机定格在蓝白场景中，完成品牌露出和行动引导。',
+  ].join('\n');
+  return {
+    ok: true,
+    mode: 'read_only_mock',
+    script_text: scriptText,
+    script_segments: [
+      { index: 1, start: 0, end: 3, text: '产品背板和人物眼神建立首帧记忆点。' },
+      { index: 2, start: 3, end: 7, text: '泳池边手持展示外观与轻薄感。' },
+      { index: 3, start: 7, end: 12, text: '多场景快速切换，证明日常可用。' },
+      { index: 4, start: 12, end: 15, text: '品牌露出与行动引导。' },
+    ],
+    director_instruction: '整体节奏清爽、明亮，产品每个镜头都保持正面可识别。',
+    director_notes: {
+      rhythm: '3 秒抓注意力，7 秒建立使用场景，15 秒完成转化。',
+      continuity: '手机颜色、镜头模组和 Logo 位置保持一致。',
+    },
+    knowledge_trace: demoKnowledgeTrace(
+      'stage-2',
+      '编剧导演',
+      'https://pcn7bpsihajy.feishu.cn/wiki/KikywYv7iiJ0zSkY8HdcLoCEnwf',
+      ['directing-001', 'directing-003'],
+    ),
+  };
+}
+
+function buildDemoStoryboardPayload(request = {}) {
+  const storyboard = [
+    {
+      time: '0-3s',
+      visual: '竖版近景，人物正面看镜头，手中手机占据画面右下角，产品背板清晰。',
+      camera_movement: '轻微推近，锁定眼神和手机镜头模组。',
+      dialogue: '出门前只带这一台。',
+      video_prompt: 'vertical smartphone ad, close portrait, product clearly visible, clean blue background, polished commercial lighting',
+    },
+    {
+      time: '3-7s',
+      visual: '泳池边中景，人物举起手机，水面反光落在蓝色机身上。',
+      camera_movement: '从手机背板平移到人物笑容。',
+      dialogue: '清透外观和日常拍摄，一镜都能接住。',
+      video_prompt: 'poolside product demo, bright daylight, hand holding smartphone, reflective blue phone body, summer commercial style',
+    },
+    {
+      time: '7-12s',
+      visual: '三连切：自拍预览、桌面产品细节、旅行随手拍。',
+      camera_movement: '快速切换但保持产品方向一致。',
+      dialogue: '自拍、旅行、通勤，随手就有氛围。',
+      video_prompt: 'quick cuts, lifestyle smartphone usage, consistent product identity, clean social feed pacing',
+    },
+    {
+      time: '12-15s',
+      visual: '手机放在蓝白道具场景中，屏幕亮起，品牌信息干净收尾。',
+      camera_movement: '慢速定格，保留 1 秒产品展示。',
+      dialogue: '让每一次记录都更上镜。',
+      video_prompt: 'final hero product shot, blue white props, premium smartphone, clear brand ending, no extra text clutter',
+    },
+  ];
+  return {
+    ok: true,
+    mode: 'read_only_mock',
+    video_task_id: 'mock-video-task-001',
+    storyboard,
+    segments: [
+      {
+        index: 1,
+        start: 0,
+        end: Number(request.duration || 15),
+        script_text: request.script_text || buildDemoScriptPayload(request).script_text,
+        storyboard,
+      },
+    ],
+    director_notes: {
+      shot_count: storyboard.length,
+      aspect_ratio: '9:16',
+      visual_constraint: '产品始终清晰可见，不改变外观。',
+    },
+    knowledge_trace: demoKnowledgeTrace(
+      'stage-3',
+      '摄影摄像',
+      'https://pcn7bpsihajy.feishu.cn/wiki/DhlgwqOcbiH073kfmpzcc0O0nsW',
+      ['cinematography-001', 'cinematography-003'],
+    ),
+  };
+}
+
+function buildDemoVideoPayload(request = {}) {
+  return {
+    ok: true,
+    mode: 'read_only_mock',
+    status: 'completed',
+    video_task_id: request.video_task_id || 'mock-video-task-001',
+    video_url: demoVideoUrl,
+    result_url: demoVideoUrl,
+    poster_url: demoCoverUrl,
+    duration: Number(request.duration || 15),
+    resolution: request.resolution || '480p',
+    segments: [
+      {
+        segment_index: 1,
+        total_segments: 1,
+        status: 'completed',
+        duration: Number(request.duration || 15),
+        video_url: demoVideoUrl,
+        url: demoVideoUrl,
+      },
+    ],
+    knowledge_trace: {
+      trace_id: demoTraceId,
+      mode: 'read_only_mock',
+      vendor_calls: 0,
+      contains_credentials: false,
+    },
+  };
+}
+
+function buildDemoKnowledgeFilters(contentType = '真人口播带货') {
+  const filters = contentType === '好物推荐'
+    ? [
+        { id: 'selling_angle', label: '卖点角度', options: ['真实体验', '细节展示', '对比种草'] },
+        { id: 'compare_dim', label: '比较维度', options: ['外观质感', '使用便利', '拍摄表现'] },
+        { id: 'visual_style', label: '视觉风格', options: ['生活方式', '开箱测评', '清爽桌面'] },
+      ]
+    : contentType === '高端TVC'
+      ? [
+          { id: 'emotion_tone', label: '情绪基调', options: ['清透', '高级', '克制'] },
+          { id: 'visual_lang', label: '视觉语言', options: ['产品英雄镜头', '材质特写', '光影流动'] },
+          { id: 'narrative', label: '叙事结构', options: ['意象开场', '产品递进', '品牌收束'] },
+        ]
+      : [
+          { id: 'creator_vibe', label: '达人气质', options: ['清爽可信', '时尚锐利', '朋友式推荐'] },
+          { id: 'speaking_style', label: '表达方式', options: ['直接种草', '场景带入', '痛点解决'] },
+          { id: 'use_scene', label: '使用场景', options: ['通勤', '旅行', '夜景自拍'] },
+        ];
+  return {
+    ok: true,
+    source: 'mock',
+    mode: 'read_only_demo',
+    content_type: contentType,
+    filters,
+    knowledge_trace: demoKnowledgeTrace(
+      'filters',
+      '广告策划',
+      'https://pcn7bpsihajy.feishu.cn/wiki/XLdRwFy4RiDNvykEXXtcc39UnIe',
+      ['planning-001', 'planning-002'],
+    ),
+  };
+}
+
+async function handleDemoRequest(req, res, url) {
+  if (!demoMode) return false;
+
+  if (req.method === 'GET' && url.pathname === '/api/health') {
+    send(res, 200, JSON.stringify({
+      ok: true,
+      frontend: 'ok',
+      n8n: 'mock',
+      python: 'mock',
+      demo_mode: true,
+      credentials_required: false,
+    }));
+    return true;
+  }
+  if (req.method === 'GET' && url.pathname === '/api/video/latest') {
+    send(res, 200, JSON.stringify(buildDemoVideoPayload()));
+    return true;
+  }
+  if (req.method === 'GET' && url.pathname === '/api/video/status') {
+    send(res, 200, JSON.stringify(buildDemoVideoPayload({ video_task_id: url.searchParams.get('task_id') })));
+    return true;
+  }
+  if (req.method === 'GET' && url.pathname === '/api/knowledge/filters') {
+    send(res, 200, JSON.stringify(buildDemoKnowledgeFilters(url.searchParams.get('content_type') || '真人口播带货')));
+    return true;
+  }
+  if (req.method === 'GET' && url.pathname === '/api/knowledge/status') {
+    send(res, 200, JSON.stringify({
+      ok: true,
+      source: 'mock',
+      mode: 'read_only_demo',
+      roles: ['广告策划', '编剧导演', '摄影摄像'],
+      credentials_required: false,
+    }));
+    return true;
+  }
+
+  const demoPostRoutes = new Set([
+    '/api/fast/stage-1',
+    '/api/fast/stage-2',
+    '/api/fast/stage-3',
+    '/api/workflow/stage-4',
+    '/api/workflow/stage-5',
+    '/api/workflow/stage-6',
+    '/api/upload-images',
+    '/api/extract-product-document',
+    '/api/media/edit',
+    '/api/media/align-subtitles',
+    '/api/providers/minimax/music',
+    '/api/providers/kie/character',
+    '/api/providers/kie/storyboard',
+    '/api/providers/kie/overseas-video',
+  ]);
+  if (req.method !== 'POST' || !demoPostRoutes.has(url.pathname)) return false;
+
+  let payload = {};
+  try {
+    const body = await readRequestBody(req);
+    payload = JSON.parse(body.toString('utf8') || '{}');
+  } catch {
+    payload = {};
+  }
+
+  if (url.pathname === '/api/fast/stage-1') {
+    send(res, 200, JSON.stringify(buildDemoStageOnePayload(payload)));
+    return true;
+  }
+  if (url.pathname === '/api/fast/stage-2') {
+    send(res, 200, JSON.stringify(buildDemoScriptPayload(payload)));
+    return true;
+  }
+  if (url.pathname === '/api/fast/stage-3') {
+    send(res, 200, JSON.stringify(buildDemoStoryboardPayload(payload)));
+    return true;
+  }
+  if (url.pathname === '/api/workflow/stage-4' || url.pathname === '/api/workflow/stage-6' || url.pathname === '/api/media/edit') {
+    send(res, 200, JSON.stringify(buildDemoVideoPayload(payload)));
+    return true;
+  }
+  if (url.pathname === '/api/workflow/stage-5' || url.pathname === '/api/providers/kie/character' || url.pathname === '/api/providers/kie/storyboard') {
+    send(res, 200, JSON.stringify({
+      ok: true,
+      mode: 'read_only_mock',
+      images: [{ url: demoCoverUrl, image_url: demoCoverUrl, public_url: demoCoverUrl }],
+      urls: [demoCoverUrl],
+      storyboard_images: [demoCoverUrl],
+      character_image_url: demoCoverUrl,
+    }));
+    return true;
+  }
+  if (url.pathname === '/api/upload-images') {
+    const items = Array.isArray(payload) ? payload : [];
+    send(res, 200, JSON.stringify({
+      ok: true,
+      images: items.slice(0, 9).map((item, index) => ({
+        ok: true,
+        name: item.name || `mock-image-${index + 1}.jpg`,
+        url: demoCoverUrl,
+      })),
+    }));
+    return true;
+  }
+  if (url.pathname === '/api/extract-product-document') {
+    send(res, 200, JSON.stringify({
+      ok: true,
+      name: payload.name || 'mock-product-brief.docx',
+      text: 'Mock 商品资料：轻薄手机、清透外观、人像与日常影像场景。',
+      images: [],
+    }));
+    return true;
+  }
+  if (url.pathname === '/api/media/align-subtitles') {
+    send(res, 200, JSON.stringify({
+      ok: true,
+      subtitle_text: payload.script_text || '',
+      source_video_url: payload.source_video_url || demoVideoUrl,
+    }));
+    return true;
+  }
+  if (url.pathname === '/api/providers/minimax/music') {
+    send(res, 200, JSON.stringify({
+      ok: true,
+      mode: 'read_only_mock',
+      music_url: '',
+      message: 'Mock 模式不生成音乐文件。',
+    }));
+    return true;
+  }
+  if (url.pathname === '/api/providers/kie/overseas-video') {
+    send(res, 200, JSON.stringify(buildDemoVideoPayload(payload)));
+    return true;
+  }
+  return false;
 }
 
 const videoUrlKeys = [
@@ -547,6 +988,9 @@ createServer(async (req, res) => {
     res.end();
     return;
   }
+  if (await handleDemoRequest(req, res, url)) {
+    return;
+  }
   if (req.method === 'POST' && disabledLegacyContentRoutes.has(url.pathname)) {
     send(res, 410, JSON.stringify({
       ok: false,
@@ -655,6 +1099,10 @@ createServer(async (req, res) => {
 }).listen(port, '127.0.0.1', () => {
   console.log(`AI广告视频工厂前端：http://localhost:${port}`);
   console.log(`前端代码目录：${root}`);
-  console.log(`Python 服务代理：${pythonBaseUrl}`);
-  console.log(`n8n Webhook 代理：${n8nBaseUrl}/${webhookPrefix}`);
+  if (demoMode) {
+    console.log('Mock 演示模式：已启用，不调用 Python、n8n、飞书或外部模型。');
+  } else {
+    console.log(`Python 服务代理：${pythonBaseUrl}`);
+    console.log(`n8n Webhook 代理：${n8nBaseUrl}/${webhookPrefix}`);
+  }
 });

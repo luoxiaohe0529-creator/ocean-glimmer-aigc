@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大海浮光 AIGC 工作台｜只读 Mock Demo</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --panel: #ffffff;
+      --panel-soft: #fafbfc;
+      --ink: #151820;
+      --muted: #676d78;
+      --faint: #8c93a0;
+      --line: #d7dce3;
+      --blue: #0d67d8;
+      --blue-soft: #eef6ff;
+      --green: #148553;
+      --amber: #a76815;
+      --shadow: 0 18px 45px rgba(19, 28, 42, .08);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 68px;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 220px;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand strong,
+    .brand span {
+      display: block;
+    }
+
+    .brand strong {
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .brand span {
+      margin-top: 3px;
+      color: var(--faint);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      min-height: calc(100vh - 68px);
+    }
+
+    .rail {
+      position: sticky;
+      top: 68px;
+      height: calc(100vh - 68px);
+      overflow: auto;
+      padding: 28px 18px;
+      border-right: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .rail-label {
+      margin: 0 12px 12px;
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      width: 100%;
+      min-height: 58px;
+      margin-bottom: 7px;
+      padding: 11px 12px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    .step:hover {
+      background: var(--panel-soft);
+      color: var(--ink);
+    }
+
+    .step.active {
+      border-color: #9dc8fb;
+      background: var(--blue-soft);
+      color: var(--ink);
+      box-shadow: 0 10px 22px rgba(13, 103, 216, .08);
+    }
+
+    .step.done .num {
+      color: var(--green);
+    }
+
+    .step .num {
+      padding-top: 1px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .step b,
+    .step small {
+      display: block;
+    }
+
+    .step b {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .step small {
+      margin-top: 4px;
+      font-size: 10px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    main {
+      min-width: 0;
+      padding: 42px 52px 70px;
+    }
+
+    .wrap {
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    .head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .head p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .head-meta {
+      min-width: 160px;
+      padding-left: 14px;
+      border-left: 3px solid var(--blue);
+    }
+
+    .head-meta span,
+    .head-meta strong {
+      display: block;
+    }
+
+    .head-meta span {
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .head-meta strong {
+      margin-top: 7px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(320px, .8fr) minmax(0, 1.2fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .panel.pad {
+      padding: 24px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 4px 0 0;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eef1f5;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill.ok {
+      background: #eaf7f0;
+      color: var(--green);
+    }
+
+    .summary-list {
+      display: grid;
+      border-top: 1px solid var(--line);
+    }
+
+    .summary-list div {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .summary-list span {
+      color: var(--muted);
+    }
+
+    .summary-list strong {
+      max-width: 66%;
+      text-align: right;
+      line-height: 1.45;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .chips span {
+      padding: 6px 9px;
+      border-radius: 6px;
+      background: var(--blue-soft);
+      color: #225f9c;
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .primary,
+    .secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border-radius: 8px;
+      padding: 0 14px;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .primary {
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .secondary {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .primary:disabled,
+    .secondary:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
+
+    .hero-media {
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #10131a;
+    }
+
+    .hero-media img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+    }
+
+    .hook-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .hook-card {
+      min-height: 142px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      text-align: left;
+    }
+
+    .hook-card.active {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      box-shadow: 0 10px 24px rgba(13, 103, 216, .08);
+    }
+
+    .hook-card h3 {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .hook-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .hook-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .script {
+      margin: 0;
+      padding: 18px 20px;
+      border-left: 3px solid var(--blue);
+      border-radius: 0 8px 8px 0;
+      background: var(--panel-soft);
+      font-size: 13px;
+      line-height: 1.85;
+      white-space: pre-wrap;
+    }
+
+    .shots {
+      display: grid;
+      gap: 10px;
+    }
+
+    .shot {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .time {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .shot b {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+
+    .shot p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .video-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #10131a;
+    }
+
+    .video-card video {
+      display: block;
+      width: 100%;
+      max-height: 640px;
+      background: #10131a;
+      object-fit: contain;
+    }
+
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .evidence {
+      min-height: 122px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-soft);
+    }
+
+    .evidence span {
+      display: block;
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .evidence b {
+      display: block;
+      margin-top: 7px;
+      font-size: 13px;
+    }
+
+    .evidence p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 960px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: sticky;
+        top: 68px;
+        z-index: 9;
+        height: auto;
+        padding: 10px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        overflow-x: auto;
+      }
+
+      .rail-label {
+        display: none;
+      }
+
+      .rail nav {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(126px, 1fr));
+        gap: 6px;
+      }
+
+      .step {
+        margin: 0;
+        min-height: 48px;
+      }
+
+      main {
+        padding: 28px 18px 46px;
+      }
+
+      .grid,
+      .hook-list,
+      .evidence-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .head {
+        display: block;
+      }
+
+      .head-meta {
+        margin-top: 18px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 18px;
+      }
+
+      .shell {
+        min-height: auto;
+      }
+
+      .rail {
+        top: 98px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .shot {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">OG</span>
+      <div>
+        <strong>大海浮光 AIGC 工作台</strong>
+        <span>Read-only mock demo</span>
+      </div>
+    </div>
+    <div class="status">无需密钥 · 不请求外部服务</div>
+  </header>
+
+  <div class="shell">
+    <aside class="rail" aria-label="Demo stages">
+      <p class="rail-label">Pipeline</p>
+      <nav>
+        <button class="step active" data-step="0"><span class="num">01</span><span><b>Brief</b><small>产品事实与卖点</small></span></button>
+        <button class="step" data-step="1"><span class="num">02</span><span><b>Hook</b><small>创意方向选择</small></span></button>
+        <button class="step" data-step="2"><span class="num">03</span><span><b>Script</b><small>编剧导演输出</small></span></button>
+        <button class="step" data-step="3"><span class="num">04</span><span><b>Storyboard</b><small>镜头与提示词</small></span></button>
+        <button class="step" data-step="4"><span class="num">05</span><span><b>Video</b><small>成片回写</small></span></button>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="wrap">
+        <section class="head">
+          <div>
+            <span class="eyebrow">Ocean Glimmer / Mock Flow</span>
+            <h1>Brief 到成片的完整可复现流程</h1>
+            <p>这个页面预置一条公开样例链路，用固定数据展示广告策划、编剧导演、摄影摄像和成片回写。页面不读取本地环境变量，也不会调用飞书、模型、n8n 或对象存储。</p>
+          </div>
+          <div class="head-meta">
+            <span>Pipeline</span>
+            <strong id="stageTitle">Stage 1 · 产品 Brief</strong>
+          </div>
+        </section>
+
+        <section id="stage-0" class="stage">
+          <div class="grid">
+            <article class="panel pad">
+              <div class="panel-head">
+                <div>
+                  <span class="eyebrow">Input</span>
+                  <h2>商品资料</h2>
+                </div>
+                <span class="pill ok">Mock ready</span>
+              </div>
+              <div class="summary-list">
+                <div><span>商品</span><strong>华为 nova 轻旗舰手机</strong></div>
+                <div><span>内容类型</span><strong>信息流广告</strong></div>
+                <div><span>目标人群</span><strong>年轻内容创作者、学生、日常拍摄用户</strong></div>
+                <div><span>营销主题</span><strong>夏日清透外观与随手拍</strong></div>
+              </div>
+              <div class="chips">
+                <span>轻薄机身</span>
+                <span>渐变外观</span>
+                <span>人像影像</span>
+                <span>旅行记录</span>
+              </div>
+              <div class="actions">
+                <button class="primary" data-next="1">查看 Hook 方案</button>
+                <button class="secondary" data-step="4">直接看成片</button>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="hero-media">
+                <img src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg" alt="华为手机产品封面">
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="stage-1" class="stage hidden">
+          <article class="panel pad">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Stage 1 / Planning</span>
+                <h2>12 条 Hook 中选择一条继续制作</h2>
+              </div>
+              <span class="pill ok">广告策划知识库</span>
+            </div>
+            <div class="hook-list" id="hookList"></div>
+            <div class="actions">
+              <button class="primary" data-next="2">确认 Hook，生成脚本</button>
+              <button class="secondary" data-step="0">返回 Brief</button>
+            </div>
+          </article>
+        </section>
+
+        <section id="stage-2" class="stage hidden">
+          <div class="grid">
+            <article class="panel pad">
+              <div class="panel-head">
+                <div>
+                  <span class="eyebrow">Stage 2 / Writer Director</span>
+                  <h2>完整视频脚本</h2>
+                </div>
+                <span class="pill ok">编剧导演知识库</span>
+              </div>
+              <pre class="script" id="scriptText"></pre>
+              <div class="actions">
+                <button class="primary" data-next="3">拆成分镜</button>
+                <button class="secondary" data-step="1">返回 Hook</button>
+              </div>
+            </article>
+            <article class="panel pad">
+              <div class="panel-head">
+                <div>
+                  <span class="eyebrow">Creative Context</span>
+                  <h2>已确认方向</h2>
+                </div>
+              </div>
+              <div class="summary-list">
+                <div><span>Hook</span><strong id="selectedHookLabel">出门前只带这一台</strong></div>
+                <div><span>Mood Board</span><strong>夏日清透科技感</strong></div>
+                <div><span>声音</span><strong>直接种草，语气清爽可信</strong></div>
+                <div><span>节奏</span><strong>3 秒抓注意力，15 秒完成转化</strong></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="stage-3" class="stage hidden">
+          <article class="panel pad">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Stage 3 / Cinematography</span>
+                <h2>导演分镜与视频提示词</h2>
+              </div>
+              <span class="pill ok">摄影摄像知识库</span>
+            </div>
+            <div class="shots" id="shotList"></div>
+            <div class="actions">
+              <button class="primary" data-next="4">生成并回写成片</button>
+              <button class="secondary" data-step="2">返回脚本</button>
+            </div>
+          </article>
+        </section>
+
+        <section id="stage-4" class="stage hidden">
+          <div class="grid">
+            <article class="panel pad">
+              <div class="panel-head">
+                <div>
+                  <span class="eyebrow">Stage 4 / Result</span>
+                  <h2>成片回写</h2>
+                </div>
+                <span class="pill ok">completed</span>
+              </div>
+              <div class="video-card">
+                <video controls preload="metadata" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg">
+                  <source src="https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a" type="video/mp4">
+                </video>
+                <div class="video-meta">
+                  <span>Mock video result · 9:16 feed ad</span>
+                  <strong>0:16</strong>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="primary" data-step="0">重新查看流程</button>
+                <button class="secondary" id="playVideo">播放视频</button>
+              </div>
+            </article>
+            <article class="panel pad">
+              <div class="panel-head">
+                <div>
+                  <span class="eyebrow">Evidence</span>
+                  <h2>公开可验证证据</h2>
+                </div>
+              </div>
+              <div class="summary-list">
+                <div><span>接口</span><strong>Mock 数据固定，无需密钥</strong></div>
+                <div><span>检索 trace</span><strong>记录三个角色知识库读取状态</strong></div>
+                <div><span>CI</span><strong>Playwright E2E 覆盖完整流程</strong></div>
+                <div><span>安全</span><strong>不包含环境变量、私有 URL 或业务凭据</strong></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="evidence-grid" aria-label="Knowledge evidence">
+          <article class="evidence">
+            <span>planning</span>
+            <b>广告策划</b>
+            <p>产品事实、用户痛点、卖点转译、Mood Board 和 Hook 生成边界。</p>
+          </article>
+          <article class="evidence">
+            <span>directing</span>
+            <b>编剧导演</b>
+            <p>把确认后的创意方向转为脚本、导演说明和结构化分镜。</p>
+          </article>
+          <article class="evidence">
+            <span>cinematography</span>
+            <b>摄影摄像</b>
+            <p>控制产品连续性、镜头语言、画面比例和视频生成提示词。</p>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const hooks = [
+      ["出门前只带这一台", "首帧直接出现人物和手机，三秒内说明它适合日常拍摄。", "清爽", 93],
+      ["把夏天拍得更清透", "用泳池、水光和蓝白道具承接手机外观与影像能力。", "夏日", 91],
+      ["夜景人像也能稳住", "让霓虹光、人像和手机背板组成强记忆点。", "时尚", 90],
+      ["开箱第一眼就很上镜", "从开箱动作进入产品细节，适合好物推荐语境。", "种草", 88]
+    ];
+
+    const script = [
+      "0-3s：镜头贴近手机背板和人物眼神，旁白：“出门前只带这一台。”",
+      "3-7s：人物在泳池边举起手机，水面反光扫过机身，强调轻薄和外观辨识度。",
+      "7-12s：切换到自拍、风景和产品近景，字幕点出“清透人像”“随手记录”“出门好搭”。",
+      "12-15s：手机定格在蓝白场景中，完成品牌露出和行动引导。"
+    ].join("\n");
+
+    const shots = [
+      ["0-3s", "人物正面看镜头，手中手机占据画面右下角。", "轻微推近，锁定眼神和手机镜头模组。"],
+      ["3-7s", "泳池边中景，水面反光落在蓝色机身上。", "从手机背板平移到人物笑容。"],
+      ["7-12s", "自拍预览、桌面产品细节、旅行随手拍三连切。", "快速切换但保持产品方向一致。"],
+      ["12-15s", "手机放在蓝白道具场景中，屏幕亮起。", "慢速定格，保留产品展示。"]
+    ];
+
+    let selectedHook = 0;
+
+    function renderHooks() {
+      const list = document.querySelector("#hookList");
+      list.innerHTML = hooks.map((hook, index) => `
+        <button class="hook-card ${index === selectedHook ? "active" : ""}" data-hook="${index}">
+          <h3>${index + 1}. ${hook[0]}</h3>
+          <p>${hook[1]}</p>
+          <div class="hook-meta"><span>${hook[2]}</span><strong>${hook[3]}</strong></div>
+        </button>
+      `).join("");
+    }
+
+    function renderShots() {
+      document.querySelector("#shotList").innerHTML = shots.map((shot, index) => `
+        <article class="shot">
+          <span class="time">${shot[0]}</span>
+          <div>
+            <b>镜头 ${index + 1}</b>
+            <p>${shot[1]}</p>
+            <p>${shot[2]}</p>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function showStage(stage) {
+      document.querySelectorAll(".stage").forEach((node, index) => {
+        node.classList.toggle("hidden", index !== stage);
+      });
+      document.querySelectorAll(".step").forEach((node, index) => {
+        node.classList.toggle("active", index === stage);
+        node.classList.toggle("done", index < stage);
+      });
+      const names = ["Stage 1 · 产品 Brief", "Stage 1 · Hook 选择", "Stage 2 · 脚本", "Stage 3 · 分镜", "Stage 4 · 成片"];
+      document.querySelector("#stageTitle").textContent = names[stage];
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.addEventListener("click", (event) => {
+      const hook = event.target.closest("[data-hook]");
+      if (hook) {
+        selectedHook = Number(hook.dataset.hook);
+        document.querySelector("#selectedHookLabel").textContent = hooks[selectedHook][0];
+        renderHooks();
+        return;
+      }
+
+      const step = event.target.closest("[data-step],[data-next]");
+      if (step) {
+        showStage(Number(step.dataset.step || step.dataset.next));
+        return;
+      }
+
+      if (event.target.id === "playVideo") {
+        const video = document.querySelector("video");
+        video.play().catch(() => {});
+      }
+    });
+
+    document.querySelector("#scriptText").textContent = script;
+    renderHooks();
+    renderShots();
+  </script>
+</body>
+</html>

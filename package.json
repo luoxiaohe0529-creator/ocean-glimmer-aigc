@@ -13,10 +13,11 @@
     "check:entrypoints": "node scripts/check-entrypoints.mjs",
     "check:python": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s python_service/tests",
     "check:workflows": "node scripts/check-public-workflows.mjs",
+    "check:e2e": "node scripts/check-mock-e2e.mjs",
     "check:secrets": "node scripts/check-public-secrets.mjs",
     "migrate:tos-credential": "node scripts/migrate-n8n-tos-credential.mjs",
     "install:stage4": "node --env-file-if-exists=.env scripts/install-stage4-workflow.mjs",
-    "check": "npm run check:server && npm run check:entrypoints && npm run check:python && npm run check:workflows && npm run check:secrets",
+    "check": "npm run check:server && npm run check:entrypoints && npm run check:python && npm run check:workflows && npm run check:e2e && npm run check:secrets",
     "export:workflows": "node scripts/export-public-workflows.mjs"
   },
   "dependencies": {

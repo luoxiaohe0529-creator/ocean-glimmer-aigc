@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ocean Glimmer Knowledge Chunk Metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "chunk_id",
+    "role",
+    "stage",
+    "source_wiki_url",
+    "content_type",
+    "language",
+    "tags",
+    "priority",
+    "updated_at"
+  ],
+  "properties": {
+    "chunk_id": {
+      "type": "string",
+      "pattern": "^(planning|directing|cinematography)-[0-9]{3}$"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["planning", "directing", "cinematography"]
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["stage-1", "stage-2", "stage-3"]
+    },
+    "source_wiki_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "content_type": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "language": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["zh-CN", "en-US"]
+      },
+      "minItems": 1
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "token_budget_hint": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 2000
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date"
+    }
+  }
+}
