@@ -2,7 +2,7 @@
 
 **Ocean Glimmer — AI Design & AIGC Advertising Workbench**
 
-> 面向跨境电商与品牌内容团队的短视频智能生产系统
+> 面向电商与品牌内容团队的短视频智能生产系统
 
 [60 秒看懂](#60-秒看懂) · [English Summary](#english-summary)
 
@@ -35,33 +35,33 @@
 
 ## 视频作品｜直接播放
 
-### 中文信息流广告（6条）
+### 中文信息流视频（6条）
 
 <table>
 <tr>
-<td align="center" valign="top"><strong>01｜华为品牌信息流 · 成片 01</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A1.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>02｜华为品牌信息流 · 成片 02</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A2.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-02.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>03｜华为品牌信息流 · 成片 03</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-03.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>01｜中文信息流视频 · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>02｜中文信息流视频 · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/9aa5d543-ece7-41b3-b7d7-f721f921ed45" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-02.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>03｜中文信息流视频 · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/b500b609-b2a1-4217-a32d-d1d02b5e4fdc" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-03.jpg" controls preload="metadata" width="260"></video></td>
 </tr>
 <tr>
-<td align="center" valign="top"><strong>04｜华为品牌信息流 · 成片 04</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A4.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-04.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>05｜华为品牌信息流 · 成片 05</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A5.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-05.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>06｜中文品牌信息流 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>04｜中文信息流视频 · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-04.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>05｜中文信息流视频 · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-05.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>06｜中文信息流视频 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg" controls preload="metadata" width="260"></video></td>
 </tr>
 </table>
 
-### 英文信息流广告（6条）
+### 英文信息流视频（6条）
 
 <table>
 <tr>
-<td align="center" valign="top"><strong>01｜英文跨境美妆广告 · 成片 01</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/veo-2_%E5%AD%97%E5%B9%95.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-07.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>02｜英文跨境美妆广告 · 成片 02</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/b6bb615118b60b4ea232edb0ca7e7393_raw_%E5%AD%97%E5%B9%95.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-08.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>03｜英文跨境美妆广告 · 成片 03</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/8b6c2682770d9ec3622d16c08564e6eb_raw_%E5%AD%97%E5%B9%95.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-09.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>01｜英文信息流视频 · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/f037c40c-4688-4c84-902f-a2a79bdd1379" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-07.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>02｜英文信息流视频 · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/cf11b849-4f57-4f31-8947-159efe9aba8c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-08.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>03｜英文信息流视频 · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/e23a1052-db38-46f1-8c1d-67a40fba8665" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-09.jpg" controls preload="metadata" width="260"></video></td>
 </tr>
 <tr>
-<td align="center" valign="top"><strong>04｜英文跨境美妆广告 · 成片 04</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/5c3c9621da7f3cf98a9d555c069f9334_raw_%E5%AD%97%E5%B9%95.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-10.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>05｜英文跨境美妆广告 · 成片 05</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/6a61109d96363f55ec04264cd57a6950_raw.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-11.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>06｜英文跨境美妆广告 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-12.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>04｜英文信息流视频 · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/144f9be2-1267-4236-a59b-9c1a7afd4fc7" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-10.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>05｜英文信息流视频 · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/8271892f-2035-4129-a70d-30b7529d80a9" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-11.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>06｜英文信息流视频 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-12.jpg" controls preload="metadata" width="260"></video></td>
 </tr>
 </table>
 
