@@ -60,7 +60,7 @@ main{min-width:0;padding:44px 54px 72px}.main-inner{max-width:1120px;margin:0 au
 <script>
 window.__OCEAN_GLIMMER_STATIC_DEMO__=true;
 (function(){
-  var VIDEO_URL="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4";
+  var VIDEO_URL="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%EF%BC%88%E6%B6%88%E8%B4%B9%E7%94%B5%E5%AD%90%EF%BC%89/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A1.mp4";
   var JSON_HEADERS={"Content-Type":"application/json"};
   function response(payload,status){return Promise.resolve(new Response(JSON.stringify(payload),{status:status||200,headers:JSON_HEADERS}));}
   function readBody(init){try{return init&&init.body?JSON.parse(init.body):{};}catch(error){return{};}}
@@ -177,8 +177,8 @@ Object.assign(state,{
   characterDescription:"18-30 岁年轻女性，清爽夏日穿搭，和粉蓝渐变手机形成统一色彩记忆。",
   characterImage:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg",
   videoTaskId:"public-demo-four-agent-video",
-  videoResultUrl:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4",
-  videoSegments:[{segment_index:1,duration:30,video_url:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4"}],
+  videoResultUrl:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%EF%BC%88%E6%B6%88%E8%B4%B9%E7%94%B5%E5%AD%90%EF%BC%89/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A1.mp4",
+  videoSegments:[{segment_index:1,duration:30,video_url:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%EF%BC%88%E6%B6%88%E8%B4%B9%E7%94%B5%E5%AD%90%EF%BC%89/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%B5%81%E5%B9%广 告1.mp4"}],
   editingVoiceoverType:"script",
   editingSubtitlesEnabled:true,
   editingSubtitleText:"把夏天拍得更清透。粉蓝渐变，和每套穿搭都合拍。自拍、街拍、日常记录，一台就够。",
@@ -195,6 +195,11 @@ Object.assign(state,{
   },
   pipelineTrace:{mode:"read_only_mock",safe_for_public_demo:true,uses_real_vendor_api:false}
 });
+var WORKBENCH_VIDEO_URL="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%EF%BC%88%E6%B6%88%E8%B4%B9%E7%94%B5%E5%AD%90%EF%BC%89/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A1.mp4";
+state.videoResultUrl=WORKBENCH_VIDEO_URL;
+state.videoSegments=[{segment_index:1,duration:30,video_url:WORKBENCH_VIDEO_URL}];
+state.editingResultUrl=WORKBENCH_VIDEO_URL;
+state.editingDownloadUrl=WORKBENCH_VIDEO_URL;
 if(!state.knowledgeTrace||typeof state.knowledgeTrace!=="object")state.knowledgeTrace={};
 if(!state.pipelineTrace||typeof state.pipelineTrace!=="object")state.pipelineTrace={};
 if(typeof state.imageUploadError!=="string")state.imageUploadError="";
@@ -1664,8 +1669,11 @@ document.addEventListener("click",function(event){
     [['GitHub','https://github.com/luoxiaohe0529-creator/ocean-glimmer-aigc'],['架构','https://github.com/luoxiaohe0529-creator/ocean-glimmer-aigc/blob/main/docs/ARCHITECTURE.md'],['评测','https://github.com/luoxiaohe0529-creator/ocean-glimmer-aigc/blob/main/docs/knowledge/evaluation/benchmark-results.md']].forEach(function(item){var a=document.createElement('a');a.href=item[1];a.target='_blank';a.rel='noreferrer';a.textContent=item[0];nav.appendChild(a);});
     actions.insertBefore(nav,actions.firstChild);
   }
-  new MutationObserver(function(){addLinks();collapseMoodBoards();}).observe(document.documentElement,{childList:true,subtree:true});
-  addLinks();collapseMoodBoards();
+  function applyVideoPosters(){
+    document.querySelectorAll('video').forEach(function(video){video.poster='https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg';});
+  }
+  new MutationObserver(function(){addLinks();collapseMoodBoards();applyVideoPosters();}).observe(document.documentElement,{childList:true,subtree:true});
+  addLinks();collapseMoodBoards();applyVideoPosters();
 })();
 </script>
 </body></html>
