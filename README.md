@@ -48,13 +48,7 @@
 <td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/67786de3-55c8-41ba-a864-238ba8501d5c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-05.jpg" controls preload="metadata" width="260"></video></td>
 <td align="center" valign="top">
   <strong>华为品牌信息流广告（中文） · 成片 06</strong><br>
-  <video
-    src="https://media.githubusercontent.com/media/luoxiaohe0529-creator/ocean-glimmer-aigc/main/media/huawei-feed-ad-06.mp4"
-    poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/docs/demo/media/video-02-product.png"
-    controls
-    preload="metadata"
-    width="260">
-  </video>
+  [▶ 播放/下载成片 06](https://github.com/luoxiaohe0529-creator/ocean-glimmer-aigc/raw/refs/heads/main/media/huawei-feed-ad-06.mp4)
   </td>
 </tr>
 </table>
