@@ -17,7 +17,7 @@
 | 用时 | 查看内容 | 可以了解什么 | 入口 |
 | --- | --- | --- | --- |
 | 0–15 秒 | 中英文广告成片 | AI 视频生成、广告创意与视觉执行能力 | [中文成片](frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频作品](#视频作品直接播放) |
-| 15–30 秒 | 工作台运行效果 | 从商品输入、方案选择到成片回写的实际产品流程 | [只读 Mock Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/) · [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
+| 15–30 秒 | 工作台运行效果 | 从商品输入、方案选择到成片回写的实际产品流程 | [四 Agent 工作台 Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/) · [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
 | 30–45 秒 | 完整决策案例 | 用户如何比较 Hook、Mood Board 和创意方案，并将选择传递到后续阶段 | [Case Study](docs/CASE_STUDY.md) |
 | 45–60 秒 | 系统架构 | Python、模型、飞书知识库与 n8n 如何协同工作 | [系统架构](docs/ARCHITECTURE.md) |
 
@@ -25,7 +25,7 @@
 
 ### 根据岗位快速查看
 
-- **AI 产品 / AIGC 产品：**查看[只读 Mock Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
+- **AI 产品 / AIGC 产品：**查看[四 Agent 工作台 Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
 - **AI 应用 / Agent 工作流：**查看[系统架构](docs/ARCHITECTURE.md)和[接口契约](docs/WORKFLOW_CONTRACTS.md)
 - **AI 视频 / 创意技术：**查看[中英文视频目录](frontend/showcase/README.md)、[摄影分镜流程](docs/ARCHITECTURE.md)和[知识库证据](docs/knowledge/README.md)
 
@@ -89,7 +89,7 @@ The workbench brings the complete process into one workflow:
 5. Turn the selected direction into a director script, shot plan, character reference, and storyboard.
 6. Generate the video, display task progress, and complete post-production, including music, subtitles, and visual enhancement.
 
-Specialized agents for advertising planning, writing and directing, and cinematography work within the same product context. Human judgment remains in control of key creative decisions, while the agents handle professional knowledge, context continuity, and execution.
+Specialized agents for advertising planning, writing and directing, cinematography, and post-production work within the same product context. Human judgment remains in control of key creative decisions, while the agents handle professional knowledge, context continuity, and execution.
 
 This turns AIGC from isolated one-off generation into a **participatory, controllable, end-to-end advertising workflow**.
 
@@ -131,7 +131,7 @@ flowchart LR
 | --- | --- |
 | AI 产品设计 | 将广告创作整合为从产品输入到成片交付的完整工作台流程 |
 | Human-in-the-loop | 在创意方向和媒体制作前设置用户决策点，由用户确认 Hook、Mood Board 和广告表达 |
-| Agent / 工作流 | 广告策划、编剧导演和摄影摄像 Agent 分工协作，并持续继承已确认的创意上下文 |
+| Agent / 工作流 | 广告策划、编剧导演、摄影摄像和后期剪辑 Agent 分工协作，并持续继承已确认的创意上下文 |
 | 多模态应用 | 同时处理商品网页、产品文档、营销要求和产品图片 |
 | 知识库应用 | 飞书 Wiki 按角色提供专业知识，并通过 `knowledge_trace` 记录实际读取状态 |
 | 结构化生成 | 使用 Pydantic、阶段 ID 和 JSON contract 连接产品简报、创意、脚本、分镜和媒体任务 |
@@ -147,7 +147,7 @@ flowchart LR
 | 前端工作台 | HTML、CSS、JavaScript | 产品资料输入、创意选择、角色与分镜预览、任务状态和后期交付 |
 | 网关 | Node.js | 静态服务、同源 API 代理、文件处理、状态保存与结果恢复 |
 | AI / Agent 服务 | Python、Pydantic | 网页抓取、文档解析、知识读取、模型路由和结构化输出校验 |
-| 知识层 | 飞书 Wiki | 广告策划、编剧导演和摄影摄像专业知识 |
+| 知识层 | 飞书 Wiki + 公开脱敏样例 | 广告策划、编剧导演、摄影摄像和后期剪辑专业知识 |
 | 创意与内容模型 | KIE Gemini 3.1 Pro、DeepSeek | 产品简报、创意方案、Mood Board、Hook、脚本和摄影分镜 |
 | 图像与视频模型 | KIE.ai、Seedance | 角色形象、分镜参考图和中英文视频生成 |
 | 编排层 | n8n | 媒体任务提交、等待、轮询、分段处理和结果回写 |
@@ -161,7 +161,7 @@ flowchart LR
 4. 编剧导演 Agent 继承已选创意，生成完整脚本、导演指令和结构化脚本段。
 5. 摄影摄像 Agent 将脚本转换为逐镜分镜、运镜设计和视频提示词。
 6. 工作台生成角色形象与分镜参考图，媒体执行层提交并追踪图片和视频任务，将结果回写到前端。
-7. 用户在后期工作台完成配乐、字幕、画质增强和成片下载。
+7. 后期剪辑 Agent 继承成片结果，完成配乐、字幕、画质增强和成片下载。
 
 ## 我实际处理过的工程问题
 
@@ -190,8 +190,8 @@ flowchart LR
 │   ├── gemini_kie.py          # KIE Gemini 3.1 Pro 通道
 │   └── deepseek.py            # 英文导演脚本生成通道
 ├── n8n-workflows/public/      # 脱敏公开工作流
-├── docs/knowledge/            # 三类知识库整理版
-├── docs/demo/                 # 无需密钥的只读 Mock Demo
+├── docs/knowledge/            # 四类 Agent 证据整理版
+├── docs/demo/                 # 无需密钥的四 Agent 工作台 Demo
 ├── docs/                      # 架构、Case Study 与接口文档
 ├── scripts/                   # 检查、导出和安装工具
 ├── .env.example
@@ -239,5 +239,5 @@ npm run check
 - [接口契约](docs/WORKFLOW_CONTRACTS.md)
 - [飞书知识库接入](docs/FEISHU_KNOWLEDGE.md)
 - [知识库公开索引](docs/knowledge/README.md)
-- [只读 Mock Demo](docs/demo/index.html)
+- [四 Agent 工作台 Demo](docs/demo/index.html)
 - [GitHub 发布检查](docs/GITHUB_RELEASE.md)

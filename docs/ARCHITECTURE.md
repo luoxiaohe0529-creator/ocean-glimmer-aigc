@@ -13,7 +13,7 @@ flowchart TB
   SERVER --> N8N["n8n Webhook API"]
   PYTHON --> GEMINI["KIE Gemini 3.1 Pro · Stage 1 / 2 / 3 内容生成"]
   PYTHON --> DEEPSEEK["DeepSeek · 英文 Stage 2 文本"]
-  PYTHON --> KNOWLEDGE["飞书三个角色知识库"]
+  PYTHON --> KNOWLEDGE["飞书角色知识库 + 后期规则"]
   PYTHON --> FFMPEG["FFmpeg 剪辑、配乐与字幕"]
   N8N --> KIE["KIE.ai · GPT Image 2 / Nano Banana 2 / Veo 3.1"]
   N8N --> VIDEO["Seedance 官网直调 · 中文视频"]
@@ -26,13 +26,13 @@ flowchart TB
 
 ## 飞书双层数据架构
 
-三个角色 Wiki 文档是唯一知识层，保存广告策划、编剧导演和摄影摄像的方法与约束。`AI 视频工厂工作台` 是运行数据层，只保存产品、Hook、脚本和视频任务；运行台账与知识源严格分离。
+前三个角色 Wiki 文档保存广告策划、编剧导演和摄影摄像的方法与约束；后期剪辑规则用于成片整理、配乐、字幕和画质交付。`AI 视频工厂工作台` 是运行数据层，只保存产品、Hook、脚本、视频任务和后期交付状态；运行台账与知识源严格分离。
 
 前端筛选器由知识层生成，所选值通过 `filter_values` 同时进入 Python 提示词和 n8n 媒体工作流。具体字段、权限和验证方法见 [飞书知识库接入](FEISHU_KNOWLEDGE.md)。
 
 ## 四个角色与后端边界
 
-前端用三个岗位表达用户任务，后端仍按可维护的技术边界拆成多个工作流：
+前端用四个岗位表达用户任务，后端仍按可维护的技术边界拆成多个工作流：
 
 | 前端角色 | n8n 工作流 | 原因 |
 | --- | --- | --- |

@@ -30,8 +30,29 @@
       "chunks": ["cinematography-001", "cinematography-003"],
       "used_for": ["storyboard", "video_prompt", "visual_constraints"],
       "status": "mocked"
+    },
+    {
+      "stage": "stage-4",
+      "role": "postproduction",
+      "source_wiki_url": null,
+      "chunks": ["postproduction-001", "postproduction-002"],
+      "used_for": ["editing_plan", "subtitles", "music", "enhancement", "delivery"],
+      "status": "mocked_public_sample"
     }
   ],
+  "portfolio_sample": {
+    "sample_count": 12,
+    "sample_scope": "6 条华为品牌信息流广告（中文）与 6 条英文跨境电商信息流广告",
+    "confirmed_capability": "end_to_end_closed_loop",
+    "time_per_video": "within_10_minutes",
+    "cost_per_video": "single_digit_rmb",
+    "unmeasured_metrics": [
+      "stage_success_rate",
+      "fact_accuracy_rate",
+      "hook_adoption_rate",
+      "manual_revision_count"
+    ]
+  },
   "security": {
     "contains_credentials": false,
     "uses_real_vendor_api": false,

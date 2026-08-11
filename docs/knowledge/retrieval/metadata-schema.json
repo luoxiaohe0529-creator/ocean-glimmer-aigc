@@ -17,19 +17,26 @@
   "properties": {
     "chunk_id": {
       "type": "string",
-      "pattern": "^(planning|directing|cinematography)-[0-9]{3}$"
+      "pattern": "^(planning|directing|cinematography|postproduction)-[0-9]{3}$"
     },
     "role": {
       "type": "string",
-      "enum": ["planning", "directing", "cinematography"]
+      "enum": ["planning", "directing", "cinematography", "postproduction"]
     },
     "stage": {
       "type": "string",
-      "enum": ["stage-1", "stage-2", "stage-3"]
+      "enum": ["stage-1", "stage-2", "stage-3", "stage-4"]
     },
     "source_wiki_url": {
-      "type": "string",
-      "format": "uri"
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "content_type": {
       "type": "array",
