@@ -1,12 +1,12 @@
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 
-const demoUrl = pathToFileURL(join(process.cwd(), 'docs/demo/index.html')).href;
-const demoOrigin = new URL(demoUrl).origin;
+const demoPath = join(process.cwd(), 'docs/demo/index.html');
 
 async function main() {
+  const demoHtml = await readFile(demoPath, 'utf8');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
   const apiRequests = [];
@@ -18,15 +18,11 @@ async function main() {
       await route.abort();
       return;
     }
-    if (requestUrl.origin !== demoOrigin) {
-      await route.abort('blockedbyclient');
-      return;
-    }
-    await route.continue();
+    await route.abort('blockedbyclient');
   });
 
   try {
-    await page.goto(demoUrl, { waitUntil: 'domcontentloaded' });
+    await page.setContent(demoHtml, { waitUntil: 'domcontentloaded' });
 
     await assertVisible(page, 'text=Brief 到成片的完整可复现流程');
     await assertVisible(page, 'text=华为 nova 轻旗舰手机');
