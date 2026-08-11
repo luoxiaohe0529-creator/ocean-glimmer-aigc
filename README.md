@@ -20,7 +20,7 @@
 
 | 用时 | 查看内容 | 可以了解什么 | 入口 |
 | --- | --- | --- | --- |
-| 0–15 秒 | 中英文广告成片 | AI 视频生成、广告创意与视觉执行能力 | [中文成片](frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频目录](frontend/showcase/README.md) |
+| 0–15 秒 | 中英文广告成片 | AI 视频生成、广告创意与视觉执行能力 | [中文成片](frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频作品](#视频作品直接播放) |
 | 15–30 秒 | 工作台运行效果 | 从商品输入、方案选择到成片回写的实际产品流程 | [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
 | 30–45 秒 | 完整决策案例 | 用户如何比较 Hook、Mood Board 和创意方案，并将选择传递到后续阶段 | [Case Study](docs/CASE_STUDY.md) |
 | 45–60 秒 | 系统架构 | Python、模型、飞书知识库与 n8n 如何协同工作 | [系统架构](docs/ARCHITECTURE.md) |
@@ -33,15 +33,52 @@
 - **AI 应用 / Agent 工作流：**查看[系统架构](docs/ARCHITECTURE.md)和[接口契约](docs/WORKFLOW_CONTRACTS.md)
 - **AI 视频 / 创意技术：**查看[中英文视频目录](frontend/showcase/README.md)和[摄影分镜流程](docs/ARCHITECTURE.md)
 
-## 代表作品｜直接播放
+## 视频作品｜直接播放
 
-### 中文代表作
+### 中文信息流广告（6条）
 
-https://github.com/user-attachments/assets/74734f72-d492-4dd3-a5c0-b4d841303856
+<table>
+<tr>
+<td><strong>01｜华为品牌信息流 · 成片 01</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A1.mp4" controls preload="metadata" width="260"></video></td>
+<td><strong>02｜华为品牌信息流 · 成片 02</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A2.mp4" controls preload="metadata" width="260"></video></td>
+<td><strong>03｜华为品牌信息流 · 成片 03</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/huawei-feed-ad-3-cover.png" controls preload="metadata" width="260"></video></td>
+</tr>
+<tr>
+<td><strong>04｜华为品牌信息流 · 成片 04</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A4.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/huawei-feed-ad-4-cover.png" controls preload="metadata" width="260"></video></td>
+<td><strong>05｜华为品牌信息流 · 成片 05</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E4%B8%AD%E6%96%87%E8%A7%86%E9%A2%91-%E5%9B%BD%E5%86%85%E7%94%B5%E5%95%86/%E5%8D%8E%E4%B8%BA%E5%93%81%E7%89%8C%E4%BF%A1%E6%81%AF%E6%B5%81%E5%B9%BF%E5%91%8A5.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/huawei-feed-ad-5-cover.png" controls preload="metadata" width="260"></video></td>
+<td><strong>06｜中文品牌信息流 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/new-feed-cn-june17-cover.jpg" controls preload="metadata" width="260"></video></td>
+</tr>
+</table>
 
-### 英文代表作
+### 英文信息流广告（6条）
 
-https://github.com/user-attachments/assets/8b56f676-ef79-4034-8571-fb77ebd9df3a
+<table>
+<tr>
+<td><strong>01｜英文跨境美妆广告 · 成片 01</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/veo-2_%E5%AD%97%E5%B9%95.mp4" controls preload="metadata" width="260"></video></td>
+<td><strong>02｜英文跨境美妆广告 · 成片 02</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/b6bb615118b60b4ea232edb0ca7e7393_raw_%E5%AD%97%E5%B9%95.mp4" controls preload="metadata" width="260"></video></td>
+<td><strong>03｜英文跨境美妆广告 · 成片 03</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/8b6c2682770d9ec3622d16c08564e6eb_raw_%E5%AD%97%E5%B9%95.mp4" controls preload="metadata" width="260"></video></td>
+</tr>
+<tr>
+<td><strong>04｜英文跨境美妆广告 · 成片 04</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/5c3c9621da7f3cf98a9d555c069f9334_raw_%E5%AD%97%E5%B9%95.mp4" controls preload="metadata" width="260"></video></td>
+<td><strong>05｜英文跨境美妆广告 · 成片 05</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/%E8%8B%B1%E6%96%87%E8%A7%86%E9%A2%91-%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86/6a61109d96363f55ec04264cd57a6950_raw.mp4" controls preload="metadata" width="260"></video></td>
+<td><strong>06｜英文跨境美妆广告 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4" controls preload="metadata" width="260"></video></td>
+</tr>
+</table>
+
+### 品牌 TVC｜16:9 原比例展示
+
+以下作品均保留原始 16:9 画面比例。
+
+<table>
+<tr>
+<td><strong>01｜品牌 TVC · 汽水</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-sparkling-water-16x9.mp4" controls preload="metadata" width="560"></video></td>
+<td><strong>02｜品牌 TVC · 羽绒服</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-down-jacket-16x9.mp4" controls preload="metadata" width="560"></video></td>
+</tr>
+<tr>
+<td><strong>03｜品牌 TVC · 小棕瓶</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-estee-lauder-16x9.mp4" controls preload="metadata" width="560"></video></td>
+<td></td>
+</tr>
+</table>
 
 ## English Summary
 
@@ -145,58 +182,6 @@ Python 负责知识读取、模型调用、模板路由和结构化契约；n8n 
 - 分辨率、Hook 和创意方案在多阶段传递中丢失；
 - 视频生成成功但前端未收到最终回写；
 - 公开仓库中 API Key、工作流凭据和对象存储地址的泄露风险。
-
-## 完整视频作品
-
-<details>
-<summary><strong>展开查看完整中英文视频作品</strong></summary>
-
-### 信息流广告｜中文、英文与其他成片
-
-<table>
-<tr>
-<td><strong>01｜华为品牌信息流 · 广告 1</strong><br><video src="https://github.com/user-attachments/assets/bb893083-e30f-411b-a85a-139d430d5e97" controls preload="metadata" width="280"></video></td>
-<td><strong>02｜华为品牌信息流 · 广告 2</strong><br><video src="https://github.com/user-attachments/assets/9aa5d543-ece7-41b3-b7d7-f721f921ed45" controls preload="metadata" width="280"></video></td>
-<td><strong>03｜华为品牌信息流 · 广告 3</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/huawei-feed-ad-3-cover.png" controls preload="metadata" width="280"></video></td>
-</tr>
-<tr>
-<td><strong>04｜华为品牌信息流 · 广告 4</strong><br><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/huawei-feed-ad-4-cover.png" controls preload="metadata" width="280"></video></td>
-<td><strong>05｜华为品牌信息流 · 广告 5</strong><br><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/huawei-feed-ad-5-cover.png" controls preload="metadata" width="280"></video></td>
-<td></td>
-</tr>
-<tr>
-<td><strong>01｜英文跨境美妆广告 · Veo 2</strong><br><video src="https://github.com/user-attachments/assets/b82b5d82-b9d3-47dd-bb2e-9ba677fc7e44" controls preload="metadata" width="280"></video></td>
-<td><strong>02｜英文跨境美妆广告 · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/ed88cbeb-ea46-4af5-a6c6-eecf10247824" controls preload="metadata" width="280"></video></td>
-<td><strong>03｜英文跨境美妆广告 · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/ffd38ee5-c3b0-430b-895e-4f399d730536" controls preload="metadata" width="280"></video></td>
-</tr>
-<tr>
-<td><strong>04｜英文跨境美妆广告 · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/33156b11-8f0d-4dae-bc9c-39503998fd3b" controls preload="metadata" width="280"></video></td>
-<td><strong>05｜英文跨境美妆广告 · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/7ffb2da2-f0a5-404e-8984-9c5b28f3ef45" controls preload="metadata" width="280"></video></td>
-<td></td>
-</tr>
-<tr>
-<td><strong>中文信息流｜品牌场景短片</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/new-feed-cn-june17-cover.jpg" controls preload="metadata" width="280"></video></td>
-<td><strong>中文信息流｜nova 16 河北主题</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-nova16-hebei.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/new-feed-cn-nova16-hebei-cover.jpg" controls preload="metadata" width="280"></video></td>
-<td><strong>英文信息流 · Veo 字幕版</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4" controls preload="metadata" width="280"></video></td>
-</tr>
-</table>
-
-### 品牌TVC｜16:9 原比例展示
-
-以下为适配 GitHub 预览的网页展示版本，均保留原始 16:9 画面比例。
-
-<table>
-<tr>
-<td><strong>品牌TVC｜汽水</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-sparkling-water-16x9.mp4" controls preload="metadata" width="560"></video></td>
-<td><strong>品牌TVC｜羽绒服</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-down-jacket-16x9.mp4" controls preload="metadata" width="560"></video></td>
-</tr>
-<tr>
-<td><strong>品牌TVC｜小棕瓶</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-estee-lauder-16x9.mp4" controls preload="metadata" width="560"></video></td>
-<td></td>
-</tr>
-</table>
-
-</details>
 
 ## 项目结构
 
