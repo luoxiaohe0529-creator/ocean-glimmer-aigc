@@ -42,7 +42,7 @@
 <tr>
 <td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/e6823c27-86a4-4bc4-9ded-a1763ea758d6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-04.jpg" controls preload="metadata" width="260"></video></td>
 <td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/67786de3-55c8-41ba-a864-238ba8501d5c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-05.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 06</strong><br><video src="https://github.com/user-attachments/assets/0d2688b6-3b6d-45aa-b0a9-81a6d321e3d6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17-reupload.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg" controls preload="metadata" width="260"></video></td>
 </tr>
 </table>
 

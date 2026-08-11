@@ -60,7 +60,7 @@ main{min-width:0;padding:44px 54px 72px}.main-inner{max-width:1120px;margin:0 au
 <script>
 window.__OCEAN_GLIMMER_STATIC_DEMO__=true;
 (function(){
-  var VIDEO_URL="https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a";
+  var VIDEO_URL="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4";
   var JSON_HEADERS={"Content-Type":"application/json"};
   function response(payload,status){return Promise.resolve(new Response(JSON.stringify(payload),{status:status||200,headers:JSON_HEADERS}));}
   function readBody(init){try{return init&&init.body?JSON.parse(init.body):{};}catch(error){return{};}}
@@ -177,16 +177,16 @@ Object.assign(state,{
   characterDescription:"18-30 岁年轻女性，清爽夏日穿搭，和粉蓝渐变手机形成统一色彩记忆。",
   characterImage:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg",
   videoTaskId:"public-demo-four-agent-video",
-  videoResultUrl:"https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a",
-  videoSegments:[{segment_index:1,duration:30,video_url:"https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a"}],
+  videoResultUrl:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4",
+  videoSegments:[{segment_index:1,duration:30,video_url:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4"}],
   editingVoiceoverType:"script",
   editingSubtitlesEnabled:true,
   editingSubtitleText:"把夏天拍得更清透。粉蓝渐变，和每套穿搭都合拍。自拍、街拍、日常记录，一台就够。",
   editingEnhance:true,
   editingResolution:"1080p",
   editingMusicVolume:.2,
-  editingResultUrl:"https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a",
-  editingDownloadUrl:"https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a",
+  editingResultUrl:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4",
+  editingDownloadUrl:"https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4",
   knowledgeTrace:{
     stage1:{source:"public_mock",role:"广告策划",api_attempted:false,chunks:["planning-001","planning-002","planning-003"]},
     stage2:{source:"public_mock",role:"编剧导演",api_attempted:false,chunks:["directing-001","directing-003"]},
@@ -1643,5 +1643,29 @@ document.addEventListener("click",function(event){
   event.preventDefault();event.stopImmediatePropagation();
   alert("这是 2026-08-09 真实运行结果的只读展示快照。生成接口与凭证不会发布到公开网站。");
 },true);
+</script>
+<script>
+(function(){
+  var style=document.createElement("style");
+  style.textContent='.demo-links{display:flex;align-items:center;gap:10px;margin-right:4px}.demo-links a{color:var(--blue);font-size:11px;font-weight:700;text-decoration:none}.demo-links a:hover{text-decoration:underline}@media(max-width:900px){.demo-links{display:none}}.hook-mood-inline{padding:0}.hook-mood-inline summary{padding:7px 0;color:var(--blue);font-size:9px;font-weight:750;cursor:pointer;list-style:none}.hook-mood-inline summary::-webkit-details-marker{display:none}.hook-mood-inline summary:before{content:"+ ";color:var(--muted)}.hook-mood-inline[open] summary:before{content:"- ";}.hook-mood-inline[open]{padding:9px 10px}.hook-mood-inline[open] summary{padding:0}';
+  document.head.appendChild(style);
+  function collapseMoodBoards(){
+    document.querySelectorAll('div.hook-mood-inline').forEach(function(box){
+      var detail=document.createElement('details');detail.className=box.className;
+      var summary=document.createElement('summary');summary.textContent='Mood Board';detail.appendChild(summary);
+      detail.insertAdjacentHTML('beforeend',box.innerHTML.replace(/^<span>Mood Board<\/span>/,'').trim());
+      box.replaceWith(detail);
+    });
+  }
+  function addLinks(){
+    var actions=document.querySelector('.topbar-actions');
+    if(!actions||actions.querySelector('.demo-links'))return;
+    var nav=document.createElement('nav');nav.className='demo-links';nav.setAttribute('aria-label','公开文档入口');
+    [['GitHub','https://github.com/luoxiaohe0529-creator/ocean-glimmer-aigc'],['架构','https://github.com/luoxiaohe0529-creator/ocean-glimmer-aigc/blob/main/docs/ARCHITECTURE.md'],['评测','https://github.com/luoxiaohe0529-creator/ocean-glimmer-aigc/blob/main/docs/knowledge/evaluation/benchmark-results.md']].forEach(function(item){var a=document.createElement('a');a.href=item[1];a.target='_blank';a.rel='noreferrer';a.textContent=item[0];nav.appendChild(a);});
+    actions.insertBefore(nav,actions.firstChild);
+  }
+  new MutationObserver(function(){addLinks();collapseMoodBoards();}).observe(document.documentElement,{childList:true,subtree:true});
+  addLinks();collapseMoodBoards();
+})();
 </script>
 </body></html>
