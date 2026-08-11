@@ -38,8 +38,8 @@
 
 | 展示名称 | 视频文件 | 封面 |
 | --- | --- | --- |
-| 中文信息流｜6月17日 | [打开视频](videos/new-feed-cn/new-feed-cn-june17.mp4) | [查看封面](covers/new-feed-cn-june17-cover.jpg) |
-| 中文信息流｜nova16打开河北 | [打开视频](videos/new-feed-cn/new-feed-cn-nova16-hebei.mp4) | [查看封面](covers/new-feed-cn-nova16-hebei-cover.jpg) |
+| 中文信息流｜品牌场景短片 | [打开视频](videos/new-feed-cn/new-feed-cn-june17.mp4) | [查看封面](covers/new-feed-cn-june17-cover.jpg) |
+| 中文信息流｜nova 16 河北主题 | [打开视频](videos/new-feed-cn/new-feed-cn-nova16-hebei.mp4) | [查看封面](covers/new-feed-cn-nova16-hebei-cover.jpg) |
 | English Feed｜Veo 字幕版 | [打开视频](videos/new-feed-en/new-feed-en-veo-subtitled.mp4) | — |
 
 ### 品牌TVC｜16:9 原比例（3 个）

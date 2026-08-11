@@ -20,7 +20,7 @@
 
 | 用时 | 查看内容 | 可以了解什么 | 入口 |
 | --- | --- | --- | --- |
-| 0–15 秒 | 中英文广告成片 | AI视频生成、广告创意与视觉执行能力 | [中文成片](frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频目录](frontend/showcase/README.md) |
+| 0–15 秒 | 中英文广告成片 | AI 视频生成、广告创意与视觉执行能力 | [中文成片](frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频目录](frontend/showcase/README.md) |
 | 15–30 秒 | 工作台运行效果 | 从商品输入、方案选择到成片回写的实际产品流程 | [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
 | 30–45 秒 | 完整决策案例 | 用户如何比较 Hook、Mood Board 和创意方案，并将选择传递到后续阶段 | [Case Study](docs/CASE_STUDY.md) |
 | 45–60 秒 | 系统架构 | Python、模型、飞书知识库与 n8n 如何协同工作 | [系统架构](docs/ARCHITECTURE.md) |
@@ -51,8 +51,8 @@ It was created to reduce repeated product-information collection, disconnected c
 
 1. analyse the product and organise its selling points, audience, usage scenarios, and communication priorities;
 2. read role-specific advertising knowledge from Feishu Wiki;
-3. generate three complete creative directions and twelve Hooks for comparison;
-4. let the user select the preferred Hook and visual direction;
+3. generate three complete creative directions and twelve hooks for comparison;
+4. let the user select the preferred hook and visual direction;
 5. convert the selected concept into a director script and cinematography plan;
 6. submit image and video generation tasks, display progress, retain error details, and write the completed video back to the workbench.
 
@@ -98,7 +98,7 @@ Python 负责知识读取、模型调用、模板路由和结构化契约；n8n 
 
 ### 4｜长任务不会阻塞前端
 
-视频生成会立即返回任务 ID，前端随后轮询状态。最终视频与上游产品简报、创意方案、分辨率和 pipeline trace 一起保存，页面刷新后仍可恢复结果。
+视频生成会立即返回任务 ID，前端随后轮询状态。最终视频与上游产品简报、创意方案、分辨率和 `pipeline_trace` 一起保存，页面刷新后仍可恢复结果。
 
 ## 本项目展示的能力
 
@@ -144,7 +144,7 @@ Python 负责知识读取、模型调用、模板路由和结构化契约；n8n 
 - 视频任务耗时较长，HTTP 请求不应一直阻塞；
 - 分辨率、Hook 和创意方案在多阶段传递中丢失；
 - 视频生成成功但前端未收到最终回写；
-- API Key、工作流凭据和对象存储地址的公开安全边界。
+- 公开仓库中 API Key、工作流凭据和对象存储地址的泄露风险；
 
 ## 完整视频作品｜直接播放
 
@@ -172,8 +172,8 @@ Python 负责知识读取、模型调用、模板路由和结构化契约；n8n 
 <td></td>
 </tr>
 <tr>
-<td><strong>中文信息流 · 6月17日</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/new-feed-cn-june17-cover.jpg" controls preload="metadata" width="280"></video></td>
-<td><strong>中文信息流 · nova16打开河北</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-nova16-hebei.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/new-feed-cn-nova16-hebei-cover.jpg" controls preload="metadata" width="280"></video></td>
+<td><strong>中文信息流｜品牌场景短片</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/new-feed-cn-june17-cover.jpg" controls preload="metadata" width="280"></video></td>
+<td><strong>中文信息流｜nova 16 河北主题</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-nova16-hebei.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/new-feed-cn-nova16-hebei-cover.jpg" controls preload="metadata" width="280"></video></td>
 <td><strong>英文信息流 · Veo 字幕版</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4" controls preload="metadata" width="280"></video></td>
 </tr>
 </table>
