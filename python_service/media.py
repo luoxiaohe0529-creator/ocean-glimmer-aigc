@@ -383,10 +383,10 @@ def render_edit(payload: dict, output_directory: Path) -> dict:
     if not source_url:
         raise ValueError("缺少待剪辑视频")
     output_directory.mkdir(parents=True, exist_ok=True)
-    output_name = f"adflow-edit-{uuid.uuid4().hex[:12]}.mp4"
+    output_name = f"ocean_glimmer_edit_{uuid.uuid4().hex[:12]}.mp4"
     output_path = output_directory / output_name
 
-    with tempfile.TemporaryDirectory(prefix="adflow-edit-") as temp:
+    with tempfile.TemporaryDirectory(prefix="ocean_glimmer_edit_") as temp:
         temp_path = Path(temp)
         source_path = temp_path / "source.mp4"
         _download(source_url, source_path)
