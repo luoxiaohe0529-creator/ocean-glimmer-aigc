@@ -77,20 +77,22 @@
 
 ## English Summary
 
-Ocean Glimmer is an AI advertising production system that turns product links, marketing requirements, and reference images into structured advertising concepts, director scripts, shot lists, and short-form videos.
+**Ocean Glimmer** is an AI advertising creation and production workbench for e-commerce and brand content teams.
 
-It was created to reduce repeated product-information collection, disconnected creative tools, single-option AI outputs, and long-running video tasks with no visible status. The workbench brings these steps into one browser-based workflow:
+Advertising is not a single generation task. It involves product understanding, creative direction, scripting, storyboarding, visual production, and post-production. Most AIGC tools cover only one part of this process, forcing users to switch between tools while making it difficult to maintain control over the creative direction.
 
-1. analyse the product and organise its selling points, audience, usage scenarios, and communication priorities;
-2. read role-specific advertising knowledge from Feishu Wiki;
-3. generate three complete creative directions and twelve hooks for comparison;
-4. let the user select the preferred hook and visual direction;
-5. convert the selected concept into a director script and cinematography plan;
-6. submit image and video generation tasks, display progress, retain error details, and write the completed video back to the workbench.
+The workbench brings the complete process into one workflow:
 
-The system separates advertising planning, directing, cinematography, and media execution instead of asking one model to complete everything in a single prompt. Human judgment is built into the key creative decisions, while structured state and task polling keep the workflow selectable, traceable, and recoverable.
+1. Import a product link, product document, or reference images.
+2. Analyse the product and create a structured product brief.
+3. Generate three creative directions, three Mood Boards, and twelve Hooks using role-specific advertising knowledge.
+4. Let the user compare and confirm the preferred Hook, visual direction, and advertising approach.
+5. Turn the selected direction into a director script, shot plan, character reference, and storyboard.
+6. Generate the video, display task progress, and complete post-production, including music, subtitles, and visual enhancement.
 
-**Recruiter takeaway:** This project demonstrates advertising and visual-design judgment, AI product thinking, and the ability to turn creative capability into a working, repeatable content-production system.
+Specialized agents for advertising planning, writing and directing, and cinematography work within the same product context. Human judgment remains in control of key creative decisions, while the agents handle professional knowledge, context continuity, and execution.
+
+This turns AIGC from isolated one-off generation into a **participatory, controllable, end-to-end advertising workflow**.
 
 ## 我解决的问题
 
