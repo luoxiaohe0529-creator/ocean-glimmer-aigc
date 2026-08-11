@@ -71,11 +71,11 @@
 
 <table>
 <tr>
-<td align="center" valign="top"><strong>品牌 TVC · 小棕瓶</strong><br><video src="https://github.com/user-attachments/assets/d17a4993-5dfb-4898-b33d-7683e469e078" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-15.jpg" controls preload="metadata" width="560"></video></td>
-<td align="center" valign="top"><strong>品牌 TVC · 汽水</strong><br><video src="https://github.com/user-attachments/assets/bb826e2f-81f7-4244-9ac6-a4e15ac336f6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-13.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>品牌 TVC · 雅诗兰黛小棕瓶</strong><br><video src="https://github.com/user-attachments/assets/d17a4993-5dfb-4898-b33d-7683e469e078" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-15.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>品牌 TVC · 大海浮光汽水</strong><br><video src="https://github.com/user-attachments/assets/bb826e2f-81f7-4244-9ac6-a4e15ac336f6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-13.jpg" controls preload="metadata" width="560"></video></td>
 </tr>
 <tr>
-<td align="center" valign="top"><strong>品牌 TVC · 羽绒服</strong><br><video src="https://github.com/user-attachments/assets/8f215e76-6bd9-4f19-a9f2-4c8dab24ea8f" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-14.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>品牌 TVC · 大海浮光羽绒服</strong><br><video src="https://github.com/user-attachments/assets/8f215e76-6bd9-4f19-a9f2-4c8dab24ea8f" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-14.jpg" controls preload="metadata" width="560"></video></td>
 <td></td>
 </tr>
 </table>
