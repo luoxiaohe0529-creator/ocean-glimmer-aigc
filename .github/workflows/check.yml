@@ -62,7 +62,7 @@ jobs:
         run: npm run check:secrets
 
   deploy-demo:
-    if: github.ref == 'refs/heads/main' && vars.ENABLE_GITHUB_PAGES_DEPLOY == 'true'
+    if: github.ref == 'refs/heads/main'
     needs: check
     runs-on: ubuntu-latest
     permissions:
