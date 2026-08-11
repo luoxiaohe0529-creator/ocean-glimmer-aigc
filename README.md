@@ -50,7 +50,7 @@
   <strong>华为品牌信息流广告（中文） · 成片 06</strong><br>
   <video
     src="https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/media/huawei-feed-ad-06.mp4"
-    poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/docs/demo/media/video-02-product.png"
+    poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg"
     controls
     preload="metadata"
     width="260">
