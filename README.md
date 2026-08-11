@@ -46,7 +46,7 @@
 <tr>
 <td align="center" valign="top"><strong>04｜中文信息流视频 · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/0dffd6f9-0732-4876-a7db-2a06b4ab83da" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-04.jpg" controls preload="metadata" width="260"></video></td>
 <td align="center" valign="top"><strong>05｜中文信息流视频 · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/78d4dbd7-4061-4df9-a7ac-3a1d5d6faecd" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-05.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>06｜中文信息流视频 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-cn/new-feed-cn-june17.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>06｜中文信息流视频 · 成片 06</strong><br><video src="https://github.com/user-attachments/assets/7ad550b3-ca6c-449d-8395-27ea72557598" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg" controls preload="metadata" width="260"></video></td>
 </tr>
 </table>
 
@@ -61,7 +61,7 @@
 <tr>
 <td align="center" valign="top"><strong>04｜英文信息流视频 · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/144f9be2-1267-4236-a59b-9c1a7afd4fc7" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-10.jpg" controls preload="metadata" width="260"></video></td>
 <td align="center" valign="top"><strong>05｜英文信息流视频 · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/8271892f-2035-4129-a70d-30b7529d80a9" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-11.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>06｜英文信息流视频 · 成片 06</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-12.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>06｜英文信息流视频 · 成片 06</strong><br><video src="https://github.com/user-attachments/assets/b31a445d-19ba-4466-be7e-e7a087371235" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-12.jpg" controls preload="metadata" width="260"></video></td>
 </tr>
 </table>
 
@@ -71,11 +71,11 @@
 
 <table>
 <tr>
-<td align="center" valign="top"><strong>01｜品牌 TVC · 汽水</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-sparkling-water-16x9.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-13.jpg" controls preload="metadata" width="560"></video></td>
-<td align="center" valign="top"><strong>02｜品牌 TVC · 羽绒服</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-down-jacket-16x9.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-14.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>01｜品牌 TVC · 汽水</strong><br><video src="https://github.com/user-attachments/assets/ed4b8bb0-fc4d-46ff-887e-114f0e1593ad" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-13.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>02｜品牌 TVC · 羽绒服</strong><br><video src="https://github.com/user-attachments/assets/8f215e76-6bd9-4f19-a9f2-4c8dab24ea8f" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-14.jpg" controls preload="metadata" width="560"></video></td>
 </tr>
 <tr>
-<td align="center" valign="top"><strong>03｜品牌 TVC · 小棕瓶</strong><br><video src="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/videos/brand-tvc-aigc-16x9/brand-tvc-aigc-estee-lauder-16x9.mp4" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-15.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>03｜品牌 TVC · 小棕瓶</strong><br><video src="https://github.com/user-attachments/assets/00cdb9e5-1aa9-4376-a528-27ba67880caa" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-15.jpg" controls preload="metadata" width="560"></video></td>
 <td></td>
 </tr>
 </table>
