@@ -39,14 +39,14 @@
 
 <table>
 <tr>
-<td><strong>01｜华为品牌信息流 · 成片 01</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告1.mp4">▶ 播放视频</a></td>
-<td><strong>02｜华为品牌信息流 · 成片 02</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告2.mp4">▶ 播放视频</a></td>
-<td><strong>03｜华为品牌信息流 · 成片 03</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告3.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告1.mp4"><img src="frontend/showcase/covers/readme/video-01.jpg" alt="01｜华为品牌信息流 · 成片 01" width="220"></a><br><strong>01｜华为品牌信息流 · 成片 01</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告1.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告2.mp4"><img src="frontend/showcase/covers/readme/video-02.jpg" alt="02｜华为品牌信息流 · 成片 02" width="220"></a><br><strong>02｜华为品牌信息流 · 成片 02</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告2.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告3.mp4"><img src="frontend/showcase/covers/readme/video-03.jpg" alt="03｜华为品牌信息流 · 成片 03" width="220"></a><br><strong>03｜华为品牌信息流 · 成片 03</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告3.mp4">▶ 播放视频</a></td>
 </tr>
 <tr>
-<td><strong>04｜华为品牌信息流 · 成片 04</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告4.mp4">▶ 播放视频</a></td>
-<td><strong>05｜华为品牌信息流 · 成片 05</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告5.mov">▶ 播放视频</a></td>
-<td><strong>06｜中文品牌信息流 · 成片 06</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/6月17日.mov">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告4.mp4"><img src="frontend/showcase/covers/readme/video-04.jpg" alt="04｜华为品牌信息流 · 成片 04" width="220"></a><br><strong>04｜华为品牌信息流 · 成片 04</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告4.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告5.mov"><img src="frontend/showcase/covers/readme/video-05.jpg" alt="05｜华为品牌信息流 · 成片 05" width="220"></a><br><strong>05｜华为品牌信息流 · 成片 05</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/华为品牌信息流广告5.mov">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="中文视频-国内电商/华为品牌信息流（消费电子）/6月17日.mov"><img src="frontend/showcase/covers/readme/video-06.jpg" alt="06｜中文品牌信息流 · 成片 06" width="220"></a><br><strong>06｜中文品牌信息流 · 成片 06</strong><br><a href="中文视频-国内电商/华为品牌信息流（消费电子）/6月17日.mov">▶ 播放视频</a></td>
 </tr>
 </table>
 
@@ -54,14 +54,14 @@
 
 <table>
 <tr>
-<td><strong>01｜英文跨境美妆广告 · 成片 01</strong><br><a href="英文视频-跨境电商/veo-2_字幕.mp4">▶ 播放视频</a></td>
-<td><strong>02｜英文跨境美妆广告 · 成片 02</strong><br><a href="英文视频-跨境电商/b6bb615118b60b4ea232edb0ca7e7393_raw_字幕.mp4">▶ 播放视频</a></td>
-<td><strong>03｜英文跨境美妆广告 · 成片 03</strong><br><a href="英文视频-跨境电商/8b6c2682770d9ec3622d16c08564e6eb_raw_字幕.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="英文视频-跨境电商/veo-2_字幕.mp4"><img src="frontend/showcase/covers/readme/video-07.jpg" alt="01｜英文跨境美妆广告 · 成片 01" width="220"></a><br><strong>01｜英文跨境美妆广告 · 成片 01</strong><br><a href="英文视频-跨境电商/veo-2_字幕.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="英文视频-跨境电商/b6bb615118b60b4ea232edb0ca7e7393_raw_字幕.mp4"><img src="frontend/showcase/covers/readme/video-08.jpg" alt="02｜英文跨境美妆广告 · 成片 02" width="220"></a><br><strong>02｜英文跨境美妆广告 · 成片 02</strong><br><a href="英文视频-跨境电商/b6bb615118b60b4ea232edb0ca7e7393_raw_字幕.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="英文视频-跨境电商/8b6c2682770d9ec3622d16c08564e6eb_raw_字幕.mp4"><img src="frontend/showcase/covers/readme/video-09.jpg" alt="03｜英文跨境美妆广告 · 成片 03" width="220"></a><br><strong>03｜英文跨境美妆广告 · 成片 03</strong><br><a href="英文视频-跨境电商/8b6c2682770d9ec3622d16c08564e6eb_raw_字幕.mp4">▶ 播放视频</a></td>
 </tr>
 <tr>
-<td><strong>04｜英文跨境美妆广告 · 成片 04</strong><br><a href="英文视频-跨境电商/5c3c9621da7f3cf98a9d555c069f9334_raw_字幕.mp4">▶ 播放视频</a></td>
-<td><strong>05｜英文跨境美妆广告 · 成片 05</strong><br><a href="英文视频-跨境电商/6a61109d96363f55ec04264cd57a6950_raw.mp4">▶ 播放视频</a></td>
-<td><strong>06｜英文跨境美妆广告 · 成片 06</strong><br><a href="英文视频-跨境电商/veo-最新_字幕.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="英文视频-跨境电商/5c3c9621da7f3cf98a9d555c069f9334_raw_字幕.mp4"><img src="frontend/showcase/covers/readme/video-10.jpg" alt="04｜英文跨境美妆广告 · 成片 04" width="220"></a><br><strong>04｜英文跨境美妆广告 · 成片 04</strong><br><a href="英文视频-跨境电商/5c3c9621da7f3cf98a9d555c069f9334_raw_字幕.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="英文视频-跨境电商/6a61109d96363f55ec04264cd57a6950_raw.mp4"><img src="frontend/showcase/covers/readme/video-11.jpg" alt="05｜英文跨境美妆广告 · 成片 05" width="220"></a><br><strong>05｜英文跨境美妆广告 · 成片 05</strong><br><a href="英文视频-跨境电商/6a61109d96363f55ec04264cd57a6950_raw.mp4">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="英文视频-跨境电商/veo-最新_字幕.mp4"><img src="frontend/showcase/covers/readme/video-12.jpg" alt="06｜英文跨境美妆广告 · 成片 06" width="220"></a><br><strong>06｜英文跨境美妆广告 · 成片 06</strong><br><a href="英文视频-跨境电商/veo-最新_字幕.mp4">▶ 播放视频</a></td>
 </tr>
 </table>
 
@@ -71,11 +71,11 @@
 
 <table>
 <tr>
-<td><strong>01｜品牌 TVC · 汽水</strong><br><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/大海浮光汽水.mov">▶ 播放视频</a></td>
-<td><strong>02｜品牌 TVC · 羽绒服</strong><br><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/大海浮光羽绒服.mov">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/大海浮光汽水.mov"><img src="frontend/showcase/covers/readme/video-13.jpg" alt="01｜品牌 TVC · 汽水" width="560"></a><br><strong>01｜品牌 TVC · 汽水</strong><br><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/大海浮光汽水.mov">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/大海浮光羽绒服.mov"><img src="frontend/showcase/covers/readme/video-14.jpg" alt="02｜品牌 TVC · 羽绒服" width="560"></a><br><strong>02｜品牌 TVC · 羽绒服</strong><br><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/大海浮光羽绒服.mov">▶ 播放视频</a></td>
 </tr>
 <tr>
-<td><strong>03｜品牌 TVC · 小棕瓶</strong><br><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/雅诗兰黛小棕瓶一定啀选择有产品的作为首帧.mov">▶ 播放视频</a></td>
+<td align="center" valign="top"><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/雅诗兰黛小棕瓶一定啀选择有产品的作为首帧.mov"><img src="frontend/showcase/covers/readme/video-15.jpg" alt="03｜品牌 TVC · 小棕瓶" width="560"></a><br><strong>03｜品牌 TVC · 小棕瓶</strong><br><a href="新增视频-tvc 一定要按照视频原本的尺寸排版/雅诗兰黛小棕瓶一定啀选择有产品的作为首帧.mov">▶ 播放视频</a></td>
 <td></td>
 </tr>
 </table>
