@@ -37,15 +37,15 @@
 
 <table>
 <tr>
-<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/4d72ad2e-7dac-4bd3-934c-a7f3425c5a8c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-02.jpg?v=2d0df1a" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/2b856c2b-3f7c-499d-abde-593a9b2f231a" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-01.jpg" controls preload="metadata" width="260" height="462"></video></td>
+<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/4d72ad2e-7dac-4bd3-934c-a7f3425c5a8c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-02.jpg?v=2d0df1a" controls preload="metadata" width="260" height="462"></video></td>
 
 
-<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/69037851-b8ce-4e4a-9d4e-bca08350f59c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-03.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/69037851-b8ce-4e4a-9d4e-bca08350f59c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-03.jpg" controls preload="metadata" width="260" height="462"></video></td>
 </tr>
 <tr>
-<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/e6823c27-86a4-4bc4-9ded-a1763ea758d6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-04.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/67786de3-55c8-41ba-a864-238ba8501d5c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-05.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/e6823c27-86a4-4bc4-9ded-a1763ea758d6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-04.jpg" controls preload="metadata" width="260" height="462"></video></td>
+<td align="center" valign="top"><strong>华为品牌信息流广告（中文） · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/67786de3-55c8-41ba-a864-238ba8501d5c" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-05.jpg" controls preload="metadata" width="260" height="462"></video></td>
 <td align="center" valign="top">
   <strong>华为品牌信息流广告（中文） · 成片 06</strong><br>
   <video
@@ -53,7 +53,8 @@
     poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-06.jpg"
     controls
     preload="metadata"
-    width="260">
+    width="260"
+    height="462">
   </video>
   </td>
 </tr>
@@ -63,14 +64,14 @@
 
 <table>
 <tr>
-<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/89dbc529-be56-451a-b519-25c1ebd6336d" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-07.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/5a82f673-3e03-4cf7-b2c8-fd211caa86ec" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-08.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/13b5815e-25a3-40d1-bc16-f4d1ea0f3ff8" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-09.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 01</strong><br><video src="https://github.com/user-attachments/assets/89dbc529-be56-451a-b519-25c1ebd6336d" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-07.jpg" controls preload="metadata" width="260" height="462"></video></td>
+<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 02</strong><br><video src="https://github.com/user-attachments/assets/5a82f673-3e03-4cf7-b2c8-fd211caa86ec" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-08.jpg" controls preload="metadata" width="260" height="462"></video></td>
+<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 03</strong><br><video src="https://github.com/user-attachments/assets/13b5815e-25a3-40d1-bc16-f4d1ea0f3ff8" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-09.jpg" controls preload="metadata" width="260" height="462"></video></td>
 </tr>
 <tr>
-<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/83e6e35c-5cce-40f1-bdef-d5bc68909fac" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-10.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/7f18632a-feb7-4620-b480-6b25e832b695" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-11.jpg" controls preload="metadata" width="260"></video></td>
-<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 06</strong><br><video src="https://github.com/user-attachments/assets/f5cad393-a241-482a-a299-ccbc084a1af2" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-12.jpg" controls preload="metadata" width="260"></video></td>
+<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 04</strong><br><video src="https://github.com/user-attachments/assets/83e6e35c-5cce-40f1-bdef-d5bc68909fac" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-10.jpg" controls preload="metadata" width="260" height="462"></video></td>
+<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 05</strong><br><video src="https://github.com/user-attachments/assets/7f18632a-feb7-4620-b480-6b25e832b695" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-11.jpg" controls preload="metadata" width="260" height="462"></video></td>
+<td align="center" valign="top"><strong>英文跨境电商（英文） · 成片 06</strong><br><video src="https://github.com/user-attachments/assets/f5cad393-a241-482a-a299-ccbc084a1af2" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-12.jpg" controls preload="metadata" width="260" height="462"></video></td>
 </tr>
 </table>
 
@@ -78,11 +79,11 @@
 
 <table>
 <tr>
-<td align="center" valign="top"><strong>品牌 TVC · 雅诗兰黛小棕瓶</strong><br><video src="https://github.com/user-attachments/assets/d17a4993-5dfb-4898-b33d-7683e469e078" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-15.jpg" controls preload="metadata" width="560"></video></td>
-<td align="center" valign="top"><strong>品牌 TVC · 大海浮光汽水</strong><br><video src="https://github.com/user-attachments/assets/bb826e2f-81f7-4244-9ac6-a4e15ac336f6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-13.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>品牌 TVC · 雅诗兰黛小棕瓶</strong><br><video src="https://github.com/user-attachments/assets/d17a4993-5dfb-4898-b33d-7683e469e078" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-15.jpg" controls preload="metadata" width="560" height="315"></video></td>
+<td align="center" valign="top"><strong>品牌 TVC · 大海浮光汽水</strong><br><video src="https://github.com/user-attachments/assets/bb826e2f-81f7-4244-9ac6-a4e15ac336f6" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-13.jpg" controls preload="metadata" width="560" height="315"></video></td>
 </tr>
 <tr>
-<td align="center" valign="top"><strong>品牌 TVC · 大海浮光羽绒服</strong><br><video src="https://github.com/user-attachments/assets/8f215e76-6bd9-4f19-a9f2-4c8dab24ea8f" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-14.jpg" controls preload="metadata" width="560"></video></td>
+<td align="center" valign="top"><strong>品牌 TVC · 大海浮光羽绒服</strong><br><video src="https://github.com/user-attachments/assets/8f215e76-6bd9-4f19-a9f2-4c8dab24ea8f" poster="https://raw.githubusercontent.com/luoxiaohe0529-creator/ocean-glimmer-aigc/main/frontend/showcase/covers/readme/video-14.jpg" controls preload="metadata" width="560" height="315"></video></td>
 <td></td>
 </tr>
 </table>
