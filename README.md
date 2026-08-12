@@ -108,7 +108,7 @@ Specialized agents for advertising planning, writing and directing, cinematograp
 
 This turns AIGC from isolated one-off generation into a **participatory, controllable, end-to-end advertising workflow**.
 
-**产品详细介绍**
+## 产品功能详细介绍
 
 ## 产品如何工作
 
@@ -124,7 +124,7 @@ flowchart LR
   F --> G["最终成片"]
 ```
 
-## 产品功能详细介绍
+
 
 ## 产品设计思维
 
