@@ -22,6 +22,7 @@
 
 > > **一句话总结：**这是一个由专业 Agent 协作驱动的 AIGC 广告工作台，用户掌握决策，系统完成从产品 Brief、脚本分镜、影像生成到后期交付的完整流程。
 
+
 ### 根据岗位快速查看
 
 - **AI 产品 / AIGC 产品：**查看[大海浮光Agent 工作台Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
@@ -57,6 +58,7 @@
 </tr>
 </table>
 
+
 ### 英文跨境电商（英文）
 
 <table>
@@ -72,6 +74,7 @@
 </tr>
 </table>
 
+
 ### 品牌 TVC｜原创
 
 <table>
@@ -84,6 +87,7 @@
 <td></td>
 </tr>
 </table>
+
 
 ## English Summary
 
@@ -103,6 +107,8 @@ The workbench brings the complete process into one workflow:
 Specialized agents for advertising planning, writing and directing, cinematography, and post-production work within the same product context. Human judgment remains in control of key creative decisions, while the agents handle professional knowledge, context continuity, and execution.
 
 This turns AIGC from isolated one-off generation into a **participatory, controllable, end-to-end advertising workflow**.
+
+**产品详细介绍**
 
 ## 产品如何工作
 
