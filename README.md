@@ -24,7 +24,7 @@
 
 ### 根据岗位快速查看
 
-- **AI 产品 / AIGC 产品：**查看[四 Agent 工作台 Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
+- **AI 产品 / AIGC 产品：**查看[大海浮光Agent 工作台Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
 - **AI 应用 / Agent 工作流：**查看[系统架构](docs/ARCHITECTURE.md)和[接口契约](docs/WORKFLOW_CONTRACTS.md)
 - **AI 视频 / 创意技术：**查看[中英文视频目录](frontend/showcase/README.md)、[摄影分镜流程](docs/ARCHITECTURE.md)和[知识库证据](docs/knowledge/README.md)
 
