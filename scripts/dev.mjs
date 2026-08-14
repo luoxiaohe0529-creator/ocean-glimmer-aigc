@@ -15,7 +15,7 @@ function start(name, command, args) {
 start('python', process.env.PYTHON_BIN || 'python3', ['-m', 'python_service.server']);
 start('frontend', process.execPath, ['frontend/server.mjs']);
 if (process.env.SCRAPER_SERVICE_ENABLED !== '0') {
-  start('scraper', process.execPath, ['scraper-service.mjs']);
+  start('scraper', process.execPath, ['scripts/scraper-service.mjs']);
 }
 
 let stopping = false;
