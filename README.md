@@ -16,7 +16,7 @@
 | 用时 | 查看内容 | 可以了解什么 | 入口 |
 | --- | --- | --- | --- |
 | 0–15 秒 | 中英文广告成片 | AI 视频生成、广告创意与视觉执行能力 | [中文成片] (frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频作品](#视频作品直接播放) |
-| 15–30 秒 | 工作台运行效果 | 从商品输入、方案选择到成片回写的实际产品流程 | [大海浮光 Agent 工作台 Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/) 和 [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
+| 15–30 秒 | 工作台与作品集 | 从商品输入、方案选择到成片回写的实际产品流程，以及完整作品集网站 | [大海浮光 Agent 工作台 Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/) · [作品集网站](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/portfolio.html) · [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
 | 30–45 秒 | 完整决策案例 | 用户如何比较 Hook、Mood Board 和 创意方案，并将选择传递到后续阶段 | [Case Study](docs/CASE_STUDY.md) |
 | 45–60 秒 | 系统架构与知识库 | Python、模型、飞书知识库与 n8n 如何协同工作 | [系统架构](docs/ARCHITECTURE.md) 和 [Agent 专业知识库](docs/knowledge/README.md) |
 
