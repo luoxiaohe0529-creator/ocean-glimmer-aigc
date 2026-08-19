@@ -3,6 +3,8 @@
 
 **Ocean Glimmer — AI Advertising Creation & Production Workbench**
 
+> **最终版产品与作品集：** [aigc-portfolio.pocketbay.app](https://aigc-portfolio.pocketbay.app/)
+
 **大海浮光 AIGC 工作台**是一款能提供完整的 AI 广告生产流程的、面向电商与品牌内容团队的 AIGC 产品。系统内设计了四个专业 Agent，分别负责广告策划、编剧导演、摄影摄像和后期剪辑。其中，每个角色都配备了知识库，作为高级智囊团。用户在 Agent 生成创意方向后，只需选择与把控创意方向，就能生成符合要求的 AIGC 视频。
 
 在操作逻辑上，用户只需导入商品链接、产品文档或图片。全程无需编写提示词，也无需切换多个 AI 软件。系统先生成**产品简报和 12 条 Hook（每条 Hook 都配备了创意方案、Mood Board 情绪板），供用户选择与把控方向**。方向确认后，脚本、分镜、视频和后期任务会在后端自动化执行，并将进度与结果实时回写。
@@ -16,7 +18,7 @@
 | 用时 | 查看内容 | 可以了解什么 | 入口 |
 | --- | --- | --- | --- |
 | 0–15 秒 | 中英文广告成片 | AI 视频生成、广告创意与视觉执行能力 | [中文成片] (frontend/showcase/videos/new-feed-cn/huawei-feed-ad-3-reupload.mp4) · [英文成片](frontend/showcase/videos/new-feed-en/new-feed-en-veo-subtitled.mp4) · [完整视频作品](#视频作品直接播放) |
-| 15–30 秒 | 工作台与作品集 | 从商品输入、方案选择到成片回写的实际产品流程，以及完整作品集网站 | [大海浮光 Agent 工作台 Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/) · [作品集网站](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/portfolio.html) · [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
+| 15–30 秒 | 工作台与作品集 | 从商品输入、方案选择到成片回写的实际产品流程，以及完整作品集网站 | [大海浮光 Agent 工作台 Demo](https://aigc-portfolio.pocketbay.app/) · [作品集网站](https://aigc-portfolio.pocketbay.app/) · [工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1) |
 | 30–45 秒 | 完整决策案例 | 用户如何比较 Hook、Mood Board 和 创意方案，并将选择传递到后续阶段 | [Case Study](docs/CASE_STUDY.md) |
 | 45–60 秒 | 系统架构与知识库 | Python、模型、飞书知识库与 n8n 如何协同工作 | [系统架构](docs/ARCHITECTURE.md) 和 [Agent 专业知识库](docs/knowledge/README.md) |
 
@@ -25,7 +27,7 @@
 
 ### 根据岗位快速查看
 
-- **AI 产品 / AIGC 产品：**查看[大海浮光Agent 工作台Demo](https://luoxiaohe0529-creator.github.io/ocean-glimmer-aigc/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
+- **AI 产品 / AIGC 产品：**查看[大海浮光Agent 工作台Demo](https://aigc-portfolio.pocketbay.app/)、[工作台运行快照](frontend/showcase/workbench/open-design-demo.html?demo=1)和[Case Study](docs/CASE_STUDY.md)
 - **AI 应用 / Agent 工作流：**查看[系统架构](docs/ARCHITECTURE.md)和[接口契约](docs/WORKFLOW_CONTRACTS.md)
 - **AI 视频 / 创意技术：**查看[中英文视频目录](frontend/showcase/README.md)、[摄影分镜流程](docs/ARCHITECTURE.md)和[知识库证据](docs/knowledge/README.md)
 
